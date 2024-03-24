@@ -1,0 +1,316 @@
+import 'package:flutter/material.dart';
+import '/backend/schema/structs/index.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'flutter_flow/flutter_flow_util.dart';
+
+class FFAppState extends ChangeNotifier {
+  static FFAppState _instance = FFAppState._internal();
+
+  factory FFAppState() {
+    return _instance;
+  }
+
+  FFAppState._internal();
+
+  static void reset() {
+    _instance = FFAppState._internal();
+  }
+
+  Future initializePersistedState() async {
+    prefs = await SharedPreferences.getInstance();
+    _safeInit(() {
+      _deviceList = prefs
+              .getStringList('ff_deviceList')
+              ?.map((x) {
+                try {
+                  return AntimoustiqueStruct.fromSerializableMap(jsonDecode(x));
+                } catch (e) {
+                  print("Can't decode persisted data type. Error: $e.");
+                  return null;
+                }
+              })
+              .withoutNulls
+              .toList() ??
+          _deviceList;
+    });
+    _safeInit(() {
+      _googleMapData = prefs
+              .getStringList('ff_googleMapData')
+              ?.map((x) {
+                try {
+                  return GoogleMapDataStruct.fromSerializableMap(jsonDecode(x));
+                } catch (e) {
+                  print("Can't decode persisted data type. Error: $e.");
+                  return null;
+                }
+              })
+              .withoutNulls
+              .toList() ??
+          _googleMapData;
+    });
+    _safeInit(() {
+      if (prefs.containsKey('ff_currentDevice')) {
+        try {
+          final serializedData = prefs.getString('ff_currentDevice') ?? '{}';
+          _currentDevice = AntimoustiqueStruct.fromSerializableMap(
+              jsonDecode(serializedData));
+        } catch (e) {
+          print("Can't decode persisted data type. Error: $e.");
+        }
+      }
+    });
+    _safeInit(() {
+      _notificationList = prefs
+              .getStringList('ff_notificationList')
+              ?.map((x) {
+                try {
+                  return NotificationStruct.fromSerializableMap(jsonDecode(x));
+                } catch (e) {
+                  print("Can't decode persisted data type. Error: $e.");
+                  return null;
+                }
+              })
+              .withoutNulls
+              .toList() ??
+          _notificationList;
+    });
+    _safeInit(() {
+      _functioningScheduleList = prefs
+              .getStringList('ff_functioningScheduleList')
+              ?.map((x) {
+                try {
+                  return FunctioningScheduleStruct.fromSerializableMap(
+                      jsonDecode(x));
+                } catch (e) {
+                  print("Can't decode persisted data type. Error: $e.");
+                  return null;
+                }
+              })
+              .withoutNulls
+              .toList() ??
+          _functioningScheduleList;
+    });
+  }
+
+  void update(VoidCallback callback) {
+    callback();
+    notifyListeners();
+  }
+
+  late SharedPreferences prefs;
+
+  List<AntimoustiqueStruct> _deviceList = [
+    AntimoustiqueStruct.fromSerializableMap(jsonDecode(
+        '{\"manufactureID\":\"XIC-SFD-LLAS\",\"name\":\"Antimoustique\",\"remoteID\":\"QSDFQSDFQSDCXVQSDF\",\"attractif\":\"0.5\",\"co2\":\"0.1\"}')),
+    AntimoustiqueStruct.fromSerializableMap(jsonDecode(
+        '{\"manufactureID\":\"LLSQI-IDNSIQ-LQD\",\"name\":\"Ouai\",\"remoteID\":\"QSDFJQKSDF\",\"attractif\":\"0.2\",\"co2\":\"0.77\"}')),
+    AntimoustiqueStruct.fromSerializableMap(jsonDecode(
+        '{\"manufactureID\":\"qsDFQSDFZE-QSJDIF\",\"name\":\"Tu veux un café ?\",\"remoteID\":\"7C:E6:FF:A5:E3:FF\",\"attractif\":\"0.5\",\"co2\":\"0.1\"}')),
+    AntimoustiqueStruct.fromSerializableMap(jsonDecode(
+        '{\"manufactureID\":\"VS-SUP2T-10G\",\"name\":\"Le l\'appareil\",\"remoteID\":\"5F:CC:D2:F3:A8\",\"attractif\":\"0.7\",\"co2\":\"0.1\",\"isOn\":\"false\"}'))
+  ];
+  List<AntimoustiqueStruct> get deviceList => _deviceList;
+  set deviceList(List<AntimoustiqueStruct> value) {
+    _deviceList = value;
+    prefs.setStringList(
+        'ff_deviceList', value.map((x) => x.serialize()).toList());
+  }
+
+  void addToDeviceList(AntimoustiqueStruct value) {
+    _deviceList.add(value);
+    prefs.setStringList(
+        'ff_deviceList', _deviceList.map((x) => x.serialize()).toList());
+  }
+
+  void removeFromDeviceList(AntimoustiqueStruct value) {
+    _deviceList.remove(value);
+    prefs.setStringList(
+        'ff_deviceList', _deviceList.map((x) => x.serialize()).toList());
+  }
+
+  void removeAtIndexFromDeviceList(int index) {
+    _deviceList.removeAt(index);
+    prefs.setStringList(
+        'ff_deviceList', _deviceList.map((x) => x.serialize()).toList());
+  }
+
+  void updateDeviceListAtIndex(
+    int index,
+    AntimoustiqueStruct Function(AntimoustiqueStruct) updateFn,
+  ) {
+    _deviceList[index] = updateFn(_deviceList[index]);
+    prefs.setStringList(
+        'ff_deviceList', _deviceList.map((x) => x.serialize()).toList());
+  }
+
+  void insertAtIndexInDeviceList(int index, AntimoustiqueStruct value) {
+    _deviceList.insert(index, value);
+    prefs.setStringList(
+        'ff_deviceList', _deviceList.map((x) => x.serialize()).toList());
+  }
+
+  List<GoogleMapDataStruct> _googleMapData = [
+    GoogleMapDataStruct.fromSerializableMap(jsonDecode(
+        '{\"lat_lng\":\"45.7825248,4.8765519\",\"iconPath\":\"https://picsum.photos/seed/474/600\",\"title\":\"Magasin 1\",\"description\":\"oui\"}')),
+    GoogleMapDataStruct.fromSerializableMap(jsonDecode(
+        '{\"lat_lng\":\"45.771211,4.8823066\",\"iconPath\":\"https://picsum.photos/seed/281/600\",\"title\":\"ouai\",\"description\":\"\"}'))
+  ];
+  List<GoogleMapDataStruct> get googleMapData => _googleMapData;
+  set googleMapData(List<GoogleMapDataStruct> value) {
+    _googleMapData = value;
+    prefs.setStringList(
+        'ff_googleMapData', value.map((x) => x.serialize()).toList());
+  }
+
+  void addToGoogleMapData(GoogleMapDataStruct value) {
+    _googleMapData.add(value);
+    prefs.setStringList(
+        'ff_googleMapData', _googleMapData.map((x) => x.serialize()).toList());
+  }
+
+  void removeFromGoogleMapData(GoogleMapDataStruct value) {
+    _googleMapData.remove(value);
+    prefs.setStringList(
+        'ff_googleMapData', _googleMapData.map((x) => x.serialize()).toList());
+  }
+
+  void removeAtIndexFromGoogleMapData(int index) {
+    _googleMapData.removeAt(index);
+    prefs.setStringList(
+        'ff_googleMapData', _googleMapData.map((x) => x.serialize()).toList());
+  }
+
+  void updateGoogleMapDataAtIndex(
+    int index,
+    GoogleMapDataStruct Function(GoogleMapDataStruct) updateFn,
+  ) {
+    _googleMapData[index] = updateFn(_googleMapData[index]);
+    prefs.setStringList(
+        'ff_googleMapData', _googleMapData.map((x) => x.serialize()).toList());
+  }
+
+  void insertAtIndexInGoogleMapData(int index, GoogleMapDataStruct value) {
+    _googleMapData.insert(index, value);
+    prefs.setStringList(
+        'ff_googleMapData', _googleMapData.map((x) => x.serialize()).toList());
+  }
+
+  AntimoustiqueStruct _currentDevice = AntimoustiqueStruct();
+  AntimoustiqueStruct get currentDevice => _currentDevice;
+  set currentDevice(AntimoustiqueStruct value) {
+    _currentDevice = value;
+    prefs.setString('ff_currentDevice', value.serialize());
+  }
+
+  void updateCurrentDeviceStruct(Function(AntimoustiqueStruct) updateFn) {
+    updateFn(_currentDevice);
+    prefs.setString('ff_currentDevice', _currentDevice.serialize());
+  }
+
+  List<NotificationStruct> _notificationList = [
+    NotificationStruct.fromSerializableMap(jsonDecode(
+        '{\"antimoustique\":\"{\\\"manufactureID\\\":\\\"Hello World\\\",\\\"name\\\":\\\"Hello World\\\",\\\"remoteID\\\":\\\"Hello World\\\",\\\"attractif\\\":\\\"0\\\",\\\"co2\\\":\\\"0\\\",\\\"deviceState\\\":\\\"e5qer\\\"}\",\"title\":\"CHEZ MAMIE\",\"body\":\"COUCOU\"}')),
+    NotificationStruct.fromSerializableMap(jsonDecode(
+        '{\"antimoustique\":\"{\\\"manufactureID\\\":\\\"Hello World\\\",\\\"name\\\":\\\"Hello World\\\",\\\"remoteID\\\":\\\"Hello World\\\",\\\"attractif\\\":\\\"0\\\",\\\"co2\\\":\\\"0\\\",\\\"deviceState\\\":\\\"e5qer\\\"}\",\"title\":\"Isazou\",\"body\":\"remet du co2 stp\"}'))
+  ];
+  List<NotificationStruct> get notificationList => _notificationList;
+  set notificationList(List<NotificationStruct> value) {
+    _notificationList = value;
+    prefs.setStringList(
+        'ff_notificationList', value.map((x) => x.serialize()).toList());
+  }
+
+  void addToNotificationList(NotificationStruct value) {
+    _notificationList.add(value);
+    prefs.setStringList('ff_notificationList',
+        _notificationList.map((x) => x.serialize()).toList());
+  }
+
+  void removeFromNotificationList(NotificationStruct value) {
+    _notificationList.remove(value);
+    prefs.setStringList('ff_notificationList',
+        _notificationList.map((x) => x.serialize()).toList());
+  }
+
+  void removeAtIndexFromNotificationList(int index) {
+    _notificationList.removeAt(index);
+    prefs.setStringList('ff_notificationList',
+        _notificationList.map((x) => x.serialize()).toList());
+  }
+
+  void updateNotificationListAtIndex(
+    int index,
+    NotificationStruct Function(NotificationStruct) updateFn,
+  ) {
+    _notificationList[index] = updateFn(_notificationList[index]);
+    prefs.setStringList('ff_notificationList',
+        _notificationList.map((x) => x.serialize()).toList());
+  }
+
+  void insertAtIndexInNotificationList(int index, NotificationStruct value) {
+    _notificationList.insert(index, value);
+    prefs.setStringList('ff_notificationList',
+        _notificationList.map((x) => x.serialize()).toList());
+  }
+
+  List<FunctioningScheduleStruct> _functioningScheduleList = [
+    FunctioningScheduleStruct.fromSerializableMap(jsonDecode(
+        '{\"startTime\":\"1710677255268\",\"endTime\":\"1710677255268\",\"isReccurent\":\"false\",\"functioningMode\":\"e5qer\",\"startDay\":\"1710677255268\"}')),
+    FunctioningScheduleStruct.fromSerializableMap(jsonDecode(
+        '{\"startTime\":\"1710677256581\",\"endTime\":\"1710677256581\",\"isReccurent\":\"false\",\"functioningMode\":\"e5qer\",\"startDay\":\"1710677256581\"}'))
+  ];
+  List<FunctioningScheduleStruct> get functioningScheduleList =>
+      _functioningScheduleList;
+  set functioningScheduleList(List<FunctioningScheduleStruct> value) {
+    _functioningScheduleList = value;
+    prefs.setStringList('ff_functioningScheduleList',
+        value.map((x) => x.serialize()).toList());
+  }
+
+  void addToFunctioningScheduleList(FunctioningScheduleStruct value) {
+    _functioningScheduleList.add(value);
+    prefs.setStringList('ff_functioningScheduleList',
+        _functioningScheduleList.map((x) => x.serialize()).toList());
+  }
+
+  void removeFromFunctioningScheduleList(FunctioningScheduleStruct value) {
+    _functioningScheduleList.remove(value);
+    prefs.setStringList('ff_functioningScheduleList',
+        _functioningScheduleList.map((x) => x.serialize()).toList());
+  }
+
+  void removeAtIndexFromFunctioningScheduleList(int index) {
+    _functioningScheduleList.removeAt(index);
+    prefs.setStringList('ff_functioningScheduleList',
+        _functioningScheduleList.map((x) => x.serialize()).toList());
+  }
+
+  void updateFunctioningScheduleListAtIndex(
+    int index,
+    FunctioningScheduleStruct Function(FunctioningScheduleStruct) updateFn,
+  ) {
+    _functioningScheduleList[index] =
+        updateFn(_functioningScheduleList[index]);
+    prefs.setStringList('ff_functioningScheduleList',
+        _functioningScheduleList.map((x) => x.serialize()).toList());
+  }
+
+  void insertAtIndexInFunctioningScheduleList(
+      int index, FunctioningScheduleStruct value) {
+    _functioningScheduleList.insert(index, value);
+    prefs.setStringList('ff_functioningScheduleList',
+        _functioningScheduleList.map((x) => x.serialize()).toList());
+  }
+}
+
+void _safeInit(Function() initializeField) {
+  try {
+    initializeField();
+  } catch (_) {}
+}
+
+Future _safeInitAsync(Function() initializeField) async {
+  try {
+    await initializeField();
+  } catch (_) {}
+}
