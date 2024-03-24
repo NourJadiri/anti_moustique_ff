@@ -103,7 +103,7 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                         ),
                   ),
                   Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
+                    padding: const EdgeInsetsDirectional.fromSTEB(0.0, .0, 0.0, 0.0),
                     child: Text(
                       widget.deviceID,
                       style: FlutterFlowTheme.of(context).bodySmall.override(
@@ -115,7 +115,7 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
+                    padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -140,7 +140,7 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                           animation: true,
                           animateFromLastPercent: true,
                           progressColor:
-                              (widget.deviceCO2Level >= .20 ? true : true)
+                              (widget.deviceCO2Level >= .20 ? true : false)
                                   ? FlutterFlowTheme.of(context).primary
                                   : FlutterFlowTheme.of(context).error,
                           backgroundColor: const Color(0xFFDBDEFF),
@@ -151,7 +151,7 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
+                    padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -194,7 +194,7 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                 splashColor: Colors.transparent,
                 focusColor: Colors.transparent,
                 hoverColor: Colors.transparent,
-                highlightColor: Colors.transparent,
+                highlightColor: Colors.transparent, 
                 onTap: () async {
                   FFAppState().update(() {
                     FFAppState().removeAtIndexFromDeviceList(widget.index!);

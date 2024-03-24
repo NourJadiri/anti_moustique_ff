@@ -446,7 +446,7 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
                                         ],
                                       ),
                                     ),
-                                  ].divide(const SizedBox(height: 8.0)),
+                                  ],
                                 ),
                               ),
                             ),
@@ -725,7 +725,7 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
                                           ),
                                         ),
                                       ),
-                                    ].divide(const SizedBox(height: 8.0)),
+                                    ].divide(const SizedBox(height: 0.0)),
                                   ),
                                 ),
                               ),
@@ -782,7 +782,8 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
                                           text: 'Nouvelle plage horaire',
                                           options: FFButtonOptions(
                                             height: 40.0,
-                                            padding: const EdgeInsets.all(16.0),
+                                            padding: const EdgeInsetsDirectional.symmetric(
+                                                horizontal: 16.0),
                                             iconPadding:
                                                 const EdgeInsetsDirectional.fromSTEB(
                                                     0.0, 0.0, 0.0, 0.0),
@@ -844,6 +845,8 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
                                               listePlagesHorairesItem.endTime!,
                                           date:
                                               listePlagesHorairesItem.startDay!,
+                                          isPeriodic:
+                                              listePlagesHorairesItem.isReccurent,
                                         ),
                                       );
                                     },

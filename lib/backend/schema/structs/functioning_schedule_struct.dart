@@ -19,6 +19,8 @@ class FunctioningScheduleStruct extends BaseStruct {
   // "startDay" field.
   DateTime? _startDay;
   DateTime? get startDay => _startDay;
+
+  get isPeriodic => null;
   set startDay(DateTime? val) => _startDay = val;
   bool hasStartDay() => _startDay != null;
 

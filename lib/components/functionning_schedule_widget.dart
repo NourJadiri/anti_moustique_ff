@@ -11,12 +11,14 @@ class FunctionningScheduleWidget extends StatefulWidget {
     required this.endTime,
     required this.date,
     required this.index,
+    required this.isPeriodic,
   });
 
   final DateTime? startTime;
   final DateTime? endTime;
   final DateTime? date;
   final int? index;
+  final bool? isPeriodic;
 
   @override
   State<FunctionningScheduleWidget> createState() =>
@@ -64,7 +66,7 @@ class _FunctionningScheduleWidgetState
         shape: BoxShape.rectangle,
       ),
       child: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.all(10.0),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           children: [
@@ -80,7 +82,7 @@ class _FunctionningScheduleWidgetState
                     children: [
                       Text(
                         valueOrDefault<String>(
-                          widget.startTime?.toString(),
+                          DateFormat('HH:mm').format(widget.startTime!),
                           '15:00',
                         ),
                         style: FlutterFlowTheme.of(context).bodyLarge.override(
@@ -99,7 +101,7 @@ class _FunctionningScheduleWidgetState
                       ),
                       Text(
                         valueOrDefault<String>(
-                          widget.endTime?.toString(),
+                          DateFormat('HH:mm').format(widget.endTime!),
                           '21:00',
                         ),
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
@@ -118,8 +120,7 @@ class _FunctionningScheduleWidgetState
                       children: [
                         Text(
                           valueOrDefault<String>(
-                            widget.date?.toString(),
-                            'undefined',
+                            widget.isPeriodic! ? 'Periodic' : DateFormat('dd/MM/yyyy').format(widget.date!), 'undefined'
                           ),
                           style:
                               FlutterFlowTheme.of(context).labelSmall.override(
