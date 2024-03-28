@@ -9,6 +9,8 @@ import 'add_device_page_model.dart';
 export 'add_device_page_model.dart';
 import '../app_state.dart';
 
+
+
 class AddDevicePageWidget extends StatefulWidget {
   const AddDevicePageWidget({super.key});
 
@@ -62,18 +64,18 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
         // Get the name from the input text field
         String name = _model.textController.text;
 
-        // Update the AntimoustiqueStruct with scanned data
         setState(() {
           _model.antimoustique = createAntimoustiqueStruct(
             manufactureID: manufactureID,
-            remoteID: remoteID,
             vendor: vendor,
             name: name,
+            remoteID: remoteID,
           );
-          // Add the created AntimoustiqueStruct to the device list
-          _model.appState.addToDeviceList(_model.antimoustique);
+          // Vérifier si _model.antimoustique est non null avant de l'utiliser
+          if (_model.antimoustique != null) {
+            _model.appState?.addToDeviceList(_model.antimoustique!);
+          }
         });
-
 
       } else {
         // Show error message if any of the required fields are missing

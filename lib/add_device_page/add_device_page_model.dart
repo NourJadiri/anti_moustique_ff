@@ -1,6 +1,9 @@
 import '/flutter_flow/flutter_flow_util.dart';
 import 'add_device_page_widget.dart' show AddDevicePageWidget;
 import 'package:flutter/material.dart';
+import '../app_state.dart';
+import '../backend/schema/structs/antimoustique_struct.dart';
+
 
 class AddDevicePageModel extends FlutterFlowModel<AddDevicePageWidget> {
   ///  State fields for stateful widgets in this page.
@@ -12,11 +15,24 @@ class AddDevicePageModel extends FlutterFlowModel<AddDevicePageWidget> {
   TextEditingController? textController;
   String? Function(BuildContext, String?)? textControllerValidator;
 
-  get appState => null;
+  AntimoustiqueStruct? _antimoustique; // Déclaration de la propriété antimoustique
+  FFAppState? _appState; // Déclaration de la propriété appState
 
-  get antimoustique => null;
+  // Getter pour antimoustique
+  AntimoustiqueStruct? get antimoustique => _antimoustique;
 
-  set antimoustique(antimoustique) {}
+  // Setter pour antimoustique
+  set antimoustique(AntimoustiqueStruct? value) {
+    _antimoustique = value;
+  }
+
+  // Getter pour appState
+  FFAppState? get appState => _appState;
+
+  // Setter pour appState
+  set appState(FFAppState? value) {
+    _appState = value;
+  }
 
   /// Initialization and disposal methods.
 
