@@ -12,6 +12,12 @@ class AddDevicePageModel extends FlutterFlowModel<AddDevicePageWidget> {
   TextEditingController? textController;
   String? Function(BuildContext, String?)? textControllerValidator;
 
+  get appState => null;
+
+  get antimoustique => null;
+
+  set antimoustique(antimoustique) {}
+
   /// Initialization and disposal methods.
 
   @override

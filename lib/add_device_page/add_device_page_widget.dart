@@ -1,3 +1,4 @@
+import '../backend/schema/structs/antimoustique_struct.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'add_device_page_model.dart';
 export 'add_device_page_model.dart';
+import '../app_state.dart';
 
 class AddDevicePageWidget extends StatefulWidget {
   const AddDevicePageWidget({super.key});
@@ -33,6 +35,64 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
     _model.dispose();
 
     super.dispose();
+  }
+
+  Future<void> _scanQR(BuildContext context) async {
+    try {
+      String qrResult = await FlutterBarcodeScanner.scanBarcode(
+        '#C62828', // scanning line color
+        'Cancel', // cancel button text
+        true, // whether to show the flash icon
+        ScanMode.QR,
+      );
+
+      // Decode the scanned JSON data
+      Map<String, dynamic> qrData = jsonDecode(qrResult);
+
+      // Check if all required fields (manufactureID, remoteID, vendor) are present
+      if (qrData.containsKey('manufactureID') &&
+          qrData.containsKey('remoteID') &&
+          qrData.containsKey('vendor')) {
+
+        // Extract manufactureID, remoteID, and vendor from the decoded JSON
+        String manufactureID = qrData['manufactureID'];
+        String remoteID = qrData['remoteID'];
+        String vendor = qrData['vendor'];
+
+        // Get the name from the input text field
+        String name = _model.textController.text;
+
+        // Update the AntimoustiqueStruct with scanned data
+        setState(() {
+          _model.antimoustique = createAntimoustiqueStruct(
+            manufactureID: manufactureID,
+            remoteID: remoteID,
+            vendor: vendor,
+            name: name,
+          );
+          // Add the created AntimoustiqueStruct to the device list
+          _model.appState.addToDeviceList(_model.antimoustique);
+        });
+
+
+      } else {
+        // Show error message if any of the required fields are missing
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Invalid QR code. Please make sure it contains manufactureID, remoteID, and vendor.'),
+          ),
+        );
+      }
+
+    } catch (e) {
+      print("Error scanning QR code: $e");
+      // Show an error message to the user
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error scanning QR code. Please try again.'),
+        ),
+      );
+    }
   }
 
   @override
@@ -64,7 +124,7 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
                     children: [
                       Padding(
                         padding:
-                            const EdgeInsetsDirectional.fromSTEB(0.0, 3.0, 0.0, 0.0),
+                        const EdgeInsetsDirectional.fromSTEB(0.0, 3.0, 0.0, 0.0),
                         child: Container(
                           width: MediaQuery.sizeOf(context).width * 1.0,
                           height: MediaQuery.sizeOf(context).height * 0.05,
@@ -101,9 +161,9 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
                                   style: FlutterFlowTheme.of(context)
                                       .titleLarge
                                       .override(
-                                        fontFamily: 'Inter',
-                                        fontWeight: FontWeight.w600,
-                                      ),
+                                    fontFamily: 'Inter',
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                               ),
                             ],
@@ -119,10 +179,10 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
                     'QR-CODE',
                     textAlign: TextAlign.center,
                     style: FlutterFlowTheme.of(context).displaySmall.override(
-                          fontFamily: 'Inter',
-                          fontSize: 32.0,
-                          fontWeight: FontWeight.w300,
-                        ),
+                      fontFamily: 'Inter',
+                      fontSize: 32.0,
+                      fontWeight: FontWeight.w300,
+                    ),
                   ),
                 ),
                 Align(
@@ -152,15 +212,7 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
                     child: FFButtonWidget(
                       onPressed: () async {
                         // Scanner QR code
-                        _model.deviceInfo =
-                            await FlutterBarcodeScanner.scanBarcode(
-                          '#C62828', // scanning line color
-                          'Cancel', // cancel button text
-                          true, // whether to show the flash icon
-                          ScanMode.QR,
-                        );
-
-                        setState(() {});
+                        _scanQR(context);
                       },
                       text: 'Scanner',
                       options: FFButtonOptions(
@@ -169,13 +221,13 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
                         padding: const EdgeInsetsDirectional.fromSTEB(
                             24.0, 0.0, 24.0, 0.0),
                         iconPadding:
-                            const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                        const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                         color: FlutterFlowTheme.of(context).primary,
                         textStyle:
-                            FlutterFlowTheme.of(context).titleSmall.override(
-                                  fontFamily: 'Readex Pro',
-                                  color: Colors.white,
-                                ),
+                        FlutterFlowTheme.of(context).titleSmall.override(
+                          fontFamily: 'Readex Pro',
+                          color: Colors.white,
+                        ),
                         elevation: 0.0,
                         borderSide: const BorderSide(
                           color: Colors.transparent,
@@ -235,7 +287,7 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
                       style: FlutterFlowTheme.of(context).bodyMedium,
                       maxLength: 10,
                       validator:
-                          _model.textControllerValidator.asValidator(context),
+                      _model.textControllerValidator.asValidator(context),
                     ),
                   ),
                 ),
