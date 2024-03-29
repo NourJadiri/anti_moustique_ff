@@ -200,7 +200,7 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
                               );
                             },
                           ),
-                        ].divide(const SizedBox(height: 2.0)),
+                        ],
                       ),
                     ),
                   ),
