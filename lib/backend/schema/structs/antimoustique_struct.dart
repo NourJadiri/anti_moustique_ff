@@ -1,26 +1,40 @@
 // ignore_for_file: unnecessary_getters_setters
 
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
+
 import '/backend/schema/util/schema_util.dart';
 
 import 'index.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 
 class AntimoustiqueStruct extends BaseStruct {
-  AntimoustiqueStruct({
-    String? manufactureID,
-    String? vendor,
-    String? name,
-    String? remoteID,
-    double? attractif,
-    double? co2,
-    bool? isOn,
-  })  : _manufactureID = manufactureID,
-        _vendor = vendor,
-        _name = name,
-        _remoteID = remoteID,
-        _attractif = attractif,
-        _co2 = co2,
-        _isOn = isOn;
+  AntimoustiqueStruct({ String? manufactureID, String? vendor = 'unknown', String? name, String? remoteID, double? attractif = 0, double? co2 = 0, bool? isOn = false, BluetoothDevice? device }) {
+    _manufactureID = manufactureID;
+    _vendor = vendor;
+    _name = name;
+    _remoteID = remoteID;
+    _attractif = attractif;
+    _co2 = co2;
+    _isOn = isOn;
+    _device = device;
+
+    _connectionSubscription = _device?.connectionState.listen((BluetoothConnectionState state) async {
+      if (state == BluetoothConnectionState.disconnected) {
+        print('Disconnected from device ${device!.advName}');
+      }
+     });
+
+     _device?.cancelWhenDisconnected(_connectionSubscription!, delayed: true, next: true);
+  }
+
+  // Stream subscription for connection state.
+  StreamSubscription<BluetoothConnectionState>? _connectionSubscription;
+  StreamSubscription<BluetoothConnectionState>? get connectionSubscription => _connectionSubscription;
+  set connectionSubscription(StreamSubscription<BluetoothConnectionState>? val) => _connectionSubscription = val;
+  bool hasConnectionSubscription() => _connectionSubscription != null;
 
   // "manufactureID" field.
   String? _manufactureID;
@@ -66,6 +80,13 @@ class AntimoustiqueStruct extends BaseStruct {
   set isOn(bool? val) => _isOn = val;
   bool hasIsOn() => _isOn != null;
 
+  // Bluetooth device field.
+  BluetoothDevice? _device;
+  BluetoothDevice get device =>
+      _device ?? BluetoothDevice(remoteId: const DeviceIdentifier(''));
+  set device(BluetoothDevice val) => _device = val;
+  bool hasDevice() => _device != null;
+
   static AntimoustiqueStruct fromMap(Map<String, dynamic> data) =>
       AntimoustiqueStruct(
         manufactureID: data['manufactureID'] as String?,
@@ -89,6 +110,10 @@ class AntimoustiqueStruct extends BaseStruct {
         'attractif': _attractif,
         'co2': _co2,
         'isOn': _isOn,
+        'device': {
+          'remoteId': _device?.remoteId.toString(),
+          'name': _device?.advName,
+        },
       }.withoutNulls;
 
   @override
@@ -121,6 +146,16 @@ class AntimoustiqueStruct extends BaseStruct {
           _isOn,
           ParamType.bool,
         ),
+        'device': {
+          'remoteId': serializeParam(
+            _device?.remoteId.toString(),
+            ParamType.String,
+          ),
+          'name': serializeParam(
+            _device?.advName,
+            ParamType.String,
+          ),
+        },
       }.withoutNulls;
 
   static AntimoustiqueStruct fromSerializableMap(Map<String, dynamic> data) =>
@@ -190,6 +225,7 @@ AntimoustiqueStruct createAntimoustiqueStruct({
   double? attractif,
   double? co2,
   bool? isOn,
+  BluetoothDevice? device,
 }) =>
     AntimoustiqueStruct(
       manufactureID: manufactureID,
