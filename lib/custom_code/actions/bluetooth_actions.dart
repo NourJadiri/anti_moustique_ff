@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:anti_moustique/backend/schema/structs/antimoustique_struct.dart';
+import 'package:anti_moustique/app_state.dart';
 
 class BluetoothActions {
 
@@ -18,13 +19,13 @@ class BluetoothActions {
     set scanSubscription(StreamSubscription<List<ScanResult>>? val) => _scanSubscription = val;
     bool hasScanSubscription() => _scanSubscription != null;
 
-    static Future<void> scanForDevice({String name = ''}) async{
+    static Future<void> scanForDevice({String name = '', String remoteID = ''}) async{
 
         FlutterBluePlus.cancelWhenScanComplete(_scanSubscription!);
 
         await FlutterBluePlus.adapterState.where((val) => val == BluetoothAdapterState.on).first;
 
-        await FlutterBluePlus.startScan(timeout: Duration(seconds: 4), withNames: name.isNotEmpty ? [name] : const []);
+        await FlutterBluePlus.startScan(timeout: Duration(seconds: 4), withNames: name.isNotEmpty ? [name] : const [], withRemoteIds: remoteID.isNotEmpty ? [remoteID] : const []);
 
         await FlutterBluePlus.isScanning.where((val) => val == false).first;
 
@@ -34,11 +35,60 @@ class BluetoothActions {
 
         antimoustique.device.cancelWhenDisconnected(antimoustique.connectionSubscription!, delayed: true, next: true);
 
-        await antimoustique.device.connect(autoConnect: true, mtu: null);
+        await antimoustique.device.connect(mtu: null);
 
         print('Connected to device ${antimoustique.device.remoteId}');
 
-        await antimoustique.device.connectionState.where((val) => val == BluetoothConnectionState.connected).first;
+        //await antimoustique.device.connectionState.where((val) => val == BluetoothConnectionState.connected).first;
+        
+    }
+
+    static Future<List<BluetoothService>> discoverServices(AntimoustiqueStruct antimoustique) async {
+
+        var services = await antimoustique.device.discoverServices();
+
+        services.forEach((service) {
+            print('Discovered service ${service.uuid} on device ${antimoustique.device.remoteId}');
+        });
+
+        return services;
+    }
+
+    static Future<List<BluetoothCharacteristic>> discoverCharacteristics(AntimoustiqueStruct antimoustique, BluetoothService service) async {
+
+        var characteristics = await service.characteristics;
+
+        characteristics.forEach((characteristic) {
+            print('Discovered characteristic ${characteristic.uuid} on device ${antimoustique.device.remoteId}');
+        });
+
+        return characteristics;
+    }
+
+    static Future<void> writeToCharacteristic(AntimoustiqueStruct antimoustique, BluetoothCharacteristic characteristic, List<int> value) async {
+
+      try{
+        await characteristic.write(value);  
+        print('Wrote to characteristic ${characteristic.uuid} on device ${antimoustique.device.remoteId}');
+      }
+      catch(e){
+        print('Error writing to characteristic ${characteristic.uuid} on device ${antimoustique.device.remoteId}');
+      }
+
+    }
+
+    static Future<List<int>> readFromCharacteristic(AntimoustiqueStruct antimoustique, BluetoothCharacteristic characteristic) async {
+
+        try{
+          var value = await characteristic.read();
+          print('Read from characteristic ${characteristic.uuid} on device ${antimoustique.device.remoteId}');
+          return value;
+        }
+        catch(e){
+          print('Error reading from characteristic ${characteristic.uuid} on device ${antimoustique.device.remoteId}');
+          return [];
+        }
+        
     }
 
     static Future<void> disconnectFromDevice(AntimoustiqueStruct antimoustique) async {

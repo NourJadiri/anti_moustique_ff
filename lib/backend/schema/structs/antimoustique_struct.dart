@@ -11,7 +11,7 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 
 class AntimoustiqueStruct extends BaseStruct {
-  AntimoustiqueStruct({ String? manufactureID, String? vendor = 'unknown', String? name, String? remoteID, double? attractif = 0, double? co2 = 0, bool? isOn = false }) {
+  AntimoustiqueStruct({ String? manufactureID, String? vendor = 'unknown', String? name, String? remoteID, double? attractif = 0, double? co2 = 0, bool? isOn = false, BluetoothDevice? device }) {
     _manufactureID = manufactureID;
     _vendor = vendor;
     _name = name;
@@ -19,13 +19,15 @@ class AntimoustiqueStruct extends BaseStruct {
     _attractif = attractif;
     _co2 = co2;
     _isOn = isOn;
-    _device = BluetoothDevice(remoteId: DeviceIdentifier(remoteID ?? ''));
+    _device = device;
 
-    _connectionSubscription = _device!.connectionState.listen((BluetoothConnectionState state) async {
+    _connectionSubscription = _device?.connectionState.listen((BluetoothConnectionState state) async {
       if (state == BluetoothConnectionState.disconnected) {
-        print('Disconnected from device ${device.advName}');
+        print('Disconnected from device ${device!.advName}');
       }
      });
+
+     _device?.cancelWhenDisconnected(_connectionSubscription!, delayed: true, next: true);
   }
 
   // Stream subscription for connection state.

@@ -99,16 +99,7 @@ class FFAppState extends ChangeNotifier {
 
   late SharedPreferences prefs;
 
-  List<AntimoustiqueStruct> _deviceList = [
-    AntimoustiqueStruct.fromSerializableMap(jsonDecode(
-        '{\"manufactureID\":\"XIC-SFD-LLAS\",\"name\":\"Antimoustique\",\"remoteID\":\"QSDFQSDFQSDCXVQSDF\",\"attractif\":\"0.5\",\"co2\":\"0.1\"}')),
-    AntimoustiqueStruct.fromSerializableMap(jsonDecode(
-        '{\"manufactureID\":\"LLSQI-IDNSIQ-LQD\",\"name\":\"Ouai\",\"remoteID\":\"QSDFJQKSDF\",\"attractif\":\"0.2\",\"co2\":\"0.77\"}')),
-    AntimoustiqueStruct.fromSerializableMap(jsonDecode(
-        '{\"manufactureID\":\"qsDFQSDFZE-QSJDIF\",\"name\":\"Tu veux un café ?\",\"remoteID\":\"7C:E6:FF:A5:E3:FF\",\"attractif\":\"0.5\",\"co2\":\"0.1\"}')),
-    AntimoustiqueStruct.fromSerializableMap(jsonDecode(
-        '{\"manufactureID\":\"VS-SUP2T-10G\",\"name\":\"Le l\'appareil\",\"remoteID\":\"5F:CC:D2:F3:A8\",\"attractif\":\"0.7\",\"co2\":\"0.1\",\"isOn\":\"false\"}'))
-  ];
+  List<AntimoustiqueStruct> _deviceList = [];
   List<AntimoustiqueStruct> get deviceList => _deviceList;
   set deviceList(List<AntimoustiqueStruct> value) {
     _deviceList = value;
@@ -149,12 +140,7 @@ class FFAppState extends ChangeNotifier {
         'ff_deviceList', _deviceList.map((x) => x.serialize()).toList());
   }
 
-  List<GoogleMapDataStruct> _googleMapData = [
-    GoogleMapDataStruct.fromSerializableMap(jsonDecode(
-        '{\"lat_lng\":\"45.7825248,4.8765519\",\"iconPath\":\"https://picsum.photos/seed/474/600\",\"title\":\"Magasin 1\",\"description\":\"oui\"}')),
-    GoogleMapDataStruct.fromSerializableMap(jsonDecode(
-        '{\"lat_lng\":\"45.771211,4.8823066\",\"iconPath\":\"https://picsum.photos/seed/281/600\",\"title\":\"ouai\",\"description\":\"\"}'))
-  ];
+  List<GoogleMapDataStruct> _googleMapData = [];
   List<GoogleMapDataStruct> get googleMapData => _googleMapData;
   set googleMapData(List<GoogleMapDataStruct> value) {
     _googleMapData = value;
@@ -253,12 +239,7 @@ class FFAppState extends ChangeNotifier {
         _notificationList.map((x) => x.serialize()).toList());
   }
 
-  List<FunctioningScheduleStruct> _functioningScheduleList = [
-    FunctioningScheduleStruct.fromSerializableMap(jsonDecode(
-        '{\"startTime\":\"1710677255268\",\"endTime\":\"1710677255268\",\"isReccurent\":\"false\",\"functioningMode\":\"e5qer\",\"startDay\":\"1710677255268\"}')),
-    FunctioningScheduleStruct.fromSerializableMap(jsonDecode(
-        '{\"startTime\":\"1710677256581\",\"endTime\":\"1710677256581\",\"isReccurent\":\"false\",\"functioningMode\":\"e5qer\",\"startDay\":\"1710677256581\"}'))
-  ];
+  List<FunctioningScheduleStruct> _functioningScheduleList = [];
   List<FunctioningScheduleStruct> get functioningScheduleList =>
       _functioningScheduleList;
   set functioningScheduleList(List<FunctioningScheduleStruct> value) {
