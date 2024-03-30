@@ -446,21 +446,21 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
   Future<void> _activateDevice(BuildContext context, AntimoustiqueStruct currentDevice) async {
     try {
       if (!currentDevice.isOn) {
-        await BluetoothActions.scanForDevice(name: 'La voix');
+        await BluetoothActions.scanForDevice(manufactureID: 'Pipou');
         
         BluetoothDevice laVoixDevice = FlutterBluePlus.lastScanResults.last.device;
 
         print(laVoixDevice);
 
         AntimoustiqueStruct laVoix = AntimoustiqueStruct(
-          name: 'La voix',
-          manufactureID: 'la voix',
+          name: 'Pipou',
+          manufactureID: 'Pipou',
           isOn: true,
           attractif: 0.5,
           co2: 0.5,
           device: laVoixDevice,
           remoteID: laVoixDevice.remoteId.toString(),
-          vendor: 'laVoix',  
+          vendor: 'Pipou',  
         );
 
         await BluetoothActions.connectToDevice(laVoix);
