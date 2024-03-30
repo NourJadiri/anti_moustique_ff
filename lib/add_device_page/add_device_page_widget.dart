@@ -9,8 +9,6 @@ import 'add_device_page_model.dart';
 export 'add_device_page_model.dart';
 import '../app_state.dart';
 
-
-
 class AddDevicePageWidget extends StatefulWidget {
   const AddDevicePageWidget({super.key});
 
@@ -51,11 +49,12 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
       // Decode the scanned JSON data
       Map<String, dynamic> qrData = jsonDecode(qrResult);
 
+      print(qrData);
+
       // Check if all required fields (manufactureID, remoteID, vendor) are present
       if (qrData.containsKey('manufactureID') &&
           qrData.containsKey('remoteID') &&
           qrData.containsKey('vendor')) {
-
         // Extract manufactureID, remoteID, and vendor from the decoded JSON
         String manufactureID = qrData['manufactureID'];
         String remoteID = qrData['remoteID'];
@@ -76,21 +75,20 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
             _model.appState?.addToDeviceList(_model.antimoustique!);
           }
         });
-
       } else {
         // Show error message if any of the required fields are missing
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Invalid QR code. Please make sure it contains manufactureID, remoteID, and vendor.'),
+          const SnackBar(
+            content: Text(
+                'Invalid QR code. Please make sure it contains manufactureID, remoteID, and vendor.'),
           ),
         );
       }
-
     } catch (e) {
       print("Error scanning QR code: $e");
       // Show an error message to the user
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Error scanning QR code. Please try again.'),
         ),
       );
@@ -119,14 +117,15 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 5.0),
+                  padding:
+                      const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 5.0),
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Padding(
-                        padding:
-                        const EdgeInsetsDirectional.fromSTEB(0.0, 3.0, 0.0, 0.0),
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            0.0, 3.0, 0.0, 0.0),
                         child: Container(
                           width: MediaQuery.sizeOf(context).width * 1.0,
                           height: MediaQuery.sizeOf(context).height * 0.05,
@@ -137,7 +136,8 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
                           child: Stack(
                             children: [
                               Align(
-                                alignment: const AlignmentDirectional(-1.0, 0.0),
+                                alignment:
+                                    const AlignmentDirectional(-1.0, 0.0),
                                 child: FlutterFlowIconButton(
                                   borderColor: FlutterFlowTheme.of(context)
                                       .secondaryBackground,
@@ -163,9 +163,9 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
                                   style: FlutterFlowTheme.of(context)
                                       .titleLarge
                                       .override(
-                                    fontFamily: 'Inter',
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                                        fontFamily: 'Inter',
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                 ),
                               ),
                             ],
@@ -176,15 +176,16 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 30.0, 0.0, 0.0),
+                  padding:
+                      const EdgeInsetsDirectional.fromSTEB(0.0, 30.0, 0.0, 0.0),
                   child: Text(
                     'QR-CODE',
                     textAlign: TextAlign.center,
                     style: FlutterFlowTheme.of(context).displaySmall.override(
-                      fontFamily: 'Inter',
-                      fontSize: 32.0,
-                      fontWeight: FontWeight.w300,
-                    ),
+                          fontFamily: 'Inter',
+                          fontSize: 32.0,
+                          fontWeight: FontWeight.w300,
+                        ),
                   ),
                 ),
                 Align(
@@ -203,7 +204,8 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
+                  padding:
+                      const EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
                   child: Container(
                     width: MediaQuery.sizeOf(context).width * 0.5,
                     height: MediaQuery.sizeOf(context).height * 0.04,
@@ -222,14 +224,14 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
                         height: 0.0,
                         padding: const EdgeInsetsDirectional.fromSTEB(
                             24.0, 0.0, 24.0, 0.0),
-                        iconPadding:
-                        const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                        iconPadding: const EdgeInsetsDirectional.fromSTEB(
+                            0.0, 0.0, 0.0, 0.0),
                         color: FlutterFlowTheme.of(context).primary,
                         textStyle:
-                        FlutterFlowTheme.of(context).titleSmall.override(
-                          fontFamily: 'Readex Pro',
-                          color: Colors.white,
-                        ),
+                            FlutterFlowTheme.of(context).titleSmall.override(
+                                  fontFamily: 'Readex Pro',
+                                  color: Colors.white,
+                                ),
                         elevation: 0.0,
                         borderSide: const BorderSide(
                           color: Colors.transparent,
@@ -241,7 +243,8 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 40.0, 0.0, 0.0),
+                  padding:
+                      const EdgeInsetsDirectional.fromSTEB(0.0, 40.0, 0.0, 0.0),
                   child: Container(
                     width: 270.0,
                     height: 63.0,
@@ -289,7 +292,7 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
                       style: FlutterFlowTheme.of(context).bodyMedium,
                       maxLength: 10,
                       validator:
-                      _model.textControllerValidator.asValidator(context),
+                          _model.textControllerValidator.asValidator(context),
                     ),
                   ),
                 ),
