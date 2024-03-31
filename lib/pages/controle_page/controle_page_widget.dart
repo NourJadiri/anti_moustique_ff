@@ -1,4 +1,6 @@
 import 'package:anti_moustique/backend/schema/structs/antimoustique_struct.dart';
+import 'package:anti_moustique/custom_code/actions/bluetooth_actions.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import '/components/functionning_schedule_widget.dart';
 import '/components/navigation_bar_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -442,8 +444,33 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
 
   Future<void> _activateDevice(BuildContext context, AntimoustiqueStruct currentDevice) async {
     try {
+      if(currentDevice.device.isDisconnected) {
+        await BluetoothActions.connectToDevice(currentDevice);
+        await BluetoothActions.discoverServices(currentDevice);
+      }
+      
+      var commandService = currentDevice.device.servicesList.firstWhere((service) => service.uuid.toString() == '1900');
 
-    } catch (e) {
+      await BluetoothActions.discoverCharacteristics(currentDevice, commandService);
+
+      var activateCommandCharacteristic = commandService.characteristics.firstWhere((characteristic) => characteristic.uuid.toString() == 'fa45d9c7-4068-453d-a18c-e255e2e037bd');
+
+      await BluetoothActions.writeToCharacteristic(currentDevice, activateCommandCharacteristic, [currentDevice.isOn ? 0 : 1]);
+
+      setState(() {
+        FFAppState().updateCurrentDeviceStruct((e) => e..isOn = currentDevice.isOn);
+      });
+    } on FlutterBluePlusException catch (e) {
+      if(context.mounted){
+        // Add a snackbar to show the error
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Erreur dans la communication avec l\'appareil. Assurez vous que l\'appareil est allumé et à proximité.'),
+          ),
+        );
+      }
+    }
+     catch (e) {
       print(e);
     }
   }
