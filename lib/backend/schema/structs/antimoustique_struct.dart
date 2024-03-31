@@ -2,7 +2,6 @@
 
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 
 import '/backend/schema/util/schema_util.dart';
 

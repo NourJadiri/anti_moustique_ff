@@ -445,41 +445,7 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
 
   Future<void> _activateDevice(BuildContext context, AntimoustiqueStruct currentDevice) async {
     try {
-      if (!currentDevice.isOn) {
-        await BluetoothActions.scanForDevice(manufactureID: 'Pipou');
-        
-        BluetoothDevice laVoixDevice = FlutterBluePlus.lastScanResults.last.device;
 
-        print(laVoixDevice);
-
-        AntimoustiqueStruct laVoix = AntimoustiqueStruct(
-          name: 'Pipou',
-          manufactureID: 'Pipou',
-          isOn: true,
-          attractif: 0.5,
-          co2: 0.5,
-          device: laVoixDevice,
-          remoteID: laVoixDevice.remoteId.toString(),
-          vendor: 'Pipou',  
-        );
-
-        await BluetoothActions.connectToDevice(laVoix);
-
-        var services = await BluetoothActions.discoverServices(laVoix);
-
-        var characteristics = await BluetoothActions.discoverCharacteristics(laVoix, services.first);
-
-        for (var characteristic in characteristics) {
-          print('Writing to characteristic ${characteristic.uuid} on device ${laVoix.name}');
-          await BluetoothActions.writeToCharacteristic(laVoix, characteristic, [0x01]);
-        }
-
-        for (var characteristic in characteristics) {
-          print('Reading from characteristic ${characteristic.uuid} on device ${laVoix.name}');
-          await BluetoothActions.readFromCharacteristic(laVoix, characteristic);
-        }
-        
-      }
     } catch (e) {
       print(e);
     }

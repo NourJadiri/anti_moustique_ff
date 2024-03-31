@@ -1,7 +1,6 @@
 import '/flutter_flow/flutter_flow_util.dart';
 import 'add_device_page_widget.dart' show AddDevicePageWidget;
 import 'package:flutter/material.dart';
-import '../app_state.dart';
 import '../backend/schema/structs/antimoustique_struct.dart';
 
 

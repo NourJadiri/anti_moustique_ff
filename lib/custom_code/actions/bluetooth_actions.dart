@@ -6,8 +6,6 @@ import 'package:anti_moustique/app_state.dart';
 class BluetoothActions {
 
 
-    // write a constructor
-
     static StreamSubscription<List<ScanResult>>? _scanSubscription = FlutterBluePlus.onScanResults.listen((results) {
             if (results.isNotEmpty) {
                 ScanResult r = results.last;
@@ -33,13 +31,9 @@ class BluetoothActions {
 
     static Future<void> connectToDevice(AntimoustiqueStruct antimoustique) async {
 
-        antimoustique.device.cancelWhenDisconnected(antimoustique.connectionSubscription!, delayed: true, next: true);
-
         await antimoustique.device.connect(mtu: null);
 
         print('Connected to device ${antimoustique.device.remoteId}');
-
-        //await antimoustique.device.connectionState.where((val) => val == BluetoothConnectionState.connected).first;
         
     }
 
@@ -79,15 +73,15 @@ class BluetoothActions {
 
     static Future<List<int>> readFromCharacteristic(AntimoustiqueStruct antimoustique, BluetoothCharacteristic characteristic) async {
 
-        try{
-          var value = await characteristic.read();
-          print('Read from characteristic ${characteristic.uuid} on device ${antimoustique.device.remoteId}');
-          return value;
-        }
-        catch(e){
-          print('Error reading from characteristic ${characteristic.uuid} on device ${antimoustique.device.remoteId}');
-          return [];
-        }
+      try{
+        var value = await characteristic.read();
+        print('Read from characteristic ${characteristic.uuid}, value : ${value}'); 
+        return value;
+      }
+      catch(e){
+        print('Error reading from characteristic ${characteristic.uuid} on device ${antimoustique.device.remoteId}');
+        return [];
+      }
         
     }
 
