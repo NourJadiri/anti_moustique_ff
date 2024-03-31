@@ -1,13 +1,10 @@
 import 'package:anti_moustique/backend/schema/structs/antimoustique_struct.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-
 import '/components/functionning_schedule_widget.dart';
 import '/components/navigation_bar_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import 'package:anti_moustique/custom_code/actions/bluetooth_actions.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
