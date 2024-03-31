@@ -1,18 +1,12 @@
-import 'package:anti_moustique/custom_code/actions/bluetooth_actions.dart';
+import 'package:anti_moustique/backend/schema/structs/index.dart';
 import 'package:anti_moustique/custom_code/actions/device_utilities.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-
-import '../backend/schema/structs/antimoustique_struct.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'add_device_page_model.dart';
 export 'add_device_page_model.dart';
-// ignore: unused_import
-import '../app_state.dart';
 
 class AddDevicePageWidget extends StatefulWidget {
   const AddDevicePageWidget({super.key});
@@ -46,50 +40,76 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
   Future<void> _scanQR(BuildContext context) async {
     var qrData = await scanQR(context);
 
-    if (qrData.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Erreur lors de la lecture du QR code'),
-        ),
-      );
+    // Check if the QR code data is empty
+    if (qrData.isEmpty && context.mounted) {
+      buildQRReadingError(context);
       return;
     }
 
-    await BluetoothActions.scanForDevice(
-        manufactureID: qrData['manufactureID']);
-
-    if (FlutterBluePlus.lastScanResults.isEmpty) {
-      print('No devices found');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-              'Aucun appareil trouvé, assurez-vous que l\'appareil est activé et qu\'il est à proximité'),
-        ),
-      );
-      return;
+    // Show a loading dialog while processing the QR code
+    if(context.mounted) {
+      showProcessingQrDialog(context);
     }
 
-    BluetoothDevice device = FlutterBluePlus.lastScanResults
-        .firstWhere(
-          (scanResult) =>
-              scanResult.device.advName.toString() == qrData['manufactureID'],
-        )
-        .device;
+    try {
+      if (context.mounted) {
+        // Get the device from the QR code data
+        AntimoustiqueStruct newAntiMoustique =
+            await getDeviceFromQR(context, qrData);
+        setState(() {
+          _model.deviceManufactureID = newAntiMoustique.manufactureID;
+          _model.antimoustique = newAntiMoustique;
+          _deviceScanned = (newAntiMoustique != AntimoustiqueStruct());
+        });
+      }
+    } catch (e) {
+      // Handle errors
+      print("Error: $e");
+    } finally {
+      // Close the loading dialog
+      if(context.mounted){
+        Navigator.of(context).pop();
+      }
+    }
+  }
 
-    // TODO : Lire les caractéristiques de la device pour avoir le niveau de CO2 et d'attractif et l'état (ON/OFF)
-    AntimoustiqueStruct newAntiMoustique = AntimoustiqueStruct(
-      manufactureID: qrData['manufactureID'],
-      remoteID: device.remoteId.toString(),
-      vendor: qrData['vendor'],
-      device: device,
-      isOn: true,
+  Future<dynamic> showProcessingQrDialog(BuildContext context) {
+    return showDialog(
+    context: context,
+    barrierDismissible:
+        false, // Prevents dismissing the dialog by tapping outside
+    builder: (BuildContext context) {
+      return const AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(height: 20),
+            Text(
+              "Please wait...",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 10),
+            Text(
+              "Processing QR code...",
+              style: TextStyle(fontSize: 16),
+            ),
+          ],
+        ),
+      );
+    },
+  );
+  }
+
+  void buildQRReadingError(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Erreur lors de la lecture du QR code'),
+      ),
     );
-
-    setState(() {
-      _model.deviceManufactureID = newAntiMoustique.manufactureID;
-      _model.antimoustique = newAntiMoustique;
-      _deviceScanned = true;
-    });
   }
 
   @override
@@ -113,48 +133,10 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Padding(
+                const Padding(
                   padding:
-                      const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 5.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(
-                            0.0, 3.0, 0.0, 0.0),
-                        child: Container(
-                          width: MediaQuery.sizeOf(context).width * 1.0,
-                          height: MediaQuery.sizeOf(context).height * 0.05,
-                          decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
-                          ),
-                          child: Stack(
-                            children: [
-                              const Align(
-                                alignment: AlignmentDirectional(-1.0, 0.0),
-                                child: ReturnButton(),
-                              ),
-                              Align(
-                                alignment: const AlignmentDirectional(0.0, 0.0),
-                                child: Text(
-                                  'Ajouter un appareil',
-                                  textAlign: TextAlign.center,
-                                  style: FlutterFlowTheme.of(context)
-                                      .titleLarge
-                                      .override(
-                                        fontFamily: 'Inter',
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                      EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 5.0),
+                  child: AjouterAppareilTopBar(),
                 ),
                 Padding(
                   padding:
@@ -179,7 +161,9 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
                     ),
                     child: Icon(
                       Icons.qr_code_2_outlined,
-                      color: FlutterFlowTheme.of(context).primary,
+                      color: _deviceScanned
+                          ? FlutterFlowTheme.of(context).success
+                          : FlutterFlowTheme.of(context).primary,
                       size: 200.0,
                     ),
                   ),
@@ -234,39 +218,7 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
                     decoration: const BoxDecoration(
                       color: Colors.transparent,
                     ),
-                    child: FFButtonWidget(
-                      onPressed: _model.antimoustique != null ? () async {
-                        
-                        if(_model.textController!.text.isNotEmpty){
-                          _model.antimoustique!.name = _model.textController!.text;
-                          FFAppState().update(() {
-                            FFAppState().addToDeviceList(_model.antimoustique!);
-                          },);
-                          Navigator.pop(context);
-                        }
-                        // _model.appState!.addAntiMoustique(_model.antimoustique!);
-                        // Navigator.pop(context);
-                      } :() {},
-                      text: 'Ajouter',
-                      options: FFButtonOptions(
-                        width: 270.0,
-                        height: 63.0,
-                        padding: const EdgeInsetsDirectional.fromSTEB(
-                            24.0, 0.0, 24.0, 0.0),
-                        color: FlutterFlowTheme.of(context).success,
-                        textStyle:
-                            FlutterFlowTheme.of(context).titleSmall.override(
-                                  fontFamily: 'Readex Pro',
-                                  color: Colors.white,
-                                ),
-                        elevation: 0.0,
-                        borderSide: const BorderSide(
-                          color: Colors.transparent,
-                          width: 1.0,
-                        ),
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                    ),
+                    child: ConfirmDeviceScanButton(model: _model),
                   ),
                 )
               ],
@@ -305,17 +257,81 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
   }
 }
 
-class ConfirmAddDeviceButton extends StatelessWidget {
-  const ConfirmAddDeviceButton({super.key});
+class AjouterAppareilTopBar extends StatelessWidget {
+  const AjouterAppareilTopBar({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsetsDirectional.fromSTEB(
+              0.0, 3.0, 0.0, 0.0),
+          child: Container(
+            width: MediaQuery.sizeOf(context).width * 1.0,
+            height: MediaQuery.sizeOf(context).height * 0.05,
+            decoration: BoxDecoration(
+              color: FlutterFlowTheme.of(context)
+                  .secondaryBackground,
+            ),
+            child: Stack(
+              children: [
+                const Align(
+                  alignment: AlignmentDirectional(-1.0, 0.0),
+                  child: ReturnButton(),
+                ),
+                Align(
+                  alignment: const AlignmentDirectional(0.0, 0.0),
+                  child: Text(
+                    'Ajouter un appareil',
+                    textAlign: TextAlign.center,
+                    style: FlutterFlowTheme.of(context)
+                        .titleLarge
+                        .override(
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w600,
+                        ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class ConfirmDeviceScanButton extends StatelessWidget {
+  const ConfirmDeviceScanButton({
+    super.key,
+    required AddDevicePageModel model,
+  }) : _model = model;
+
+  final AddDevicePageModel _model;
 
   @override
   Widget build(BuildContext context) {
     return FFButtonWidget(
-      onPressed: () async {
-        // Ajouter l'appareil
-        // _model.appState!.addAntiMoustique(_model.antimoustique!);
-        // Navigator.pop(context);
-      },
+      onPressed: _model.antimoustique != null
+          ? () async {
+              if (_model.textController!.text.isNotEmpty) {
+                _model.antimoustique!.name = _model.textController!.text;
+                FFAppState().update(
+                  () {
+                    FFAppState().addToDeviceList(_model.antimoustique!);
+                  },
+                );
+                Navigator.pop(context);
+              }
+              // _model.appState!.addAntiMoustique(_model.antimoustique!);
+              // Navigator.pop(context);
+            }
+          : () {},
       text: 'Ajouter',
       options: FFButtonOptions(
         width: 270.0,
