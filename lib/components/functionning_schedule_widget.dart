@@ -52,7 +52,7 @@ class _FunctionningScheduleWidgetState
     _model.maybeDispose();
     super.dispose();
   }
-/*
+
   void activerAppareil() {
     setState(() {
       // Mettre à jour le paramètre isOn à true
@@ -89,7 +89,7 @@ class _FunctionningScheduleWidgetState
       allowWhileIdle: true,
     );
   }
-*/
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -184,8 +184,7 @@ class _FunctionningScheduleWidgetState
               highlightColor: Colors.transparent,
               onTap: () async {
                 setState(() {
-                  FFAppState()
-                      .removeAtIndexFromFunctioningScheduleList(widget.index!);
+                  FFAppState().currentDevice.removeAtIndexFromFunctioningScheduleList(widget.index!);
                 });
               },
               child: Icon(

@@ -272,11 +272,6 @@ class FFAppState extends ChangeNotifier {
         _functioningScheduleList.map((x) => x.serialize()).toList());
   }
 
-  void removeAtIndexFromFunctioningScheduleList(int index) {
-    _functioningScheduleList.removeAt(index);
-    prefs.setStringList('ff_functioningScheduleList',
-        _functioningScheduleList.map((x) => x.serialize()).toList());
-  }
 
   void updateFunctioningScheduleListAtIndex(
     int index,

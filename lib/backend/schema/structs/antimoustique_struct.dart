@@ -111,25 +111,15 @@ class AntimoustiqueStruct extends BaseStruct {
   void removeFunctioningSchedule(FunctioningScheduleStruct schedule) {
     _functioningScheduleList?.remove(schedule);
   }
+  void removeAtIndexFromFunctioningScheduleList(int index) {
+    _functioningScheduleList?.removeAt(index);
+  }
 
   // Méthode pour mettre à jour une plage horaire
   void updateFunctioningSchedule(int index, FunctioningScheduleStruct updatedSchedule) {
     if (_functioningScheduleList != null && index >= 0 && index < _functioningScheduleList!.length) {
       _functioningScheduleList![index] = updatedSchedule;
     }
-  }
-  // Méthode pour sérialiser la liste de plages horaires
-  List<Map<String, dynamic>> serializeFunctioningScheduleList() {
-    return _functioningScheduleList
-        ?.map((schedule) => schedule.toMap())
-        .toList() ?? [];
-  }
-
-  // Méthode pour désérialiser la liste de plages horaires
-  void deserializeFunctioningScheduleList(List<Map<String, dynamic>> data) {
-    _functioningScheduleList = data
-        .map((scheduleData) => FunctioningScheduleStruct.fromMap(scheduleData))
-        .toList();
   }
 
   // "device" field.
@@ -172,7 +162,7 @@ class AntimoustiqueStruct extends BaseStruct {
       'remoteId': _device?.remoteId.toString(),
       'name': _device?.advName,
     },
-    'functioningScheduleList': serializeFunctioningScheduleList(),
+    'functioningScheduleList' : _functioningScheduleList,
   }.withoutNulls;
 
   @override
@@ -215,9 +205,6 @@ class AntimoustiqueStruct extends BaseStruct {
         ParamType.String,
       ),
     },
-    'functioningScheduleList': _functioningScheduleList
-        ?.map((schedule) => schedule.toMap())
-        .toList(),
   }.withoutNulls;
 
   static AntimoustiqueStruct fromSerializableMap(Map<String, dynamic> data) =>

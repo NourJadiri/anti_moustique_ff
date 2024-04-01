@@ -175,6 +175,7 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
             // Ouverture de la page de controle correspondante
 
             context.pushNamed('ControlePage');
+            print(FFAppState().currentDevice.isOn);
           },
           child: DeviceWidget(
             key: Key(
