@@ -55,56 +55,42 @@ class FunctioningScheduleStruct extends BaseStruct {
       : null;
 
   Map<String, dynamic> toMap() => {
-        'startDay': _startDay,
-        'startTime': _startTime,
-        'endTime': _endTime,
-        'isReccurent': _isReccurent,
-      }.withoutNulls;
+    'startDay': _startDay,
+    'startTime': _startTime,
+    'endTime': _endTime,
+    'isReccurent': _isReccurent,
+  }.withoutNulls;
 
   @override
   Map<String, dynamic> toSerializableMap() => {
-        'startDay': serializeParam(
-          _startDay,
-          ParamType.DateTime,
-        ),
-        'startTime': serializeParam(
-          _startTime,
-          ParamType.DateTime,
-        ),
-        'endTime': serializeParam(
-          _endTime,
-          ParamType.DateTime,
-        ),
-        'isReccurent': serializeParam(
-          _isReccurent,
-          ParamType.bool,
-        ),
-      }.withoutNulls;
+    'startDay': _startDay != null ? _startDay!.toIso8601String() : null,
+    'startTime': _startTime != null ? _startTime!.toIso8601String() : null,
+    'endTime': _endTime != null ? _endTime!.toIso8601String() : null,
+    'isReccurent': serializeParam(
+      _isReccurent,
+      ParamType.bool,
+    ),
+  }.withoutNulls;
 
   static FunctioningScheduleStruct fromSerializableMap(
-          Map<String, dynamic> data) =>
-      FunctioningScheduleStruct(
-        startDay: deserializeParam(
-          data['startDay'],
-          ParamType.DateTime,
-          false,
-        ),
-        startTime: deserializeParam(
-          data['startTime'],
-          ParamType.DateTime,
-          false,
-        ),
-        endTime: deserializeParam(
-          data['endTime'],
-          ParamType.DateTime,
-          false,
-        ),
-        isReccurent: deserializeParam(
-          data['isReccurent'],
-          ParamType.bool,
-          false,
-        ),
-      );
+      Map<String, dynamic> data) {
+    return FunctioningScheduleStruct(
+      startDay: data['startDay'] != null
+          ? DateTime.parse(data['startDay'] as String)
+          : null,
+      startTime: data['startTime'] != null
+          ? DateTime.parse(data['startTime'] as String)
+          : null,
+      endTime: data['endTime'] != null
+          ? DateTime.parse(data['endTime'] as String)
+          : null,
+      isReccurent: deserializeParam(
+        data['isReccurent'],
+        ParamType.bool,
+        false,
+      ),
+    );
+  }
 
   @override
   String toString() => 'FunctioningScheduleStruct(${toMap()})';

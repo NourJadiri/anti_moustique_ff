@@ -1,8 +1,12 @@
+import 'package:anti_moustique/app_state.dart';
+
+import '../backend/schema/structs/antimoustique_struct.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'functionning_schedule_model.dart';
 export 'functionning_schedule_model.dart';
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 
 class FunctionningScheduleWidget extends StatefulWidget {
   const FunctionningScheduleWidget({
@@ -20,6 +24,7 @@ class FunctionningScheduleWidget extends StatefulWidget {
   final int? index;
   final bool? isPeriodic;
 
+
   @override
   State<FunctionningScheduleWidget> createState() =>
       _FunctionningScheduleWidgetState();
@@ -30,24 +35,61 @@ class _FunctionningScheduleWidgetState
   late FunctionningScheduleModel _model;
 
   @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => FunctionningScheduleModel(FFAppState())); // Passer FFAppState ici
+  }
+
+  @override
   void setState(VoidCallback callback) {
     super.setState(callback);
     _model.onUpdate();
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _model = createModel(context, () => FunctionningScheduleModel());
-  }
 
   @override
   void dispose() {
     _model.maybeDispose();
-
     super.dispose();
   }
+/*
+  void activerAppareil() {
+    setState(() {
+      // Mettre à jour le paramètre isOn à true
+      FFAppState().currentDevice.isOn = true;
 
+    });
+  }
+
+  void desactiverAppareil() {
+    setState(() {
+      FFAppState().currentDevice.isOn = false;
+    });
+  }
+
+  void scheduleAlarm() async {
+    DateTime debut = widget.startTime!;
+    DateTime fin = widget.endTime!;
+
+    await AndroidAlarmManager.cancel(widget.index!);
+
+    await AndroidAlarmManager.oneShotAt(
+      debut,
+      widget.index!,
+      activerAppareil,
+      exact: true,
+      allowWhileIdle: true,
+    );
+
+    await AndroidAlarmManager.oneShotAt(
+      fin,
+      widget.index! + 1,
+      desactiverAppareil,
+      exact: true,
+      allowWhileIdle: true,
+    );
+  }
+*/
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -86,18 +128,18 @@ class _FunctionningScheduleWidgetState
                           '15:00',
                         ),
                         style: FlutterFlowTheme.of(context).bodyLarge.override(
-                              fontFamily: 'Readex Pro',
-                              color: FlutterFlowTheme.of(context).primary,
-                              fontSize: 30.0,
-                              fontWeight: FontWeight.w300,
-                            ),
+                          fontFamily: 'Readex Pro',
+                          color: FlutterFlowTheme.of(context).primary,
+                          fontSize: 30.0,
+                          fontWeight: FontWeight.w300,
+                        ),
                       ),
                       Text(
                         'à ',
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
-                              fontFamily: 'Readex Pro',
-                              color: FlutterFlowTheme.of(context).primary,
-                            ),
+                          fontFamily: 'Readex Pro',
+                          color: FlutterFlowTheme.of(context).primary,
+                        ),
                       ),
                       Text(
                         valueOrDefault<String>(
@@ -105,11 +147,11 @@ class _FunctionningScheduleWidgetState
                           '21:00',
                         ),
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
-                              fontFamily: 'Readex Pro',
-                              color: FlutterFlowTheme.of(context).primary,
-                              fontSize: 30.0,
-                              fontWeight: FontWeight.w300,
-                            ),
+                          fontFamily: 'Readex Pro',
+                          color: FlutterFlowTheme.of(context).primary,
+                          fontSize: 30.0,
+                          fontWeight: FontWeight.w300,
+                        ),
                       ),
                     ],
                   ),
@@ -120,14 +162,14 @@ class _FunctionningScheduleWidgetState
                       children: [
                         Text(
                           valueOrDefault<String>(
-                            widget.isPeriodic! ? 'Periodic' : DateFormat('dd/MM/yyyy').format(widget.date!), 'undefined'
+                              widget.isPeriodic! ? 'Periodic' : DateFormat('dd/MM/yyyy').format(widget.date!), 'undefined'
                           ),
                           style:
-                              FlutterFlowTheme.of(context).labelSmall.override(
-                                    fontFamily: 'Readex Pro',
-                                    color: FlutterFlowTheme.of(context).primary,
-                                    fontWeight: FontWeight.w200,
-                                  ),
+                          FlutterFlowTheme.of(context).labelSmall.override(
+                            fontFamily: 'Readex Pro',
+                            color: FlutterFlowTheme.of(context).primary,
+                            fontWeight: FontWeight.w200,
+                          ),
                         ),
                       ],
                     ),

@@ -3,6 +3,7 @@ import '/components/navigation_bar_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import 'package:anti_moustique/backend/schema/structs/antimoustique_struct.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'device_page_model.dart';
@@ -52,7 +53,8 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
             title: Align(
               alignment: const AlignmentDirectional(0.0, 0.0),
               child: Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
+                padding:
+                const EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -60,28 +62,12 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
                     Text(
                       'Mes Appareils',
                       style:
-                          FlutterFlowTheme.of(context).headlineLarge.override(
-                                fontFamily: 'Inter',
-                                fontSize: 20.0,
-                              ),
-                    ),
-                    FlutterFlowIconButton(
-                      borderColor:
-                          FlutterFlowTheme.of(context).secondaryBackground,
-                      borderRadius: 20.0,
-                      borderWidth: 1.0,
-                      buttonSize: 40.0,
-                      fillColor:
-                          FlutterFlowTheme.of(context).secondaryBackground,
-                      icon: Icon(
-                        Icons.notifications_none,
-                        color: FlutterFlowTheme.of(context).primaryText,
-                        size: 24.0,
+                      FlutterFlowTheme.of(context).headlineLarge.override(
+                        fontFamily: 'Inter',
+                        fontSize: 20.0,
                       ),
-                      onPressed: () async {
-                        context.pushNamed('NotificationPage');
-                      },
                     ),
+                    const NotificationIconButton(),
                   ],
                 ),
               ),
@@ -122,33 +108,17 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
                                       0.0, 10.0, 0.0, 10.0),
                                   child: Container(
                                     width:
-                                        MediaQuery.sizeOf(context).width * 1.0,
+                                    MediaQuery.sizeOf(context).width * 1.0,
                                     height: 38.0,
                                     decoration: BoxDecoration(
                                       color: FlutterFlowTheme.of(context)
                                           .secondaryBackground,
                                     ),
-                                    alignment: const AlignmentDirectional(0.0, 0.0),
-                                    child: Align(
-                                      alignment: const AlignmentDirectional(0.0, 0.0),
-                                      child: FlutterFlowIconButton(
-                                        borderColor: const Color(0xFF2A2D50),
-                                        borderRadius: 20.0,
-                                        borderWidth: 1.0,
-                                        buttonSize:
-                                            MediaQuery.sizeOf(context).width *
-                                                0.6,
-                                        fillColor: const Color(0xFF2A2D50),
-                                        icon: Icon(
-                                          Icons.add,
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
-                                          size: 24.0,
-                                        ),
-                                        onPressed: () async {
-                                          context.pushNamed('AddDevicePage');
-                                        },
-                                      ),
+                                    alignment:
+                                    const AlignmentDirectional(0.0, 0.0),
+                                    child: const Align(
+                                      alignment: AlignmentDirectional(0.0, 0.0),
+                                      child: AddDeviceButton(),
                                     ),
                                   ),
                                 ),
@@ -158,46 +128,8 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
                           Builder(
                             builder: (context) {
                               final listeAppareils =
-                                  FFAppState().deviceList.toList();
-                              return ListView.separated(
-                                padding: EdgeInsets.zero,
-                                shrinkWrap: true,
-                                scrollDirection: Axis.vertical,
-                                itemCount: listeAppareils.length,
-                                separatorBuilder: (_, __) =>
-                                    const SizedBox(height: 1.0),
-                                itemBuilder: (context, listeAppareilsIndex) {
-                                  final listeAppareilsItem =
-                                      listeAppareils[listeAppareilsIndex];
-                                  return InkWell(
-                                    splashColor: Colors.transparent,
-                                    focusColor: Colors.transparent,
-                                    hoverColor: Colors.transparent,
-                                    highlightColor: Colors.transparent,
-                                    onTap: () async {
-                                      setState(() {
-                                        FFAppState().currentDevice =
-                                            listeAppareilsItem;
-                                      });
-                                    
-                                      // Ouverture de la page de controle correspondante
-
-                                      context.pushNamed('ControlePage');
-                                    },
-                                    child: DeviceWidget(
-                                      key: Key(
-                                          'Key1f8_${listeAppareilsIndex}_of_${listeAppareils.length}'),
-                                      deviceName: listeAppareilsItem.name,
-                                      deviceID:
-                                          listeAppareilsItem.manufactureID,
-                                      deviceCO2Level: listeAppareilsItem.co2,
-                                      deviceAttractifLevel:
-                                          listeAppareilsItem.attractif,
-                                      index: listeAppareilsIndex,
-                                    ),
-                                  );
-                                },
-                              );
+                              FFAppState().deviceList.toList();
+                              return buildDeviceListView(listeAppareils);
                             },
                           ),
                         ],
@@ -218,6 +150,93 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
           ),
         ),
       ),
+    );
+  }
+
+  ListView buildDeviceListView(List<AntimoustiqueStruct> listeAppareils) {
+    return ListView.separated(
+      padding: EdgeInsets.zero,
+      shrinkWrap: true,
+      scrollDirection: Axis.vertical,
+      itemCount: listeAppareils.length,
+      separatorBuilder: (_, __) => const SizedBox(height: 1.0),
+      itemBuilder: (context, listeAppareilsIndex) {
+        final listeAppareilsItem = listeAppareils[listeAppareilsIndex];
+        return InkWell(
+          splashColor: Colors.transparent,
+          focusColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          onTap: () async {
+            setState(() {
+              FFAppState().currentDevice = listeAppareilsItem;
+            });
+
+            // Ouverture de la page de controle correspondante
+
+            context.pushNamed('ControlePage');
+          },
+          child: DeviceWidget(
+            key: Key(
+                'Key1f8_${listeAppareilsIndex}_of_${listeAppareils.length}'),
+            deviceName: listeAppareilsItem.name,
+            deviceID: listeAppareilsItem.manufactureID,
+            deviceCO2Level: listeAppareilsItem.co2,
+            deviceAttractifLevel: listeAppareilsItem.attractif,
+            index: listeAppareilsIndex,
+          ),
+        );
+      },
+    );
+  }
+}
+
+class AddDeviceButton extends StatelessWidget {
+  const AddDeviceButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return FlutterFlowIconButton(
+      borderColor: const Color(0xFF2A2D50),
+      borderRadius: 20.0,
+      borderWidth: 1.0,
+      buttonSize: MediaQuery.sizeOf(context).width * 0.6,
+      fillColor: const Color(0xFF2A2D50),
+      icon: Icon(
+        Icons.add,
+        color: FlutterFlowTheme.of(context).secondaryBackground,
+        size: 24.0,
+      ),
+      onPressed: () async {
+        context.pushNamed('AddDevicePage');
+      },
+    );
+  }
+}
+
+class NotificationIconButton extends StatelessWidget {
+  const NotificationIconButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return FlutterFlowIconButton(
+      borderColor: FlutterFlowTheme.of(context).secondaryBackground,
+      borderRadius: 20.0,
+      borderWidth: 1.0,
+      buttonSize: 40.0,
+      fillColor: FlutterFlowTheme.of(context).secondaryBackground,
+      icon: Icon(
+        Icons.notifications_none,
+        color: FlutterFlowTheme.of(context).primaryText,
+        size: 24.0,
+      ),
+      onPressed: () async {
+        context.pushNamed('NotificationPage');
+      },
     );
   }
 }

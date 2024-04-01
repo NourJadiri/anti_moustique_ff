@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 class FunctionningScheduleModel
     extends FlutterFlowModel<FunctionningScheduleWidget> {
+  FunctionningScheduleModel(FFAppState ffAppState);
+
   /// Initialization and disposal methods.
 
   @override

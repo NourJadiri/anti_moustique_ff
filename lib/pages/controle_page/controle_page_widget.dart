@@ -57,7 +57,7 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
           flexibleSpace: FlexibleSpaceBar(
             title: Padding(
               padding:
-                  const EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
+              const EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -66,20 +66,20 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
                   Text(
                     'Contrôle',
                     style: FlutterFlowTheme.of(context).headlineLarge.override(
-                          fontFamily: 'Inter',
-                          fontSize: 20.0,
-                        ),
+                      fontFamily: 'Inter',
+                      fontSize: 20.0,
+                    ),
                   ),
                   Align(
                     alignment: const AlignmentDirectional(0.0, 0.0),
                     child: FlutterFlowIconButton(
                       borderColor:
-                          FlutterFlowTheme.of(context).secondaryBackground,
+                      FlutterFlowTheme.of(context).secondaryBackground,
                       borderRadius: 20.0,
                       borderWidth: 1.0,
                       buttonSize: 40.0,
                       fillColor:
-                          FlutterFlowTheme.of(context).secondaryBackground,
+                      FlutterFlowTheme.of(context).secondaryBackground,
                       icon: Icon(
                         Icons.notifications_none,
                         color: FlutterFlowTheme.of(context).primaryText,
@@ -108,7 +108,7 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
                 height: 872.0,
                 child: Padding(
                   padding:
-                      const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 40.0),
+                  const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 40.0),
                   child: buildControlPageView(context),
                 ),
               ),
@@ -139,7 +139,7 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
             children: [
               Padding(
                 padding:
-                    const EdgeInsetsDirectional.fromSTEB(16.0, 4.0, 16.0, 60.0),
+                const EdgeInsetsDirectional.fromSTEB(16.0, 4.0, 16.0, 60.0),
                 child: Container(
                   decoration: const BoxDecoration(),
                   child: Column(
@@ -152,7 +152,7 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
                         height: 100.0,
                         decoration: BoxDecoration(
                           color:
-                              FlutterFlowTheme.of(context).secondaryBackground,
+                          FlutterFlowTheme.of(context).secondaryBackground,
                         ),
                         child: const Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
@@ -199,11 +199,11 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
                                   children: [
                                     Align(
                                       alignment:
-                                          const AlignmentDirectional(0.0, 0.0),
+                                      const AlignmentDirectional(0.0, 0.0),
                                       child: FlutterFlowIconButton(
                                         borderColor:
-                                            FlutterFlowTheme.of(context)
-                                                .primary,
+                                        FlutterFlowTheme.of(context)
+                                            .primary,
                                         borderRadius: 25.0,
                                         borderWidth: 3.0,
                                         buttonSize: 50.0,
@@ -256,11 +256,11 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
-                                        fontFamily: 'Readex Pro',
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondary,
-                                        fontSize: 12.0,
-                                      ),
+                                    fontFamily: 'Readex Pro',
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondary,
+                                    fontSize: 12.0,
+                                  ),
                                 ),
                               ],
                             ),
@@ -272,7 +272,7 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
                         height: 20.0,
                         decoration: BoxDecoration(
                           color:
-                              FlutterFlowTheme.of(context).secondaryBackground,
+                          FlutterFlowTheme.of(context).secondaryBackground,
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
@@ -349,17 +349,17 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
                               children: [
                                 Align(
                                   alignment:
-                                      const AlignmentDirectional(0.0, 0.0),
+                                  const AlignmentDirectional(0.0, 0.0),
                                   child: Text(
                                     'Glisser pour afficher les plages horaires',
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
-                                          fontFamily: 'Readex Pro',
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondary,
-                                          fontSize: 12.0,
-                                        ),
+                                      fontFamily: 'Readex Pro',
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondary,
+                                      fontSize: 12.0,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -412,7 +412,7 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
             FFAppState().currentDevice,
           );
           FFAppState().updateCurrentDeviceStruct(
-            (e) => e..isOn = !e.isOn,
+                (e) => e..isOn = !e.isOn,
           );
         });
       },
@@ -426,11 +426,11 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
             ? FlutterFlowTheme.of(context).primary
             : FlutterFlowTheme.of(context).secondaryBackground,
         textStyle: FlutterFlowTheme.of(context).labelSmall.override(
-              fontFamily: 'Readex Pro',
-              color: FFAppState().currentDevice.isOn
-                  ? FlutterFlowTheme.of(context).accent4
-                  : FlutterFlowTheme.of(context).primary,
-            ),
+          fontFamily: 'Readex Pro',
+          color: FFAppState().currentDevice.isOn
+              ? FlutterFlowTheme.of(context).accent4
+              : FlutterFlowTheme.of(context).primary,
+        ),
         elevation: 3.0,
         borderSide: BorderSide(
           color: FFAppState().currentDevice.isOn
@@ -447,7 +447,7 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
     try {
       if (!currentDevice.isOn) {
         await BluetoothActions.scanForDevice(name: 'La voix');
-        
+
         BluetoothDevice laVoixDevice = FlutterBluePlus.lastScanResults.last.device;
 
         print(laVoixDevice);
@@ -460,7 +460,7 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
           co2: 0.5,
           device: laVoixDevice,
           remoteID: laVoixDevice.remoteId.toString(),
-          vendor: 'laVoix',  
+          vendor: 'laVoix',
         );
 
         await BluetoothActions.connectToDevice(laVoix);
@@ -478,7 +478,7 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
           print('Reading from characteristic ${characteristic.uuid} on device ${laVoix.name}');
           await BluetoothActions.readFromCharacteristic(laVoix, characteristic);
         }
-        
+
       }
     } catch (e) {
       print(e);
@@ -501,9 +501,9 @@ class DeviceIdTitleWidget extends StatelessWidget {
             FFAppState().currentDevice.name,
             textAlign: TextAlign.center,
             style: FlutterFlowTheme.of(context).headlineLarge.override(
-                  fontFamily: 'Inter',
-                  color: FlutterFlowTheme.of(context).primary,
-                ),
+              fontFamily: 'Inter',
+              color: FlutterFlowTheme.of(context).primary,
+            ),
           ),
         ),
         Align(
@@ -571,11 +571,11 @@ class FunctionningSchedulePageView extends StatelessWidget {
                               0.0, 0.0, 0.0, 0.0),
                           color: FlutterFlowTheme.of(context).primary,
                           textStyle:
-                              FlutterFlowTheme.of(context).bodySmall.override(
-                                    fontFamily: 'Readex Pro',
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryBackground,
-                                  ),
+                          FlutterFlowTheme.of(context).bodySmall.override(
+                            fontFamily: 'Readex Pro',
+                            color: FlutterFlowTheme.of(context)
+                                .secondaryBackground,
+                          ),
                           elevation: 0.0,
                           borderSide: const BorderSide(
                             color: Colors.transparent,
@@ -595,6 +595,8 @@ class FunctionningSchedulePageView extends StatelessWidget {
       ),
     );
   }
+
+  void setState(Null Function() param0) {}
 }
 
 class FunctioningScheduleListWidget extends StatelessWidget {
@@ -607,7 +609,7 @@ class FunctioningScheduleListWidget extends StatelessWidget {
     return Builder(
       builder: (context) {
         final listePlagesHoraires =
-            FFAppState().functioningScheduleList.toList();
+        FFAppState().currentDevice.functioningScheduleList.toList();
         return ListView.builder(
           padding: EdgeInsets.zero,
           shrinkWrap: true,
@@ -615,7 +617,7 @@ class FunctioningScheduleListWidget extends StatelessWidget {
           itemCount: listePlagesHoraires.length,
           itemBuilder: (context, listePlagesHorairesIndex) {
             final listePlagesHorairesItem =
-                listePlagesHoraires[listePlagesHorairesIndex];
+            listePlagesHoraires[listePlagesHorairesIndex];
             return Container(
               width: MediaQuery.sizeOf(context).width * 1.0,
               height: MediaQuery.sizeOf(context).height * 0.1,
@@ -649,9 +651,9 @@ class ProgrammerButtonContainer extends StatelessWidget {
       child: Text(
         'Programmer',
         style: FlutterFlowTheme.of(context).bodyMedium.override(
-              fontFamily: 'Readex Pro',
-              fontSize: 12.0,
-            ),
+          fontFamily: 'Readex Pro',
+          fontSize: 12.0,
+        ),
       ),
     );
   }
