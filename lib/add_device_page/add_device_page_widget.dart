@@ -1,4 +1,5 @@
 import 'package:anti_moustique/backend/schema/structs/index.dart';
+import 'package:anti_moustique/custom_code/actions/bluetooth_actions.dart';
 import 'package:anti_moustique/custom_code/actions/device_utilities.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -314,24 +315,50 @@ class ConfirmDeviceScanButton extends StatelessWidget {
 
   final AddDevicePageModel _model;
 
+  Future<void> _onPressed(BuildContext context) async {
+    if (_model.antimoustique != null) {
+      if (_model.textController!.text.isNotEmpty) {
+        _model.antimoustique!.name = _model.textController!.text;
+
+        await BluetoothActions.connectToDevice(_model.antimoustique!);
+        var services = await BluetoothActions.discoverServices(_model.antimoustique!);
+
+        var deviceInfoService = services.firstWhere((service) => service.uuid.toString() == '180d');
+
+        var characteristics = await BluetoothActions.discoverCharacteristics(_model.antimoustique!, deviceInfoService);
+        
+        var co2LevelCharacteristic = characteristics.firstWhere((characteristic) => characteristic.uuid.toString() == '289f1cd7-546b-4c3d-b760-a353592e196c');
+
+        var attractifLevelCharacteristic = characteristics.firstWhere((characteristic) => characteristic.uuid.toString() == 'cf862a6b-8f91-4d53-a396-70d91a25ce9b');
+
+        var co2Level = await BluetoothActions.readFromCharacteristic(_model.antimoustique!, co2LevelCharacteristic);
+        
+        var attractifLevel = await BluetoothActions.readFromCharacteristic(_model.antimoustique!, attractifLevelCharacteristic);
+
+        if(co2Level.isNotEmpty){
+
+          _model.antimoustique!.co2 = (co2Level[0].toDouble())/100;
+          _model.antimoustique!.attractif = (attractifLevel[0].toDouble())/100;
+
+          print('CO2 level : ${_model.antimoustique!.co2}');
+        }
+
+        FFAppState().update(
+          () {
+            FFAppState().addToDeviceList(_model.antimoustique!);
+          },
+        );
+        Navigator.pop(context);
+
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return FFButtonWidget(
       onPressed: _model.antimoustique != null
-          ? () async {
-              if (_model.textController!.text.isNotEmpty) {
-                _model.antimoustique!.name = _model.textController!.text;
-                FFAppState().update(
-                  () {
-                    FFAppState().addToDeviceList(_model.antimoustique!);
-                  },
-                );
-                Navigator.pop(context);
-              }
-              // _model.appState!.addAntiMoustique(_model.antimoustique!);
-              // Navigator.pop(context);
-            }
-          : () {},
+          ? () => _onPressed(context) : () {},
       text: 'Ajouter',
       options: FFButtonOptions(
         width: 270.0,

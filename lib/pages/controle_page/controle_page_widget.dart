@@ -1,13 +1,12 @@
 import 'package:anti_moustique/backend/schema/structs/antimoustique_struct.dart';
+import 'package:anti_moustique/custom_code/actions/bluetooth_actions.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-
 import '/components/functionning_schedule_widget.dart';
 import '/components/navigation_bar_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import 'package:anti_moustique/custom_code/actions/bluetooth_actions.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
@@ -445,42 +444,33 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
 
   Future<void> _activateDevice(BuildContext context, AntimoustiqueStruct currentDevice) async {
     try {
-      if (!currentDevice.isOn) {
-        await BluetoothActions.scanForDevice(manufactureID: 'Pipou');
-        
-        BluetoothDevice laVoixDevice = FlutterBluePlus.lastScanResults.last.device;
-
-        print(laVoixDevice);
-
-        AntimoustiqueStruct laVoix = AntimoustiqueStruct(
-          name: 'Pipou',
-          manufactureID: 'Pipou',
-          isOn: true,
-          attractif: 0.5,
-          co2: 0.5,
-          device: laVoixDevice,
-          remoteID: laVoixDevice.remoteId.toString(),
-          vendor: 'Pipou',
-        );
-
-        await BluetoothActions.connectToDevice(laVoix);
-
-        var services = await BluetoothActions.discoverServices(laVoix);
-
-        var characteristics = await BluetoothActions.discoverCharacteristics(laVoix, services.first);
-
-        for (var characteristic in characteristics) {
-          print('Writing to characteristic ${characteristic.uuid} on device ${laVoix.name}');
-          await BluetoothActions.writeToCharacteristic(laVoix, characteristic, [0x01]);
-        }
-
-        for (var characteristic in characteristics) {
-          print('Reading from characteristic ${characteristic.uuid} on device ${laVoix.name}');
-          await BluetoothActions.readFromCharacteristic(laVoix, characteristic);
-        }
-        
+      if(currentDevice.device.isDisconnected) {
+        await BluetoothActions.connectToDevice(currentDevice);
+        await BluetoothActions.discoverServices(currentDevice);
       }
-    } catch (e) {
+
+      var commandService = currentDevice.device.servicesList.firstWhere((service) => service.uuid.toString() == '1900');
+
+      await BluetoothActions.discoverCharacteristics(currentDevice, commandService);
+
+      var activateCommandCharacteristic = commandService.characteristics.firstWhere((characteristic) => characteristic.uuid.toString() == 'fa45d9c7-4068-453d-a18c-e255e2e037bd');
+
+      await BluetoothActions.writeToCharacteristic(currentDevice, activateCommandCharacteristic, [currentDevice.isOn ? 0 : 1]);
+
+      setState(() {
+        FFAppState().updateCurrentDeviceStruct((e) => e..isOn = currentDevice.isOn);
+      });
+    } on FlutterBluePlusException catch (e) {
+      if(context.mounted){
+        // Add a snackbar to show the error
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Erreur dans la communication avec l\'appareil. Assurez vous que l\'appareil est allumé et à proximité.'),
+          ),
+        );
+      }
+    }
+     catch (e) {
       print(e);
     }
   }
@@ -562,7 +552,6 @@ class FunctionningSchedulePageView extends StatelessWidget {
                         onPressed: () async {
                           context.pushNamed('AddSchedulePage');
                         },
-
                         text: 'Nouvelle plage horaire',
                         options: FFButtonOptions(
                           height: 40.0,
@@ -598,16 +587,11 @@ class FunctionningSchedulePageView extends StatelessWidget {
   }
 }
 
-class FunctioningScheduleListWidget extends StatefulWidget {
+class FunctioningScheduleListWidget extends StatelessWidget {
   const FunctioningScheduleListWidget({
     super.key,
   });
 
-  @override
-  State<FunctioningScheduleListWidget> createState() => _FunctioningScheduleListWidgetState();
-}
-
-class _FunctioningScheduleListWidgetState extends State<FunctioningScheduleListWidget> {
   @override
   Widget build(BuildContext context) {
     return Builder(

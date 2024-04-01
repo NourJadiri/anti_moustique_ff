@@ -1,11 +1,7 @@
 // ignore_for_file: unnecessary_getters_setters
 
 import 'dart:async';
-
-import 'package:flutter/foundation.dart';
-
 import '/backend/schema/util/schema_util.dart';
-
 import 'index.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -38,8 +34,17 @@ class AntimoustiqueStruct extends BaseStruct {
       }
     });
 
-    _device?.cancelWhenDisconnected(_connectionSubscription!, delayed: true, next: true);
+     _onServiceResetSubscription = _device?.onServicesReset.listen((_) async{
+        print('Services reset');
+        await _device?.discoverServices();
+     });
+
+     _device?.cancelWhenDisconnected(_connectionSubscription!, delayed: true, next: true);
   }
+
+  StreamSubscription<void>? _onServiceResetSubscription;
+  get onServiceResetSubscription => _onServiceResetSubscription;
+  set onServiceResetSubscription(val) => _onServiceResetSubscription = val;
 
   // Stream subscription for connection state.
   StreamSubscription<BluetoothConnectionState>? _connectionSubscription;
