@@ -4,14 +4,9 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="428ea98a-0dd3-484c-ac09-aa9a94b23271" name="Changes" comment="Version d'ajout des plages horaires. Run time problème &#10;Error: Converting object to an encodable object failed: Instance of 'DateTime'&#10;A modifier">
-      <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
+    <list default="true" id="428ea98a-0dd3-484c-ac09-aa9a94b23271" name="Changes" comment="Version d'ajout des plages horaires. Il faut mtn refresh la page controlePage">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/app_state.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app_state.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/backend/schema/structs/antimoustique_struct.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/backend/schema/structs/antimoustique_struct.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/backend/schema/structs/functioning_schedule_struct.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/backend/schema/structs/functioning_schedule_struct.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/components/functionning_schedule_widget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/components/functionning_schedule_widget.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pages/device_page/device_page_widget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/device_page/device_page_widget.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/pages/controle_page/controle_page_widget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pages/controle_page/controle_page_widget.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -126,7 +121,15 @@
       <option name="project" value="LOCAL" />
       <updated>1711978848557</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Version d'ajout des plages horaires. Il faut mtn refresh la page controlePage">
+      <option name="closed" value="true" />
+      <created>1711985387883</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1711985387883</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -143,7 +146,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Version avec la lecture de QR-code en JSon avec ce format : &#10;{&#10;  &quot;manufactureID&quot;: &quot;your_manufactureID_here&quot;,&#10;  &quot;remoteID&quot;: &quot;your_remoteID_here&quot;,&#10;  &quot;vendor&quot;: &quot;your_vendor_here&quot;&#10;}&#10;&#10;and create a antiMousique and then add it to deviceList" />
     <MESSAGE value="Version d'ajout des plages horaires. Run time problème &#10;Error: Converting object to an encodable object failed: Instance of 'DateTime'&#10;A modifier" />
-    <option name="LAST_COMMIT_MESSAGE" value="Version d'ajout des plages horaires. Run time problème &#10;Error: Converting object to an encodable object failed: Instance of 'DateTime'&#10;A modifier" />
+    <MESSAGE value="Version d'ajout des plages horaires. Il faut mtn refresh la page controlePage" />
+    <option name="LAST_COMMIT_MESSAGE" value="Version d'ajout des plages horaires. Il faut mtn refresh la page controlePage" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

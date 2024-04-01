@@ -562,6 +562,7 @@ class FunctionningSchedulePageView extends StatelessWidget {
                         onPressed: () async {
                           context.pushNamed('AddSchedulePage');
                         },
+
                         text: 'Nouvelle plage horaire',
                         options: FFButtonOptions(
                           height: 40.0,
@@ -597,11 +598,16 @@ class FunctionningSchedulePageView extends StatelessWidget {
   }
 }
 
-class FunctioningScheduleListWidget extends StatelessWidget {
+class FunctioningScheduleListWidget extends StatefulWidget {
   const FunctioningScheduleListWidget({
     super.key,
   });
 
+  @override
+  State<FunctioningScheduleListWidget> createState() => _FunctioningScheduleListWidgetState();
+}
+
+class _FunctioningScheduleListWidgetState extends State<FunctioningScheduleListWidget> {
   @override
   Widget build(BuildContext context) {
     return Builder(
