@@ -19,13 +19,13 @@ class BluetoothActions {
     set scanSubscription(StreamSubscription<List<ScanResult>>? val) => _scanSubscription = val;
     bool hasScanSubscription() => _scanSubscription != null;
 
-    static Future<void> scanForDevice({String name = '', String remoteID = ''}) async{
+    static Future<void> scanForDevice({String manufactureID = '', String remoteID = ''}) async{
 
         FlutterBluePlus.cancelWhenScanComplete(_scanSubscription!);
 
         await FlutterBluePlus.adapterState.where((val) => val == BluetoothAdapterState.on).first;
 
-        await FlutterBluePlus.startScan(timeout: Duration(seconds: 4), withNames: name.isNotEmpty ? [name] : const [], withRemoteIds: remoteID.isNotEmpty ? [remoteID] : const []);
+        await FlutterBluePlus.startScan(timeout: Duration(seconds: 4), withNames: manufactureID.isNotEmpty ? [manufactureID] : const [], withRemoteIds: remoteID.isNotEmpty ? [remoteID] : const []);
 
         await FlutterBluePlus.isScanning.where((val) => val == false).first;
 

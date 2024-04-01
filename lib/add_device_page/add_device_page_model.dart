@@ -9,7 +9,7 @@ class AddDevicePageModel extends FlutterFlowModel<AddDevicePageWidget> {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
-  var deviceInfo = '';
+  var deviceManufactureID = '';
   // State field(s) for TextField widget.
   FocusNode? textFieldFocusNode;
   TextEditingController? textController;

@@ -54,7 +54,7 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
               alignment: const AlignmentDirectional(0.0, 0.0),
               child: Padding(
                 padding:
-                const EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
+                    const EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -62,10 +62,10 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
                     Text(
                       'Mes Appareils',
                       style:
-                      FlutterFlowTheme.of(context).headlineLarge.override(
-                        fontFamily: 'Inter',
-                        fontSize: 20.0,
-                      ),
+                          FlutterFlowTheme.of(context).headlineLarge.override(
+                                fontFamily: 'Inter',
+                                fontSize: 20.0,
+                              ),
                     ),
                     const NotificationIconButton(),
                   ],
@@ -108,14 +108,14 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
                                       0.0, 10.0, 0.0, 10.0),
                                   child: Container(
                                     width:
-                                    MediaQuery.sizeOf(context).width * 1.0,
+                                        MediaQuery.sizeOf(context).width * 1.0,
                                     height: 38.0,
                                     decoration: BoxDecoration(
                                       color: FlutterFlowTheme.of(context)
                                           .secondaryBackground,
                                     ),
                                     alignment:
-                                    const AlignmentDirectional(0.0, 0.0),
+                                        const AlignmentDirectional(0.0, 0.0),
                                     child: const Align(
                                       alignment: AlignmentDirectional(0.0, 0.0),
                                       child: AddDeviceButton(),
@@ -128,7 +128,7 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
                           Builder(
                             builder: (context) {
                               final listeAppareils =
-                              FFAppState().deviceList.toList();
+                                  FFAppState().deviceList.toList();
                               return buildDeviceListView(listeAppareils);
                             },
                           ),
@@ -175,7 +175,6 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
             // Ouverture de la page de controle correspondante
 
             context.pushNamed('ControlePage');
-            print(FFAppState().currentDevice.isOn);
           },
           child: DeviceWidget(
             key: Key(
