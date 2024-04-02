@@ -17,6 +17,8 @@ class NotificationStruct extends BaseStruct {
   AntimoustiqueStruct? _antimoustique;
   AntimoustiqueStruct get antimoustique =>
       _antimoustique ?? AntimoustiqueStruct();
+
+  String? get message => null;
   set antimoustique(AntimoustiqueStruct? val) => _antimoustique = val;
   bool hasAntimoustique() => _antimoustique != null;
 

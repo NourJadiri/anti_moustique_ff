@@ -1,3 +1,4 @@
+import 'package:anti_moustique/services/notification_service.dart';
 import 'package:flutter/material.dart';
 import '/backend/schema/structs/index.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -216,6 +217,8 @@ class FFAppState extends ChangeNotifier {
     _notificationList.add(value);
     prefs.setStringList('ff_notificationList',
         _notificationList.map((x) => x.serialize()).toList());
+    // Envoyer une notification
+    NotificationService().sendLocalNotification(value);
   }
 
   void removeFromNotificationList(NotificationStruct value) {
