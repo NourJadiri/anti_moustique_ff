@@ -448,7 +448,7 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
         await BluetoothActions.connectToDevice(currentDevice);
         await BluetoothActions.discoverServices(currentDevice);
       }
-      
+
       var commandService = currentDevice.device.servicesList.firstWhere((service) => service.uuid.toString() == '1900');
 
       await BluetoothActions.discoverCharacteristics(currentDevice, commandService);
@@ -597,7 +597,7 @@ class FunctioningScheduleListWidget extends StatelessWidget {
     return Builder(
       builder: (context) {
         final listePlagesHoraires =
-            FFAppState().functioningScheduleList.toList();
+        FFAppState().currentDevice.functioningScheduleList.toList();
         return ListView.builder(
           padding: EdgeInsets.zero,
           shrinkWrap: true,
@@ -605,7 +605,7 @@ class FunctioningScheduleListWidget extends StatelessWidget {
           itemCount: listePlagesHoraires.length,
           itemBuilder: (context, listePlagesHorairesIndex) {
             final listePlagesHorairesItem =
-                listePlagesHoraires[listePlagesHorairesIndex];
+            listePlagesHoraires[listePlagesHorairesIndex];
             return Container(
               width: MediaQuery.sizeOf(context).width * 1.0,
               height: MediaQuery.sizeOf(context).height * 0.1,

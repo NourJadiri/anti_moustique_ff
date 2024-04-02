@@ -57,8 +57,8 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 5.0),
+                      padding: const EdgeInsetsDirectional.fromSTEB(
+                          0.0, 0.0, 0.0, 5.0),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -76,7 +76,8 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                               child: Stack(
                                 children: [
                                   Align(
-                                    alignment: const AlignmentDirectional(-1.0, 0.0),
+                                    alignment:
+                                        const AlignmentDirectional(-1.0, 0.0),
                                     child: FlutterFlowIconButton(
                                       borderColor: FlutterFlowTheme.of(context)
                                           .secondaryBackground,
@@ -95,7 +96,8 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                                     ),
                                   ),
                                   Align(
-                                    alignment: const AlignmentDirectional(0.0, 0.0),
+                                    alignment:
+                                        const AlignmentDirectional(0.0, 0.0),
                                     child: Text(
                                       'Nouvelle plage horaire',
                                       textAlign: TextAlign.center,
@@ -110,7 +112,8 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                                     ),
                                   ),
                                   Align(
-                                    alignment: const AlignmentDirectional(1.0, 0.0),
+                                    alignment:
+                                        const AlignmentDirectional(1.0, 0.0),
                                     child: FlutterFlowIconButton(
                                       borderColor: FlutterFlowTheme.of(context)
                                           .secondaryBackground,
@@ -547,8 +550,8 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                   child: Visibility(
                     visible: _model.switchValue ?? true,
                     child: Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(40.0, 0.0, 0.0, 0.0),
+                      padding: const EdgeInsetsDirectional.fromSTEB(
+                          40.0, 0.0, 0.0, 0.0),
                       child: FlutterFlowCheckboxGroup(
                         options: const [
                           'Chaque lundi',
@@ -580,59 +583,108 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0.0, 30.0, 0.0, 0.0),
+                padding:
+                    const EdgeInsetsDirectional.fromSTEB(0.0, 30.0, 0.0, 0.0),
                 child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: MediaQuery.sizeOf(context).width * 0.5,
-                      height: MediaQuery.sizeOf(context).height * 0.04,
-                      decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).secondaryBackground,
-                        borderRadius: BorderRadius.circular(14.0),
-                      ),
-                      child: FFButtonWidget(
-                        onPressed: () async {
-                          setState(() {
-                            FFAppState().addToFunctioningScheduleList(
-                                FunctioningScheduleStruct(
-                              startTime: _model.datePicked2,
-                              endTime: _model.datePicked3,
-                              isReccurent: _model.switchValue,
-                              startDay: _model.datePicked1,
-                            ));
-                          });
-                          context.safePop();
-                        },
-                        text: 'Confirmer',
-                        options: FFButtonOptions(
-                          width: MediaQuery.sizeOf(context).width * 0.2,
-                          height: MediaQuery.sizeOf(context).height * 0.2,
-                          padding: const EdgeInsetsDirectional.fromSTEB(
-                              24.0, 0.0, 24.0, 0.0),
-                          iconPadding: const EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 0.0, 0.0),
-                          color: FlutterFlowTheme.of(context).primary,
-                          textStyle:
-                              FlutterFlowTheme.of(context).titleSmall.override(
-                                    fontFamily: 'Inter',
-                                    color: Colors.white,
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.w300,
-                                  ),
-                          elevation: 0.0,
-                          borderSide: const BorderSide(
-                            color: Colors.transparent,
-                            width: 1.0,
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: MediaQuery.sizeOf(context).width * 0.5,
+                        height: MediaQuery.sizeOf(context).height * 0.04,
+                        decoration: BoxDecoration(
+                          color:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                          borderRadius: BorderRadius.circular(14.0),
+                        ),
+                        child: FFButtonWidget(
+                          onPressed: () async {
+                            final DateTime? startDay = _model.datePicked1;
+                            final TimeOfDay? startTime = _model.datePicked2 != null
+                                ? TimeOfDay(hour: _model.datePicked2!.hour, minute: _model.datePicked2!.minute)
+                                : null;
+
+                            final TimeOfDay? endTime = _model.datePicked3 != null
+                                ? TimeOfDay(hour: _model.datePicked3!.hour, minute: _model.datePicked3!.minute)
+                                : null;
+
+                            if (startDay == null || startTime == null || endTime == null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text("Veuillez sélectionner une date et une heure."),
+                                ),
+                              );
+                              return;
+                            }
+
+                            final DateTime startDateTime = DateTime(
+                              startDay.year,
+                              startDay.month,
+                              startDay.day,
+                              startTime.hour,
+                              startTime.minute,
+                            );
+
+                            final DateTime endDateTime = DateTime(
+                              startDay.year,
+                              startDay.month,
+                              startDay.day,
+                              endTime.hour,
+                              endTime.minute,
+                            );
+
+                            if (endDateTime.isBefore(startDateTime)) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text("L'heure de fin doit être après l'heure de début."),
+                                ),
+                              );
+                              return;
+                            }
+
+                            FFAppState().currentDevice.functioningScheduleList.add(
+                              FunctioningScheduleStruct(
+                                startTime: startDateTime,
+                                endTime: endDateTime,
+                                isReccurent: _model.switchValue,
+                                startDay: startDay,
+                              ),
+                            );
+
+                            setState(() {});
+
+                            context.safePop();
+                            print(FFAppState().currentDevice.functioningScheduleList);
+                            print('ici');
+                          },
+                          text: 'Confirmer',
+                          options: FFButtonOptions(
+                            width: MediaQuery.sizeOf(context).width * 0.2,
+                            height: MediaQuery.sizeOf(context).height * 0.2,
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                24.0, 0.0, 24.0, 0.0),
+                            iconPadding: const EdgeInsetsDirectional.fromSTEB(
+                                0.0, 0.0, 0.0, 0.0),
+                            color: FlutterFlowTheme.of(context).primary,
+                            textStyle: FlutterFlowTheme.of(context)
+                                .titleSmall
+                                .override(
+                                  fontFamily: 'Inter',
+                                  color: Colors.white,
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w300,
+                                ),
+                            elevation: 0.0,
+                            borderSide: const BorderSide(
+                              color: Colors.transparent,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(24.0),
                           ),
-                          borderRadius: BorderRadius.circular(24.0),
                         ),
                       ),
-                    ),
-                  ],
-                ),
+                    ]),
               ),
             ],
           ),

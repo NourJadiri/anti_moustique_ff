@@ -2,6 +2,13 @@
   <library name="Dart Packages" type="DartPackagesLibraryType">
     <properties>
       <option name="packageNameToDirsMap">
+        <entry key="android_alarm_manager_plus">
+          <value>
+            <list>
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/android_alarm_manager_plus-4.0.1/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="archive">
           <value>
             <list>
@@ -825,6 +832,7 @@
     </properties>
     <CLASSES>
       <root url="file://$USER_HOME$/.pub-cache/git/flutter_barcode_scanner-603ea693b43575dafa4c6672e6232f5a99e261ef//lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/android_alarm_manager_plus-4.0.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/archive-3.4.10/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/args-2.4.2/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/async-2.11.0/lib" />

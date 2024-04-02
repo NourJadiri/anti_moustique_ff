@@ -7,7 +7,17 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 
 class AntimoustiqueStruct extends BaseStruct {
-  AntimoustiqueStruct({ String? manufactureID, String? vendor = 'unknown', String? name, String? remoteID, double? attractif = 0, double? co2 = 0, bool? isOn = false, BluetoothDevice? device }) {
+  AntimoustiqueStruct({
+    String? manufactureID,
+    String? vendor = 'unknown',
+    String? name,
+    String? remoteID,
+    double? attractif = 0,
+    double? co2 = 0,
+    bool? isOn = false,
+    BluetoothDevice? device,
+    List<FunctioningScheduleStruct>? functioningScheduleList, // Ajout du paramètre
+  }) {
     _manufactureID = manufactureID;
     _vendor = vendor;
     _name = name;
@@ -16,12 +26,13 @@ class AntimoustiqueStruct extends BaseStruct {
     _co2 = co2;
     _isOn = isOn;
     _device = device;
-
+    device = device;
+    _functioningScheduleList = functioningScheduleList ?? []; // Initialisation avec une liste vide par défaut
     _connectionSubscription = _device?.connectionState.listen((BluetoothConnectionState state) async {
       if (state == BluetoothConnectionState.disconnected) {
         print('Disconnected from device ${device!.advName}');
       }
-     });
+    });
 
      _onServiceResetSubscription = _device?.onServicesReset.listen((_) async{
         print('Services reset');
@@ -85,14 +96,45 @@ class AntimoustiqueStruct extends BaseStruct {
   set isOn(bool? val) => _isOn = val;
   bool hasIsOn() => _isOn != null;
 
-  // Bluetooth device field.
+  // "functioning schedule list" field.
+  List<FunctioningScheduleStruct>? _functioningScheduleList;
+
+  List<FunctioningScheduleStruct> get functioningScheduleList =>
+      _functioningScheduleList ?? [];
+  set functioningScheduleList(List<FunctioningScheduleStruct>? value) {
+    _functioningScheduleList = value;
+  }
+  bool? hasFunctioningScheduleList() => _functioningScheduleList != null;
+
+  // Méthode pour ajouter une plage horaire
+  void addFunctioningSchedule(FunctioningScheduleStruct schedule) {
+    _functioningScheduleList ??= [];
+    _functioningScheduleList!.add(schedule);
+  }
+
+  // Méthode pour supprimer une plage horaire
+  void removeFunctioningSchedule(FunctioningScheduleStruct schedule) {
+    _functioningScheduleList?.remove(schedule);
+  }
+  void removeAtIndexFromFunctioningScheduleList(int index) {
+    _functioningScheduleList?.removeAt(index);
+  }
+
+  // Méthode pour mettre à jour une plage horaire
+  void updateFunctioningSchedule(int index, FunctioningScheduleStruct updatedSchedule) {
+    if (_functioningScheduleList != null && index >= 0 && index < _functioningScheduleList!.length) {
+      _functioningScheduleList![index] = updatedSchedule;
+    }
+  }
+
+  // "device" field.
   BluetoothDevice? _device;
   BluetoothDevice get device =>
       _device ?? BluetoothDevice(remoteId: const DeviceIdentifier(''));
   set device(BluetoothDevice val) => _device = val;
   bool hasDevice() => _device != null;
 
-  
+
 
   static AntimoustiqueStruct fromMap(Map<String, dynamic> data) =>
       AntimoustiqueStruct(
@@ -103,6 +145,10 @@ class AntimoustiqueStruct extends BaseStruct {
         attractif: castToType<double>(data['attractif']),
         co2: castToType<double>(data['co2']),
         isOn: data['isOn'] as bool?,
+        functioningScheduleList: (data['functioningScheduleList'] as List<dynamic>?)
+            ?.map((scheduleData)
+        => FunctioningScheduleStruct.fromMap(scheduleData.cast<String, dynamic>()))
+            .toList(),
       );
 
   static AntimoustiqueStruct? maybeFromMap(dynamic data) => data is Map
@@ -110,60 +156,61 @@ class AntimoustiqueStruct extends BaseStruct {
       : null;
 
   Map<String, dynamic> toMap() => {
-        'manufactureID': _manufactureID,
-        'vendor': _vendor,
-        'name': _name,
-        'remoteID': _remoteID,
-        'attractif': _attractif,
-        'co2': _co2,
-        'isOn': _isOn,
-        'device': {
-          'remoteId': _device?.remoteId.toString(),
-          'name': _device?.advName,
-        },
-      }.withoutNulls;
+    'manufactureID': _manufactureID,
+    'vendor': _vendor,
+    'name': _name,
+    'remoteID': _remoteID,
+    'attractif': _attractif,
+    'co2': _co2,
+    'isOn': _isOn,
+    'device': {
+      'remoteId': _device?.remoteId.toString(),
+      'name': _device?.advName,
+    },
+    'functioningScheduleList' : _functioningScheduleList,
+  }.withoutNulls;
 
   @override
   Map<String, dynamic> toSerializableMap() => {
-        'manufactureID': serializeParam(
-          _manufactureID,
-          ParamType.String,
-        ),
-        'vendor': serializeParam(
-          _vendor,
-          ParamType.String,
-        ),
-        'name': serializeParam(
-          _name,
-          ParamType.String,
-        ),
-        'remoteID': serializeParam(
-          _remoteID,
-          ParamType.String,
-        ),
-        'attractif': serializeParam(
-          _attractif,
-          ParamType.double,
-        ),
-        'co2': serializeParam(
-          _co2,
-          ParamType.double,
-        ),
-        'isOn': serializeParam(
-          _isOn,
-          ParamType.bool,
-        ),
-        'device': {
-          'remoteId': serializeParam(
-            _device?.remoteId.toString(),
-            ParamType.String,
-          ),
-          'name': serializeParam(
-            _device?.advName,
-            ParamType.String,
-          ),
-        },
-      }.withoutNulls;
+    'manufactureID': serializeParam(
+      _manufactureID,
+      ParamType.String,
+    ),
+    'vendor': serializeParam(
+      _vendor,
+      ParamType.String,
+    ),
+    'name': serializeParam(
+      _name,
+      ParamType.String,
+    ),
+    'remoteID': serializeParam(
+      _remoteID,
+      ParamType.String,
+    ),
+    'attractif': serializeParam(
+      _attractif,
+      ParamType.double,
+    ),
+    'co2': serializeParam(
+      _co2,
+      ParamType.double,
+    ),
+    'isOn': serializeParam(
+      _isOn,
+      ParamType.bool,
+    ),
+    'device': {
+      'remoteId': serializeParam(
+        _device?.remoteId.toString(),
+        ParamType.String,
+      ),
+      'name': serializeParam(
+        _device?.advName,
+        ParamType.String,
+      ),
+    },
+  }.withoutNulls;
 
   static AntimoustiqueStruct fromSerializableMap(Map<String, dynamic> data) =>
       AntimoustiqueStruct(
@@ -202,6 +249,9 @@ class AntimoustiqueStruct extends BaseStruct {
           ParamType.bool,
           false,
         ),
+        functioningScheduleList: (data['functioningScheduleList'] as List<dynamic>?)
+            ?.map((scheduleData) => FunctioningScheduleStruct.fromMap(scheduleData.cast<String, dynamic>()))
+            .toList(),
       );
 
   @override
