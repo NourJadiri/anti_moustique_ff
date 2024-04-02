@@ -67,14 +67,14 @@ class BluetoothActions {
     return characteristics;
   }
 
-  static Future<void> writeToCharacteristic(AntimoustiqueStruct antimoustique,
-      BluetoothCharacteristic characteristic, List<int> value) async {
+  static Future<void> writeToCharacteristic({required AntimoustiqueStruct antimoustique,
+      required BluetoothCharacteristic characteristic, required List<int> value, bool allowLongWrite = false}) async {
     try {
       // if the device is disconnected, we need to reconnect
       if (antimoustique.device.state != BluetoothDeviceState.connected) {
         await antimoustique.device.connect(mtu: null);
       }
-      await characteristic.write(value);
+      await characteristic.write(value, allowLongWrite: allowLongWrite);
       print(
           'Wrote to characteristic ${characteristic.uuid} on device ${antimoustique.device.remoteId}');
     } catch (e) {
