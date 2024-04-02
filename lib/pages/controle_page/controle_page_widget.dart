@@ -486,17 +486,19 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
   }
 
   Future<void> _activateDevice(BuildContext context) async {
-    await sendCommandToDevice(context, FFAppState().currentDevice, CommandEnum.activate);
-    setState(() {
-      FFAppState().updateCurrentDeviceStruct((d) => d..isOn = true);
-    });
+    if (await sendCommandToDevice(context, FFAppState().currentDevice, CommandEnum.activate)){
+      setState(() {
+        FFAppState().updateCurrentDeviceStruct((d) => d..isOn = true);
+      });
+    }
   }
 
   Future<void> _deactivateDevice(BuildContext context) async {
-    await sendCommandToDevice(context, FFAppState().currentDevice, CommandEnum.deactivate);
-    setState(() {
-      FFAppState().updateCurrentDeviceStruct((d) => d..isOn = false);
-    });
+    if(await sendCommandToDevice(context, FFAppState().currentDevice, CommandEnum.deactivate)){
+      setState(() {
+        FFAppState().updateCurrentDeviceStruct((d) => d..isOn = false);
+      });
+    }
   }
 }
 
