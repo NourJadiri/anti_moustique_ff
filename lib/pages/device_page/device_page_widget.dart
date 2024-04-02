@@ -173,7 +173,6 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
             });
 
             // Ouverture de la page de controle correspondante
-
             context.pushNamed('ControlePage');
           },
           child: DeviceWidget(

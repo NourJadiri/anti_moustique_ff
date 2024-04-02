@@ -1,4 +1,5 @@
 import 'package:anti_moustique/custom_code/actions/device_utilities.dart';
+import '../../backend/schema/structs/notification_struct.dart';
 import '/components/functionning_schedule_widget.dart';
 import '/components/navigation_bar_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -83,6 +84,21 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
                         size: 24.0,
                       ),
                       onPressed: () async {
+                        bool isAlreadyInList = false;
+                        for (var notification in FFAppState().notificationList) {
+                          if(notification.antimoustique == FFAppState().currentDevice)
+                            {
+                              isAlreadyInList = true;
+                            }
+                        }
+                        if(FFAppState().currentDevice.islevelCo2Low() && isAlreadyInList == false) {
+                          NotificationStruct notification = NotificationStruct(
+                            antimoustique: FFAppState().currentDevice,
+                            title: "",
+                            body: "Niveau de CO2 faible, veuillez changer la bouteille.",
+                          );
+                          FFAppState().addToNotificationList(notification);
+                        }
                         context.pushNamed('NotificationPage');
                       },
                     ),

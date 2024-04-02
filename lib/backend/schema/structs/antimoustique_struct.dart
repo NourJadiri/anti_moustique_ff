@@ -151,6 +151,14 @@ class AntimoustiqueStruct extends BaseStruct {
     name = _device?.advName;
   }
 
+  bool islevelCo2Low(){
+    bool isLow = false;
+    if(co2/100 < 0.1) {
+      isLow = true;
+    }
+    return isLow;
+  }
+
   static AntimoustiqueStruct fromMap(Map<String, dynamic> data) =>
       AntimoustiqueStruct(
         manufactureID: data['manufactureID'] as String?,
