@@ -1,3 +1,5 @@
+import 'package:anti_moustique/app_state.dart';
+
 import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_checkbox_group.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -611,7 +613,7 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
 
                             if (startDay == null || startTime == null || endTime == null) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
+                                const SnackBar(
                                   content: Text("Veuillez sélectionner une date et une heure."),
                                 ),
                               );
@@ -636,27 +638,23 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
 
                             if (endDateTime.isBefore(startDateTime)) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
+                                const SnackBar(
                                   content: Text("L'heure de fin doit être après l'heure de début."),
                                 ),
                               );
                               return;
                             }
-
-                            FFAppState().currentDevice.functioningScheduleList.add(
-                              FunctioningScheduleStruct(
+                          
+                            FFAppState().updateCurrentDeviceStruct((device) {
+                              device.functioningScheduleList.add(FunctioningScheduleStruct(
+                                startDay: startDay,
                                 startTime: startDateTime,
                                 endTime: endDateTime,
-                                isReccurent: _model.switchValue,
-                                startDay: startDay,
-                              ),
-                            );
-
-                            setState(() {});
-
-                            context.safePop();
-                            print(FFAppState().currentDevice.functioningScheduleList);
-                            print('ici');
+                                isReccurent: _model.switchValue ?? false,
+                              ));
+                            });
+                            
+                            Navigator.pop(context);
                           },
                           text: 'Confirmer',
                           options: FFButtonOptions(

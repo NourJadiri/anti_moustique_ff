@@ -444,7 +444,103 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
             ],
           ),
         ),
-        const FunctionningSchedulePageView(),
+        Container(
+          width: MediaQuery.sizeOf(context).width * 1.0,
+          height: MediaQuery.sizeOf(context).height * 1.0,
+          decoration: BoxDecoration(
+            color: FlutterFlowTheme.of(context).secondaryBackground,
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Align(
+                      alignment: const AlignmentDirectional(0.0, 0.0),
+                      child: Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            0.0, 10.0, 0.0, 10.0),
+                        child: Container(
+                          width: MediaQuery.sizeOf(context).width * 1.0,
+                          height: 38.0,
+                          decoration: BoxDecoration(
+                            color: FlutterFlowTheme.of(context)
+                                .secondaryBackground,
+                          ),
+                          alignment: const AlignmentDirectional(0.0, 0.0),
+                          child: FFButtonWidget(
+                            onPressed: () async {
+                              context.pushNamed('AddSchedulePage');
+                            },
+                            text: 'Nouvelle plage horaire',
+                            options: FFButtonOptions(
+                              height: 40.0,
+                              padding: const EdgeInsetsDirectional.symmetric(
+                                  horizontal: 16.0),
+                              iconPadding: const EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 0.0),
+                              color: FlutterFlowTheme.of(context).primary,
+                              textStyle: FlutterFlowTheme.of(context)
+                                  .bodySmall
+                                  .override(
+                                    fontFamily: 'Readex Pro',
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryBackground,
+                                  ),
+                              elevation: 0.0,
+                              borderSide: const BorderSide(
+                                color: Colors.transparent,
+                                width: 1.0,
+                              ),
+                              borderRadius: BorderRadius.circular(24.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Builder(
+                  builder: (context) {
+                    final listePlagesHoraires = FFAppState()
+                        .currentDevice
+                        .functioningScheduleList
+                        .toList();
+                    return ListView.builder(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      itemCount: listePlagesHoraires.length,
+                      itemBuilder: (context, listePlagesHorairesIndex) {
+                        final listePlagesHorairesItem =
+                            listePlagesHoraires[listePlagesHorairesIndex];
+                        return Container(
+                          width: MediaQuery.sizeOf(context).width * 1.0,
+                          height: MediaQuery.sizeOf(context).height * 0.1,
+                          decoration: const BoxDecoration(),
+                          child: FunctionningScheduleWidget(
+                            key: Key(
+                                'Key4rp_${listePlagesHorairesIndex}_of_${listePlagesHoraires.length}'),
+                            index: listePlagesHorairesIndex,
+                            startTime: listePlagesHorairesItem.startTime!,
+                            endTime: listePlagesHorairesItem.endTime!,
+                            date: listePlagesHorairesItem.startDay!,
+                            isPeriodic: listePlagesHorairesItem.isReccurent,
+                          ),
+                        );
+                      },
+                    );
+                  },
+                )
+              ].divide(const SizedBox(height: 2.0)),
+            ),
+          ),
+        )
       ],
     );
   }
@@ -486,14 +582,16 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
   }
 
   Future<void> _activateDevice(BuildContext context) async {
-    await sendCommandToDevice(context, FFAppState().currentDevice, CommandEnum.activate);
+    await sendCommandToDevice(
+        context, FFAppState().currentDevice, CommandEnum.activate);
     setState(() {
       FFAppState().updateCurrentDeviceStruct((d) => d..isOn = true);
     });
   }
 
   Future<void> _deactivateDevice(BuildContext context) async {
-    await sendCommandToDevice(context, FFAppState().currentDevice, CommandEnum.deactivate);
+    await sendCommandToDevice(
+        context, FFAppState().currentDevice, CommandEnum.deactivate);
     setState(() {
       FFAppState().updateCurrentDeviceStruct((d) => d..isOn = false);
     });
@@ -603,50 +701,39 @@ class FunctionningSchedulePageView extends StatelessWidget {
                 ),
               ],
             ),
-            const FunctioningScheduleListWidget(),
+            Builder(
+              builder: (context) {
+                final listePlagesHoraires =
+                    FFAppState().currentDevice.functioningScheduleList.toList();
+                return ListView.builder(
+                  padding: EdgeInsets.zero,
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  itemCount: listePlagesHoraires.length,
+                  itemBuilder: (context, listePlagesHorairesIndex) {
+                    final listePlagesHorairesItem =
+                        listePlagesHoraires[listePlagesHorairesIndex];
+                    return Container(
+                      width: MediaQuery.sizeOf(context).width * 1.0,
+                      height: MediaQuery.sizeOf(context).height * 0.1,
+                      decoration: const BoxDecoration(),
+                      child: FunctionningScheduleWidget(
+                        key: Key(
+                            'Key4rp_${listePlagesHorairesIndex}_of_${listePlagesHoraires.length}'),
+                        index: listePlagesHorairesIndex,
+                        startTime: listePlagesHorairesItem.startTime!,
+                        endTime: listePlagesHorairesItem.endTime!,
+                        date: listePlagesHorairesItem.startDay!,
+                        isPeriodic: listePlagesHorairesItem.isReccurent,
+                      ),
+                    );
+                  },
+                );
+              },
+            )
           ].divide(const SizedBox(height: 2.0)),
         ),
       ),
-    );
-  }
-}
-
-class FunctioningScheduleListWidget extends StatelessWidget {
-  const FunctioningScheduleListWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Builder(
-      builder: (context) {
-        final listePlagesHoraires =
-        FFAppState().currentDevice.functioningScheduleList.toList();
-        return ListView.builder(
-          padding: EdgeInsets.zero,
-          shrinkWrap: true,
-          scrollDirection: Axis.vertical,
-          itemCount: listePlagesHoraires.length,
-          itemBuilder: (context, listePlagesHorairesIndex) {
-            final listePlagesHorairesItem =
-            listePlagesHoraires[listePlagesHorairesIndex];
-            return Container(
-              width: MediaQuery.sizeOf(context).width * 1.0,
-              height: MediaQuery.sizeOf(context).height * 0.1,
-              decoration: const BoxDecoration(),
-              child: FunctionningScheduleWidget(
-                key: Key(
-                    'Key4rp_${listePlagesHorairesIndex}_of_${listePlagesHoraires.length}'),
-                index: listePlagesHorairesIndex,
-                startTime: listePlagesHorairesItem.startTime!,
-                endTime: listePlagesHorairesItem.endTime!,
-                date: listePlagesHorairesItem.startDay!,
-                isPeriodic: listePlagesHorairesItem.isReccurent,
-              ),
-            );
-          },
-        );
-      },
     );
   }
 }

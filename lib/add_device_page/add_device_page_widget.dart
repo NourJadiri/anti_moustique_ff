@@ -348,6 +348,7 @@ class ConfirmDeviceScanButton extends StatelessWidget {
             FFAppState().addToDeviceList(_model.antimoustique!);
           },
         );
+        
         Navigator.pop(context);
 
       }
