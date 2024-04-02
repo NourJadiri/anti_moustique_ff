@@ -460,7 +460,7 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
       setState(() {
         FFAppState().updateCurrentDeviceStruct((e) => e..isOn = currentDevice.isOn);
       });
-    } on FlutterBluePlusException catch (e) {
+    } on FlutterBluePlusException {
       if(context.mounted){
         // Add a snackbar to show the error
         ScaffoldMessenger.of(context).showSnackBar(
