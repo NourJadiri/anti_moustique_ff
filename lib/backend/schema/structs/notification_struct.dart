@@ -1,14 +1,14 @@
-// ignore_for_file: unnecessary_getters_setters
-
-
 import 'index.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+
+enum NotificationType { co2Low, attractifLow }
 
 class NotificationStruct extends BaseStruct {
   NotificationStruct({
     AntimoustiqueStruct? antimoustique,
     String? title,
     String? body,
+    required this.type, // Directement initialisé ici
   })  : _antimoustique = antimoustique,
         _title = title,
         _body = body;
@@ -18,8 +18,6 @@ class NotificationStruct extends BaseStruct {
   AntimoustiqueStruct get antimoustique =>
       _antimoustique ?? AntimoustiqueStruct();
   set antimoustique(AntimoustiqueStruct? val) => _antimoustique = val;
-  void updateAntimoustique(Function(AntimoustiqueStruct) updateFn) =>
-      updateFn(_antimoustique ??= AntimoustiqueStruct());
   bool hasAntimoustique() => _antimoustique != null;
 
   // "title" field.
@@ -34,39 +32,42 @@ class NotificationStruct extends BaseStruct {
   set body(String? val) => _body = val;
   bool hasBody() => _body != null;
 
+  // "type" field.
+  final NotificationType type; // Ajouté comme attribut final
+
   static NotificationStruct fromMap(Map<String, dynamic> data) =>
       NotificationStruct(
         antimoustique: AntimoustiqueStruct.maybeFromMap(data['antimoustique']),
         title: data['title'] as String?,
         body: data['body'] as String?,
+        type: NotificationType.values[data['type']], // Conversion de l'index en type
       );
 
-  static NotificationStruct? maybeFromMap(dynamic data) => data is Map
-      ? NotificationStruct.fromMap(data.cast<String, dynamic>())
-      : null;
-
   Map<String, dynamic> toMap() => {
-        'antimoustique': _antimoustique?.toMap(),
-        'title': _title,
-        'body': _body,
-      }.withoutNulls;
+    'antimoustique': _antimoustique?.toMap(),
+    'title': _title,
+    'body': _body,
+    'type': type.index, // Stockage de l'index du type pour la sérialisation
+  }.withoutNulls;
 
   @override
   Map<String, dynamic> toSerializableMap() => {
-        'antimoustique': serializeParam(
-          _antimoustique,
-          ParamType.DataStruct,
-        ),
-        'title': serializeParam(
-          _title,
-          ParamType.String,
-        ),
-        'body': serializeParam(
-          _body,
-          ParamType.String,
-        ),
-      }.withoutNulls;
+    'antimoustique': serializeParam(
+      _antimoustique,
+      ParamType.DataStruct,
+    ),
+    'title': serializeParam(
+      _title,
+      ParamType.String,
+    ),
+    'body': serializeParam(
+      _body,
+      ParamType.String,
+    ),
+    'type': type.index, // Sérialisation du type
+  }.withoutNulls;
 
+// Méthode fromSerializableMap intégrée avec la gestion du type
   static NotificationStruct fromSerializableMap(Map<String, dynamic> data) =>
       NotificationStruct(
         antimoustique: deserializeStructParam(
@@ -85,30 +86,20 @@ class NotificationStruct extends BaseStruct {
           ParamType.String,
           false,
         ),
+        type: NotificationType.values[data['type']], // Conversion de l'index en NotificationType
       );
 
   @override
   String toString() => 'NotificationStruct(${toMap()})';
 
   @override
-  bool operator ==(Object other) {
-    return other is NotificationStruct &&
-        antimoustique == other.antimoustique &&
-        title == other.title &&
-        body == other.body;
-  }
+  bool operator ==(Object other) =>
+      other is NotificationStruct &&
+          antimoustique == other.antimoustique &&
+          title == other.title &&
+          body == other.body &&
+          type == other.type;
 
   @override
-  int get hashCode => const ListEquality().hash([antimoustique, title, body]);
+  int get hashCode => const ListEquality().hash([antimoustique, title, body, type]);
 }
-
-NotificationStruct createNotificationStruct({
-  AntimoustiqueStruct? antimoustique,
-  String? title,
-  String? body,
-}) =>
-    NotificationStruct(
-      antimoustique: antimoustique ?? AntimoustiqueStruct(),
-      title: title,
-      body: body,
-    );

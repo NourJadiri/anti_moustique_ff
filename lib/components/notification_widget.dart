@@ -3,6 +3,8 @@ import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'notification_model.dart';
 export 'notification_model.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 
 class NotificationWidget extends StatefulWidget {
   const NotificationWidget({
@@ -66,13 +68,19 @@ class _NotificationWidgetState extends State<NotificationWidget> {
           child: Row(
             mainAxisSize: MainAxisSize.max,
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(4.0),
-                child: Image.asset(
-                  'assets/images/boitier.png',
-                  width: 44.0,
-                  height: 200.0,
-                  fit: BoxFit.contain,
+              GestureDetector(
+                onTap: () {
+                  // Ouvre une URL dans le navigateur
+                  launchUrl(Uri.parse('https://www.pole-habitat-ra.com'));
+                },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(4.0),
+                  child: Image.asset(
+                    'assets/images/boitier.png',
+                    width: 44.0,
+                    height: 200.0,
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
               Expanded(

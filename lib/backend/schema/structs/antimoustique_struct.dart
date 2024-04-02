@@ -159,6 +159,14 @@ class AntimoustiqueStruct extends BaseStruct {
     return isLow;
   }
 
+  bool islevelAttractifLow(){
+    bool isLow = false;
+    if(attractif/100 < 0.1) {
+      isLow = true;
+    }
+    return isLow;
+  }
+
   static AntimoustiqueStruct fromMap(Map<String, dynamic> data) =>
       AntimoustiqueStruct(
         manufactureID: data['manufactureID'] as String?,

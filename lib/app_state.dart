@@ -204,12 +204,7 @@ class FFAppState extends ChangeNotifier {
     prefs.setString('ff_currentDevice', _currentDevice.serialize());
   }
 
-  List<NotificationStruct> _notificationList = [
-    NotificationStruct.fromSerializableMap(jsonDecode(
-        '{\"antimoustique\":\"{\\\"manufactureID\\\":\\\"Hello World\\\",\\\"name\\\":\\\"Hello World\\\",\\\"remoteID\\\":\\\"Hello World\\\",\\\"attractif\\\":\\\"0\\\",\\\"co2\\\":\\\"0\\\",\\\"deviceState\\\":\\\"e5qer\\\"}\",\"title\":\"CHEZ MAMIE\",\"body\":\"COUCOU\"}')),
-    NotificationStruct.fromSerializableMap(jsonDecode(
-        '{\"antimoustique\":\"{\\\"manufactureID\\\":\\\"Hello World\\\",\\\"name\\\":\\\"Hello World\\\",\\\"remoteID\\\":\\\"Hello World\\\",\\\"attractif\\\":\\\"0\\\",\\\"co2\\\":\\\"0\\\",\\\"deviceState\\\":\\\"e5qer\\\"}\",\"title\":\"Isazou\",\"body\":\"remet du co2 stp\"}'))
-  ];
+  List<NotificationStruct> _notificationList = [];
   List<NotificationStruct> get notificationList => _notificationList;
   set notificationList(List<NotificationStruct> value) {
     _notificationList = value;
