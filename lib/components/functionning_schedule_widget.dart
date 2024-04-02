@@ -183,8 +183,10 @@ class _FunctionningScheduleWidgetState
               hoverColor: Colors.transparent,
               highlightColor: Colors.transparent,
               onTap: () async {
+                FFAppState().update(() {
                 setState(() {
                   FFAppState().currentDevice.removeAtIndexFromFunctioningScheduleList(widget.index!);
+                });
                 });
               },
               child: Icon(
