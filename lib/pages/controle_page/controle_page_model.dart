@@ -1,3 +1,5 @@
+import 'package:anti_moustique/backend/schema/structs/antimoustique_struct.dart';
+
 import '/components/navigation_bar_widget.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'controle_page_widget.dart' show ControlePageWidget;
@@ -9,6 +11,8 @@ class ControlePageModel extends FlutterFlowModel<ControlePageWidget> {
   final unfocusNode = FocusNode();
   // State field(s) for ScrollablePageView widget.
   PageController? scrollablePageViewController;
+
+  late AntimoustiqueStruct? selectedDevice;
 
   int get scrollablePageViewCurrentIndex =>
       scrollablePageViewController != null &&

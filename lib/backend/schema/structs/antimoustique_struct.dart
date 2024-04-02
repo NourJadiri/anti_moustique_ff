@@ -29,7 +29,19 @@ class AntimoustiqueStruct extends BaseStruct {
      });
 
      _device?.cancelWhenDisconnected(_connectionSubscription!, delayed: true, next: true);
+     _device?.cancelWhenDisconnected(_onServiceResetSubscription!, delayed: true, next: true);
   }
+
+  BluetoothService? _deviceInformationService;
+  BluetoothService? get deviceInformationService => _deviceInformationService;
+  set deviceInformationService(BluetoothService? val) => _deviceInformationService = val;
+  bool hasDeviceInformationService() => _deviceInformationService != null;
+
+  BluetoothService? _deviceCommandService;
+  BluetoothService? get deviceCommandService => _deviceCommandService;
+  set deviceCommandService(BluetoothService? val) => _deviceCommandService = val;
+  bool hasDeviceCommandService() => _deviceCommandService != null;
+
 
   StreamSubscription<void>? _onServiceResetSubscription;
   get onServiceResetSubscription => _onServiceResetSubscription;
@@ -92,7 +104,10 @@ class AntimoustiqueStruct extends BaseStruct {
   set device(BluetoothDevice val) => _device = val;
   bool hasDevice() => _device != null;
 
-  
+  void updateDeviceInfo(){
+    remoteID = _device?.remoteId.toString();
+    name = _device?.advName;
+  }
 
   static AntimoustiqueStruct fromMap(Map<String, dynamic> data) =>
       AntimoustiqueStruct(

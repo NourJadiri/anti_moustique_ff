@@ -1,6 +1,4 @@
-import 'package:anti_moustique/backend/schema/structs/antimoustique_struct.dart';
-import 'package:anti_moustique/custom_code/actions/bluetooth_actions.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:anti_moustique/custom_code/actions/device_utilities.dart';
 import '/components/functionning_schedule_widget.dart';
 import '/components/navigation_bar_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -158,7 +156,56 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
                                 0.0, 0.0, 0.0, 10.0),
                             child: DeviceIdTitleWidget()),
                       ),
-                      const DeviceStateCircleWidget(),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            0.0, 20.0, 0.0, 10.0),
+                        child: Container(
+                          width: 192.0,
+                          height: 192.0,
+                          decoration: BoxDecoration(
+                            color: FFAppState().currentDevice.isOn
+                                ? const Color(0xFF05D03E)
+                                : const Color(0xFFD9E9FE),
+                            boxShadow: const [
+                              BoxShadow(
+                                blurRadius: 4.0,
+                                color: Color(0x33000000),
+                                offset: Offset(0.0, 2.0),
+                              )
+                            ],
+                            shape: BoxShape.circle,
+                          ),
+                          child: Stack(
+                            children: [
+                              Opacity(
+                                opacity: 0.2,
+                                child: Align(
+                                  alignment:
+                                      const AlignmentDirectional(0.0, 0.0),
+                                  child: Container(
+                                    width: 144.0,
+                                    height: 144.0,
+                                    decoration: BoxDecoration(
+                                      color:
+                                          FlutterFlowTheme.of(context).tertiary,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(10.0),
+                                child: Image.asset(
+                                  'assets/images/boitier.png',
+                                  width: 300.0,
+                                  height: 200.0,
+                                  fit: BoxFit.none,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                       Padding(
                         padding: const EdgeInsetsDirectional.fromSTEB(
                             0.0, 20.0, 0.0, 0.0),
@@ -405,20 +452,16 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
   FFButtonWidget buildActivateButton(BuildContext context) {
     return FFButtonWidget(
       onPressed: () async {
-        setState(() {
-          _activateDevice(
-            context,
-            FFAppState().currentDevice,
-          );
-          FFAppState().updateCurrentDeviceStruct(
-            (e) => e..isOn = !e.isOn,
-          );
-        });
+        if (FFAppState().currentDevice.isOn) {
+          await _deactivateDevice(context);
+        } else {
+          await _activateDevice(context);
+        }
       },
       text: FFAppState().currentDevice.isOn ? 'Désactiver' : 'Activer',
       options: FFButtonOptions(
         width: MediaQuery.sizeOf(context).width * 0.6,
-        height: 35.0,
+        height: 40.0,
         padding: const EdgeInsetsDirectional.fromSTEB(70.0, 0.0, 70.0, 0.0),
         iconPadding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
         color: FFAppState().currentDevice.isOn
@@ -442,37 +485,18 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
     );
   }
 
-  Future<void> _activateDevice(BuildContext context, AntimoustiqueStruct currentDevice) async {
-    try {
-      if(currentDevice.device.isDisconnected) {
-        await BluetoothActions.connectToDevice(currentDevice);
-        await BluetoothActions.discoverServices(currentDevice);
-      }
-      
-      var commandService = currentDevice.device.servicesList.firstWhere((service) => service.uuid.toString() == '1900');
+  Future<void> _activateDevice(BuildContext context) async {
+    await sendCommandToDevice(context, FFAppState().currentDevice, CommandEnum.activate);
+    setState(() {
+      FFAppState().updateCurrentDeviceStruct((d) => d..isOn = true);
+    });
+  }
 
-      await BluetoothActions.discoverCharacteristics(currentDevice, commandService);
-
-      var activateCommandCharacteristic = commandService.characteristics.firstWhere((characteristic) => characteristic.uuid.toString() == 'fa45d9c7-4068-453d-a18c-e255e2e037bd');
-
-      await BluetoothActions.writeToCharacteristic(currentDevice, activateCommandCharacteristic, [currentDevice.isOn ? 0 : 1]);
-
-      setState(() {
-        FFAppState().updateCurrentDeviceStruct((e) => e..isOn = currentDevice.isOn);
-      });
-    } on FlutterBluePlusException catch (e) {
-      if(context.mounted){
-        // Add a snackbar to show the error
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Erreur dans la communication avec l\'appareil. Assurez vous que l\'appareil est allumé et à proximité.'),
-          ),
-        );
-      }
-    }
-     catch (e) {
-      print(e);
-    }
+  Future<void> _deactivateDevice(BuildContext context) async {
+    await sendCommandToDevice(context, FFAppState().currentDevice, CommandEnum.deactivate);
+    setState(() {
+      FFAppState().updateCurrentDeviceStruct((d) => d..isOn = false);
+    });
   }
 }
 
@@ -748,63 +772,6 @@ class Co2LevelContainer extends StatelessWidget {
               child: Text(
                 'CO2',
                 style: FlutterFlowTheme.of(context).bodyLarge,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class DeviceStateCircleWidget extends StatelessWidget {
-  const DeviceStateCircleWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 10.0),
-      child: Container(
-        width: 192.0,
-        height: 192.0,
-        decoration: BoxDecoration(
-          color: FFAppState().currentDevice.isOn
-              ? const Color(0xFF05D03E)
-              : const Color(0xFFD9E9FE),
-          boxShadow: const [
-            BoxShadow(
-              blurRadius: 4.0,
-              color: Color(0x33000000),
-              offset: Offset(0.0, 2.0),
-            )
-          ],
-          shape: BoxShape.circle,
-        ),
-        child: Stack(
-          children: [
-            Opacity(
-              opacity: 0.2,
-              child: Align(
-                alignment: const AlignmentDirectional(0.0, 0.0),
-                child: Container(
-                  width: 144.0,
-                  height: 144.0,
-                  decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).tertiary,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ),
-            ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10.0),
-              child: Image.asset(
-                'assets/images/boitier.png',
-                width: 300.0,
-                height: 200.0,
-                fit: BoxFit.none,
               ),
             ),
           ],
