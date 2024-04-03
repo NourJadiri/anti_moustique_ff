@@ -7,8 +7,8 @@
     <list default="true" id="428ea98a-0dd3-484c-ac09-aa9a94b23271" name="Changes" comment="A local notification is generated every time a notification is added in app_state.dart : FFAppState().addNotificationList&#10;if the vendor is Pole Habitat, on est redirigé vers le site de pole-habitat lorsqu'on clique sur la notif.&#10;On est redirigé vers une page google map des revendeurs.&#10;Lorsqu'on clique sur une notification locale soit le e-shop de pole habitat s'ouvre soit la map s'affiche.">
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/services/notification_service.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/services/notification_service.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
