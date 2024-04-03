@@ -78,7 +78,7 @@ class BluetoothActions {
       print(
           'Wrote to characteristic ${characteristic.uuid} on device ${antimoustique.device.remoteId}');
     } catch (e) {
-      print(
+      throw Exception(
           'Error writing to characteristic ${characteristic.uuid} on device ${antimoustique.device.remoteId}');
     }
   }

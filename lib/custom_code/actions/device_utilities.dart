@@ -152,9 +152,14 @@ Future<bool> addFunctionSchedule(BuildContext context, AntimoustiqueStruct antim
 
     List<int> scheduleBytes = utf8.encode(scheduleString);
 
-    await BluetoothActions.writeToCharacteristic(antimoustique: antimoustique, characteristic:  writeCharacteristic, value: scheduleBytes, allowLongWrite: true);
+    try{
+      await BluetoothActions.writeToCharacteristic(antimoustique: antimoustique, characteristic:  writeCharacteristic, value: scheduleBytes, allowLongWrite: true);
+      return true;
+    }
+    catch(e){
+      return false;
+    }
 
-    return true;
   }
   catch(e){
     print('Error writing to characteristic: $e');
