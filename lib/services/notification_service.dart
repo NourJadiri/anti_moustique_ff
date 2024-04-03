@@ -1,6 +1,11 @@
+
+
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../backend/schema/structs/notification_struct.dart';
+import '../flutter_flow/flutter_flow_util.dart';
+import '../main.dart';
 
 class NotificationService {
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
@@ -61,6 +66,10 @@ class NotificationService {
     print(payload);
     if (payload == "Distributeur" || payload == "unknown") {
       // Naviguez vers la page Map
+      final url = Uri.parse('https://www.google.com/maps/d/viewer?mid=1G4QNa9Ob5ErrTV54evRI3o_Gbm0&hl=en_US&ll=46.14750807696509%2C-71.90924343517304&z=8');
+      if (!await launchUrl(url)) {
+        throw 'Could not launch $url';
+      }
     } else if (payload == "Pole-Habitat") {
       // Naviguez vers le e-shop de Pole Habitat
       // Utilisation de launchUrl pour ouvrir le navigateur

@@ -7,16 +7,19 @@ import 'package:url_launcher/url_launcher.dart';
 
 
 class NotificationWidget extends StatefulWidget {
+
   const NotificationWidget({
     super.key,
     required this.deviceName,
     required this.content,
     required this.index,
+    required this.deviceVendor
   });
 
   final String? deviceName;
   final String? content;
   final int? index;
+  final String? deviceVendor;
 
   @override
   State<NotificationWidget> createState() => _NotificationWidgetState();
@@ -70,8 +73,13 @@ class _NotificationWidgetState extends State<NotificationWidget> {
             children: [
               GestureDetector(
                 onTap: () {
-                  // Ouvre une URL dans le navigateur
-                  launchUrl(Uri.parse('https://www.pole-habitat-ra.com'));
+                  if(widget.deviceVendor == "Pole-Habitat" || widget.deviceVendor == 'unknown') {
+                    // Ouvre une URL dans le navigateur
+                    launchUrl(Uri.parse('https://www.pole-habitat-ra.com'));
+                  }
+                  else {
+                    context.pushNamed('MapPage');
+                  }
                 },
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(4.0),

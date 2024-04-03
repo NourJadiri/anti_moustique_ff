@@ -7,7 +7,6 @@ import 'backend/schema/structs/antimoustique_struct.dart';
 import 'flutter_flow/flutter_flow_util.dart';
 import 'services/notification_service.dart'; // Ajustez le chemin en fonction de votre structure de dossier
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   usePathUrlStrategy();
@@ -74,6 +73,7 @@ class _MyAppState extends State<MyApp> {
       ),
       themeMode: _themeMode,
       routerConfig: _router,
+
     );
   }
 }
