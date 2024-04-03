@@ -101,16 +101,7 @@ class FFAppState extends ChangeNotifier {
 
   late SharedPreferences prefs;
 
-  List<AntimoustiqueStruct> _deviceList = [
-    AntimoustiqueStruct.fromSerializableMap(jsonDecode(
-        '{\"manufactureID\":\"XIC-SFD-LLAS\",\"name\":\"Antimoustique\",\"remoteID\":\"QSDFQSDFQSDCXVQSDF\",\"attractif\":\"0.5\",\"co2\":\"0.1\"}')),
-    AntimoustiqueStruct.fromSerializableMap(jsonDecode(
-        '{\"manufactureID\":\"LLSQI-IDNSIQ-LQD\",\"name\":\"Ouai\",\"remoteID\":\"QSDFJQKSDF\",\"attractif\":\"0.2\",\"co2\":\"0.77\"}')),
-    AntimoustiqueStruct.fromSerializableMap(jsonDecode(
-        '{\"manufactureID\":\"qsDFQSDFZE-QSJDIF\",\"name\":\"Tu veux un café ?\",\"remoteID\":\"7C:E6:FF:A5:E3:FF\",\"attractif\":\"0.5\",\"co2\":\"0.1\"}')),
-    AntimoustiqueStruct.fromSerializableMap(jsonDecode(
-        '{\"manufactureID\":\"VS-SUP2T-10G\",\"name\":\"Le l\'appareil\",\"remoteID\":\"5F:CC:D2:F3:A8\",\"attractif\":\"0.7\",\"co2\":\"0.1\",\"isOn\":\"false\"}'))
-  ];
+  List<AntimoustiqueStruct> _deviceList = [];
 
   List<AntimoustiqueStruct> get deviceList => _deviceList;
   set deviceList(List<AntimoustiqueStruct> value) {
@@ -123,6 +114,7 @@ class FFAppState extends ChangeNotifier {
     _deviceList.add(value);
     prefs.setStringList(
         'ff_deviceList', _deviceList.map((x) => x.serialize()).toList());
+
   }
 
   void removeFromDeviceList(AntimoustiqueStruct value) {

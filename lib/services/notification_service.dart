@@ -1,4 +1,5 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../backend/schema/structs/notification_struct.dart';
 
 class NotificationService {
@@ -52,11 +53,21 @@ class NotificationService {
       value.antimoustique.name, // titre
       value.body, // corps de la notification
       platformChannelSpecifics,
-      payload: 'item x',
+      payload: value.antimoustique.vendor,
     );
   }
 
   Future onSelectNotification(String? payload) async {
-    // Ici, gérez ce que vous voulez faire lorsque l'utilisateur sélectionne la notification
+    print(payload);
+    if (payload == "Distributeur" || payload == "unknown") {
+      // Naviguez vers la page Map
+    } else if (payload == "Pole-Habitat") {
+      // Naviguez vers le e-shop de Pole Habitat
+      // Utilisation de launchUrl pour ouvrir le navigateur
+      final url = Uri.parse('https://www.pole-habitat-ra.com');
+      if (!await launchUrl(url)) {
+        throw 'Could not launch $url';
+      }
+    }
   }
 }

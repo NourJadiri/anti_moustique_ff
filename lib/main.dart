@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
+import 'backend/schema/structs/antimoustique_struct.dart';
 import 'flutter_flow/flutter_flow_util.dart';
 import 'services/notification_service.dart'; // Ajustez le chemin en fonction de votre structure de dossier
 
