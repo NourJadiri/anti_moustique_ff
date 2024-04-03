@@ -5,11 +5,12 @@ import '../backend/schema/structs/notification_struct.dart';
 class NotificationService {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
   FlutterLocalNotificationsPlugin();
+  static const String _channelId = 'custom_notification_channel_id'; // Define a channel ID
+  static const String _channelName = 'Custom Notifications'; // Define a channel name
+  static const String _channelDescription = 'Notifications for this app'; // Define a channel description
 
   static final NotificationService _instance = NotificationService._internal();
-
   factory NotificationService() => _instance;
-
   NotificationService._internal();
 
   Future<void> init() async {
@@ -20,29 +21,53 @@ class NotificationService {
         requestSoundPermission: false,
         requestBadgePermission: false,
         requestAlertPermission: false,
-        onDidReceiveLocalNotification: (int id, String? title, String? body,
-            String? payload) async {
+        onDidReceiveLocalNotification: (int id, String? title, String? body, String? payload) async {
           // Handle foreground notification reception in iOS
         });
+
     final InitializationSettings initializationSettings = InitializationSettings(
-        android: initializationSettingsAndroid,iOS: initializationSettingsDarwin);
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onDidReceiveNotificationResponse: onDidReceiveNotificationResponse);
+      android: initializationSettingsAndroid,
+      iOS: initializationSettingsDarwin,
+    );
+
+    await flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: onDidReceiveNotificationResponse,
+    );
+
+    // Create a channel for Android (only affects Android 8.0+)
+    final AndroidNotificationChannel channel = AndroidNotificationChannel(
+      _channelId,
+      _channelName,
+      description: _channelDescription,
+      importance: Importance.max,
+    );
+
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
   }
 
   Future<void> sendLocalNotification(NotificationStruct value) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
     AndroidNotificationDetails(
-        'your_channel_id', 'your_channel_name',
-        importance: Importance.max, priority: Priority.high, showWhen: false);
+        _channelId, // Make sure to use the defined channel ID
+        _channelName,
+        channelDescription: _channelDescription,
+        importance: Importance.max,
+        priority: Priority.high,
+        showWhen: false);
+
     const NotificationDetails platformChannelSpecifics =
     NotificationDetails(android: androidPlatformChannelSpecifics);
+
     await flutterLocalNotificationsPlugin.show(
-        0, // Dynamic ID for the notification
-        value.antimoustique.name,
-        value.body,
-        platformChannelSpecifics,
-        payload: value.antimoustique.vendor);
+      DateTime.now().millisecondsSinceEpoch.remainder(100000), // Dynamic ID for the notification
+      value.antimoustique.name,
+      value.body,
+      platformChannelSpecifics,
+      payload: value.antimoustique.vendor,
+    );
   }
 
   void onDidReceiveNotificationResponse(NotificationResponse response) async {
