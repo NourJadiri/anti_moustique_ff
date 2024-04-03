@@ -20,7 +20,9 @@ class BluetoothActions {
   bool hasScanSubscription() => _scanSubscription != null;
 
   static Future<void> scanForDevice(
-      {String manufactureID = '', String remoteID = '', Duration timeout = const Duration(seconds : 4)}) async {
+      {String manufactureID = '',
+      String remoteID = '',
+      Duration timeout = const Duration(seconds: 4)}) async {
     FlutterBluePlus.cancelWhenScanComplete(_scanSubscription!);
 
     await FlutterBluePlus.adapterState
@@ -57,8 +59,6 @@ class BluetoothActions {
       AntimoustiqueStruct antimoustique, BluetoothService service) async {
     var characteristics = await service.characteristics;
 
-    
-
     characteristics.forEach((characteristic) {
       print(
           'Discovered characteristic ${characteristic.uuid} on device ${antimoustique.device.remoteId}');
@@ -67,18 +67,36 @@ class BluetoothActions {
     return characteristics;
   }
 
-  static Future<void> writeToCharacteristic(AntimoustiqueStruct antimoustique,
-      BluetoothCharacteristic characteristic, List<int> value) async {
+  // Example of a refactored helper method
+  static Future<List<BluetoothCharacteristic>> discoverCharacteristicsForServiceUUID(
+      AntimoustiqueStruct antimoustique, String serviceUUID) async {
+    try {
+      return await BluetoothActions.discoverCharacteristics(
+          antimoustique,
+          antimoustique.device.servicesList
+              .firstWhere((service) => service.uuid.toString() == serviceUUID));
+    } catch (e) {
+      print(
+          'Error discovering characteristics for service UUID $serviceUUID: $e');
+      rethrow; // This allows the calling method to handle the exception
+    }
+  }
+
+  static Future<void> writeToCharacteristic(
+      {required AntimoustiqueStruct antimoustique,
+      required BluetoothCharacteristic characteristic,
+      required List<int> value,
+      bool allowLongWrite = false}) async {
     try {
       // if the device is disconnected, we need to reconnect
       if (antimoustique.device.state != BluetoothDeviceState.connected) {
         await antimoustique.device.connect(mtu: null);
       }
-      await characteristic.write(value);
+      await characteristic.write(value, allowLongWrite: allowLongWrite);
       print(
           'Wrote to characteristic ${characteristic.uuid} on device ${antimoustique.device.remoteId}');
     } catch (e) {
-      print(
+      throw Exception(
           'Error writing to characteristic ${characteristic.uuid} on device ${antimoustique.device.remoteId}');
     }
   }

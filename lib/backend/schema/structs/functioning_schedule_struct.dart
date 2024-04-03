@@ -63,9 +63,9 @@ class FunctioningScheduleStruct extends BaseStruct {
 
   @override
   Map<String, dynamic> toSerializableMap() => {
-    'startDay': _startDay?.toIso8601String(),
-    'startTime': _startTime?.toIso8601String(),
-    'endTime': _endTime?.toIso8601String(),
+    'startDay': DateFormat('yyyy-MM-dd').format(_startDay!),
+    'startTime': DateFormat('HH:mm').format(_startTime!),
+    'endTime': DateFormat('HH:mm').format(_endTime!),
     'isReccurent': serializeParam(
       _isReccurent,
       ParamType.bool,

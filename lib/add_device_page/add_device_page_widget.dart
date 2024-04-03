@@ -41,6 +41,16 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
   Future<void> _scanQR(BuildContext context) async {
     var qrData = await scanQR(context);
 
+    // Check if the device list contains a device with the same manufacture ID
+    if (FFAppState().deviceList.any((device) => device.manufactureID == qrData['manufactureID'])) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Cet appareil a déjà été ajouté'),
+        ),
+      );
+      return;
+    }
+
     // Check if the QR code data is empty
     if (qrData.isEmpty && context.mounted) {
       buildQRReadingError(context);
@@ -55,10 +65,10 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
     try {
       if (context.mounted) {
         // Get the device from the QR code data
-        AntimoustiqueStruct newAntiMoustique =
-            await getDeviceFromQR(context, qrData);
+        AntimoustiqueStruct newAntiMoustique = await getDeviceFromQR(context, qrData);
+        await refreshDeviceInformation(newAntiMoustique);    
+
         setState(() {
-          _model.deviceManufactureID = newAntiMoustique.manufactureID;
           _model.antimoustique = newAntiMoustique;
           _deviceScanned = (newAntiMoustique != AntimoustiqueStruct());
         });
@@ -307,7 +317,7 @@ class AjouterAppareilTopBar extends StatelessWidget {
   }
 }
 
-class ConfirmDeviceScanButton extends StatelessWidget {
+class ConfirmDeviceScanButton extends StatefulWidget {
   const ConfirmDeviceScanButton({
     super.key,
     required AddDevicePageModel model,
@@ -315,57 +325,45 @@ class ConfirmDeviceScanButton extends StatelessWidget {
 
   final AddDevicePageModel _model;
 
+  @override
+  State<ConfirmDeviceScanButton> createState() => _ConfirmDeviceScanButtonState();
+}
+
+class _ConfirmDeviceScanButtonState extends State<ConfirmDeviceScanButton> {
   Future<void> _onPressed(BuildContext context) async {
-    if (_model.antimoustique != null) {
-      if (_model.textController!.text.isNotEmpty) {
-        _model.antimoustique!.name = _model.textController!.text;
+    // if the device list contains a device with the same manufacture ID, return
 
-        await BluetoothActions.connectToDevice(_model.antimoustique!);
-        var services = await BluetoothActions.discoverServices(_model.antimoustique!);
+    if (widget._model.antimoustique != null) {
+      if (widget._model.textController!.text.isNotEmpty) {
+        widget._model.antimoustique!.name = widget._model.textController!.text;
 
-        var deviceInfoService = services.firstWhere((service) => service.uuid.toString() == '180d');
-
-        var characteristics = await BluetoothActions.discoverCharacteristics(_model.antimoustique!, deviceInfoService);
-        
-        var co2LevelCharacteristic = characteristics.firstWhere((characteristic) => characteristic.uuid.toString() == '289f1cd7-546b-4c3d-b760-a353592e196c');
-
-        var attractifLevelCharacteristic = characteristics.firstWhere((characteristic) => characteristic.uuid.toString() == 'cf862a6b-8f91-4d53-a396-70d91a25ce9b');
-
-        var co2Level = await BluetoothActions.readFromCharacteristic(_model.antimoustique!, co2LevelCharacteristic);
-        
-        var attractifLevel = await BluetoothActions.readFromCharacteristic(_model.antimoustique!, attractifLevelCharacteristic);
-
-        if(co2Level.isNotEmpty){
-
-          _model.antimoustique!.co2 = (co2Level[0].toDouble())/100;
-          _model.antimoustique!.attractif = (attractifLevel[0].toDouble())/100;
-
-          print('CO2 level : ${_model.antimoustique!.co2}');
+        await BluetoothActions.connectToDevice(widget._model.antimoustique!);
+        await BluetoothActions.discoverServices(widget._model.antimoustique!);
+        await refreshDeviceInformation(widget._model.antimoustique!);
         }
 
         FFAppState().update(
           () {
-            FFAppState().addToDeviceList(_model.antimoustique!);
+            FFAppState().addToDeviceList(widget._model.antimoustique!);
           },
         );
-        
+      
         Navigator.pop(context);
 
       }
-    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final bool isButtonEnabled = widget._model.antimoustique != null;
     return FFButtonWidget(
-      onPressed: _model.antimoustique != null
-          ? () => _onPressed(context) : () {},
+      onPressed: isButtonEnabled ? () => _onPressed(context) : null,
       text: 'Ajouter',
       options: FFButtonOptions(
         width: 270.0,
         height: 63.0,
         padding: const EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 0.0),
-        color: FlutterFlowTheme.of(context).success,
+        color: isButtonEnabled ? FlutterFlowTheme.of(context).success : const Color.fromARGB(255, 214, 214, 214),
         textStyle: FlutterFlowTheme.of(context).titleSmall.override(
               fontFamily: 'Readex Pro',
               color: Colors.white,
@@ -375,7 +373,7 @@ class ConfirmDeviceScanButton extends StatelessWidget {
           color: Colors.transparent,
           width: 1.0,
         ),
-        borderRadius: BorderRadius.circular(20.0),
+        borderRadius: BorderRadius.circular(25.0),
       ),
     );
   }
