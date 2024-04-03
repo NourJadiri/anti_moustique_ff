@@ -62,31 +62,37 @@ Future<jsonObject> scanQR(BuildContext context) async {
   }
 }
 
-Future<AntimoustiqueStruct> getDeviceFromQR(BuildContext context, jsonObject qrData) async {
+Future<AntimoustiqueStruct> getDeviceFromQR(BuildContext context, Map<String, dynamic> qrData) async {
+  try {
+    await BluetoothActions.scanForDevice(manufactureID: qrData['manufactureID']);
 
-  
-  await BluetoothActions.scanForDevice(manufactureID: qrData['manufactureID']);
+    if (FlutterBluePlus.lastScanResults.isEmpty) {
+      throw Exception('Aucun appareil trouvé, assurez-vous que l\'appareil est activé et qu\'il est à proximité.');
+    }
 
-  if(FlutterBluePlus.lastScanResults.isEmpty){
-    print('No devices found');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-              'Aucun appareil trouvé, assurez-vous que l\'appareil est activé et qu\'il est à proximité'),
-        ),
-      );
-      return AntimoustiqueStruct();
+    BluetoothDevice device = FlutterBluePlus.lastScanResults.firstWhere(
+      (scanResult) => scanResult.device.advName.toString() == qrData['manufactureID'],
+      orElse: () {
+        throw Exception('Aucun appareil correspondant au ID de fabrication trouvé.');
+      },
+    ).device;
+
+    return AntimoustiqueStruct(
+      manufactureID: qrData['manufactureID'],
+      remoteID: device.remoteId.toString(),
+      vendor: qrData['vendor'],
+      device: device,
+      isOn: false,
+    );
+  } catch (e) {
+    // Vous pouvez gérer ou relancer l'exception selon votre cas d'utilisation.
+    // Par exemple, afficher une SnackBar avec l'erreur:
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(e.toString())),
+    );
+    // Relancer l'exception si nécessaire
+    throw e;
   }
-
-  BluetoothDevice device = FlutterBluePlus.lastScanResults.firstWhere((scanResult) => scanResult.device.advName.toString() == qrData['manufactureID']).device;
-
-  return AntimoustiqueStruct(
-    manufactureID: qrData['manufactureID'],
-    remoteID: device.remoteId.toString(),
-    vendor: qrData['vendor'],
-    device: device,
-    isOn: true,
-  );
 }
 
 Future<bool> sendCommandToDevice(BuildContext context, AntimoustiqueStruct antimoustique, CommandEnum command) async{
@@ -185,7 +191,14 @@ Future<void> restoreDeviceConnection(AntimoustiqueStruct antimoustique) async{
 
 Future<void> refreshDeviceInformation(AntimoustiqueStruct antimoustique) async {
   if (!antimoustique.device.isConnected) {
-    throw FlutterBluePlusException(ErrorPlatform.fbp, 'refreshDeviceInformation', 20, 'The device is not connected, could not fetch device information');
+    try{
+      await BluetoothActions.connectToDevice(antimoustique);
+      await BluetoothActions.discoverServices(antimoustique);
+    }
+    catch(e){
+      print('Error connecting to device: $e');
+      rethrow;
+    }
   }
 
   try {

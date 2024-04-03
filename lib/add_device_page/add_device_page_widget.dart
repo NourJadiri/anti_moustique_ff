@@ -65,10 +65,10 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
     try {
       if (context.mounted) {
         // Get the device from the QR code data
-        AntimoustiqueStruct newAntiMoustique =
-            await getDeviceFromQR(context, qrData);
+        AntimoustiqueStruct newAntiMoustique = await getDeviceFromQR(context, qrData);
+        await refreshDeviceInformation(newAntiMoustique);    
+
         setState(() {
-          _model.deviceManufactureID = newAntiMoustique.manufactureID;
           _model.antimoustique = newAntiMoustique;
           _deviceScanned = (newAntiMoustique != AntimoustiqueStruct());
         });
