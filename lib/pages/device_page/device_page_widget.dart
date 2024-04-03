@@ -1,3 +1,5 @@
+import 'package:anti_moustique/custom_code/actions/device_utilities.dart';
+
 import '/components/device_widget.dart';
 import '/components/navigation_bar_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -172,8 +174,8 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
               FFAppState().currentDevice = listeAppareilsItem;
             });
 
+            await refreshDeviceInformation(FFAppState().currentDevice);
             // Ouverture de la page de controle correspondante
-
             context.pushNamed('ControlePage');
           },
           child: DeviceWidget(

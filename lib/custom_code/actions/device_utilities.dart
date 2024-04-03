@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:core';
 import 'dart:convert';
+import 'dart:io';
 import 'package:anti_moustique/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
@@ -8,6 +10,11 @@ import 'package:anti_moustique/custom_code/actions/bluetooth_actions.dart';
 import 'package:anti_moustique/backend/schema/structs/antimoustique_struct.dart';
 import 'package:anti_moustique/backend/schema/structs/functioning_schedule_struct.dart';
 
+final String deviceInfoServiceUUID = '180d';
+final String deviceCommandServiceUUID = '1900';
+final String functioningScheduleServiceUUID = '6900';
+final String co2LevelCharacteristicUUID = '289f1cd7-546b-4c3d-b760-a353592e196c';
+final String attractifLevelCharacteristicUUID = 'cf862a6b-8f91-4d53-a396-70d91a25ce9b';
 
 typedef jsonObject = Map<String, dynamic>;
 
@@ -142,7 +149,7 @@ Future<bool> addFunctionSchedule(BuildContext context, AntimoustiqueStruct antim
       await restoreDeviceConnection(antimoustique);
     }
 
-    var scheduleService = await antimoustique.device.servicesList.firstWhere((service) => service.uuid.toString() == '6900');
+    var scheduleService = await antimoustique.device.servicesList.firstWhere((service) => service.uuid.toString() == functioningScheduleServiceUUID);
 
     var fsCharacteristics = await BluetoothActions.discoverCharacteristics(antimoustique, scheduleService);
 
@@ -175,4 +182,34 @@ Future<void> restoreDeviceConnection(AntimoustiqueStruct antimoustique) async{
   await BluetoothActions.connectToDevice(antimoustique);
   await BluetoothActions.discoverServices(antimoustique);
 }
+
+Future<void> refreshDeviceInformation(AntimoustiqueStruct antimoustique) async {
+  if (!antimoustique.device.isConnected) {
+    throw FlutterBluePlusException(ErrorPlatform.fbp, 'refreshDeviceInformation', 20, 'The device is not connected, could not fetch device information');
+  }
+
+  try {
+
+    var deviceInfoCharacteristicList = await BluetoothActions.discoverCharacteristicsForServiceUUID(antimoustique, deviceInfoServiceUUID);
+    var deviceCommandCharacteristicList = await BluetoothActions.discoverCharacteristicsForServiceUUID(antimoustique, deviceCommandServiceUUID);
+
+    var co2Characteristic = deviceInfoCharacteristicList.firstWhere((characteristic) => characteristic.uuid.toString() == co2LevelCharacteristicUUID);
+    var attractifCharacteristic = deviceInfoCharacteristicList.firstWhere((characteristic) => characteristic.uuid.toString() == attractifLevelCharacteristicUUID);
+    var deviceCommandCharacteristic = deviceCommandCharacteristicList.firstWhere((characteristic) => characteristic.uuid.toString() == 'fa45d9c7-4068-453d-a18c-e255e2e037bd');
+
+
+    // Reading characteristics
+    var co2Level = await BluetoothActions.readFromCharacteristic(antimoustique, co2Characteristic);
+    var attractifLevel = await BluetoothActions.readFromCharacteristic(antimoustique, attractifCharacteristic);
+
+    // Updating antimoustique properties
+    antimoustique.co2 = co2Level.first / 100;
+    antimoustique.attractif = attractifLevel.first / 100;
+  } catch (e) {
+    print('Error discovering services and characteristics: $e');
+    
+    rethrow; // Rethrows the caught exception
+  }
+}
+
 
