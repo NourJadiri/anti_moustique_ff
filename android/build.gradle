@@ -1,3 +1,15 @@
+buildscript {
+    repositories {
+        google() // Google's Maven repository
+        mavenCentral() // Maven Central repository
+    }
+    dependencies {
+        // Assurez-vous que cette ligne est à l'intérieur du bloc 'dependencies' du 'buildscript'
+        classpath 'com.android.tools.build:gradle:7.3.1'
+        // Ajoutez ici les autres dépendances de classpath si nécessaire
+    }
+}
+
 allprojects {
     repositories {
         google()

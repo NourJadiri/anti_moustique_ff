@@ -4,12 +4,11 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="428ea98a-0dd3-484c-ac09-aa9a94b23271" name="Changes" comment="Version d'ajout des plages horaires. Il faut mtn refresh la page controlePage">
+    <list default="true" id="428ea98a-0dd3-484c-ac09-aa9a94b23271" name="Changes" comment="A local notification is generated every time a notification is added in app_state.dart : FFAppState().addNotificationList&#10;if the vendor is Pole Habitat, on est redirigé vers le site de pole-habitat lorsqu'on clique sur la notif.&#10;On est redirigé vers une page google map des revendeurs.&#10;Lorsqu'on clique sur une notification locale soit le e-shop de pole habitat s'ouvre soit la map s'affiche.">
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/components/functionning_schedule_widget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/components/functionning_schedule_widget.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/services/notification_service.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/services/notification_service.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,6 +17,13 @@
   </component>
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Dart File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <excluded-from-favorite>
@@ -76,7 +82,7 @@
     &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
     &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
     &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;isaline&quot;,
     &quot;io.flutter.reload.alreadyRun&quot;: &quot;true&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
@@ -89,6 +95,10 @@
     </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SwiftWorkspaceSettings">
+    <option name="detectedToolchain" value="true" />
+    <option name="toolchainPathValue" value="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain" />
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="428ea98a-0dd3-484c-ac09-aa9a94b23271" name="Changes" comment="" />
@@ -153,7 +163,31 @@
       <option name="project" value="LOCAL" />
       <updated>1711990515287</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Notification Added in notification List when Level Of CO2 is lower than 0.1">
+      <option name="closed" value="true" />
+      <created>1712091198562</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1712091198562</updated>
+    </task>
+    <task id="LOCAL-00009" summary="A local notification is generated every time a notification is added in app_state.dart : FFAppState().addNotificationList&#10;if the vendor is Pole Habitat, on est redirigé vers le site de pole-habitat lorsqu'on clique sur la notif.">
+      <option name="closed" value="true" />
+      <created>1712154677600</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1712154677600</updated>
+    </task>
+    <task id="LOCAL-00010" summary="A local notification is generated every time a notification is added in app_state.dart : FFAppState().addNotificationList&#10;if the vendor is Pole Habitat, on est redirigé vers le site de pole-habitat lorsqu'on clique sur la notif.&#10;On est redirigé vers une page google map des revendeurs.&#10;Lorsqu'on clique sur une notification locale soit le e-shop de pole habitat s'ouvre soit la map s'affiche.">
+      <option name="closed" value="true" />
+      <created>1712164829312</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1712164829312</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -183,7 +217,10 @@
     <MESSAGE value="Version avec la lecture de QR-code en JSon avec ce format : &#10;{&#10;  &quot;manufactureID&quot;: &quot;your_manufactureID_here&quot;,&#10;  &quot;remoteID&quot;: &quot;your_remoteID_here&quot;,&#10;  &quot;vendor&quot;: &quot;your_vendor_here&quot;&#10;}&#10;&#10;and create a antiMousique and then add it to deviceList" />
     <MESSAGE value="Version d'ajout des plages horaires. Run time problème &#10;Error: Converting object to an encodable object failed: Instance of 'DateTime'&#10;A modifier" />
     <MESSAGE value="Version d'ajout des plages horaires. Il faut mtn refresh la page controlePage" />
-    <option name="LAST_COMMIT_MESSAGE" value="Version d'ajout des plages horaires. Il faut mtn refresh la page controlePage" />
+    <MESSAGE value="Notification Added in notification List when Level Of CO2 is lower than 0.1" />
+    <MESSAGE value="A local notification is generated every time a notification is added in app_state.dart : FFAppState().addNotificationList&#10;if the vendor is Pole Habitat, on est redirigé vers le site de pole-habitat lorsqu'on clique sur la notif." />
+    <MESSAGE value="A local notification is generated every time a notification is added in app_state.dart : FFAppState().addNotificationList&#10;if the vendor is Pole Habitat, on est redirigé vers le site de pole-habitat lorsqu'on clique sur la notif.&#10;On est redirigé vers une page google map des revendeurs.&#10;Lorsqu'on clique sur une notification locale soit le e-shop de pole habitat s'ouvre soit la map s'affiche." />
+    <option name="LAST_COMMIT_MESSAGE" value="A local notification is generated every time a notification is added in app_state.dart : FFAppState().addNotificationList&#10;if the vendor is Pole Habitat, on est redirigé vers le site de pole-habitat lorsqu'on clique sur la notif.&#10;On est redirigé vers une page google map des revendeurs.&#10;Lorsqu'on clique sur une notification locale soit le e-shop de pole habitat s'ouvre soit la map s'affiche." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
