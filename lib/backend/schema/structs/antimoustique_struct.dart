@@ -110,7 +110,6 @@ class AntimoustiqueStruct extends BaseStruct {
 
   // "functioning schedule list" field.
   List<FunctioningScheduleStruct>? _functioningScheduleList;
-
   List<FunctioningScheduleStruct> get functioningScheduleList =>
       _functioningScheduleList ?? [];
   set functioningScheduleList(List<FunctioningScheduleStruct>? value) {

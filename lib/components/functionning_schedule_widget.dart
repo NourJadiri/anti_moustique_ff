@@ -1,12 +1,8 @@
-import 'package:anti_moustique/app_state.dart';
-
-import '../backend/schema/structs/antimoustique_struct.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'functionning_schedule_model.dart';
 export 'functionning_schedule_model.dart';
-import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 
 class FunctionningScheduleWidget extends StatefulWidget {
   const FunctionningScheduleWidget({
@@ -51,43 +47,6 @@ class _FunctionningScheduleWidgetState
   void dispose() {
     _model.maybeDispose();
     super.dispose();
-  }
-
-  void activerAppareil() {
-    setState(() {
-      // Mettre à jour le paramètre isOn à true
-      FFAppState().currentDevice.isOn = true;
-
-    });
-  }
-
-  void desactiverAppareil() {
-    setState(() {
-      FFAppState().currentDevice.isOn = false;
-    });
-  }
-
-  void scheduleAlarm() async {
-    DateTime debut = widget.startTime!;
-    DateTime fin = widget.endTime!;
-
-    await AndroidAlarmManager.cancel(widget.index!);
-
-    await AndroidAlarmManager.oneShotAt(
-      debut,
-      widget.index!,
-      activerAppareil,
-      exact: true,
-      allowWhileIdle: true,
-    );
-
-    await AndroidAlarmManager.oneShotAt(
-      fin,
-      widget.index! + 1,
-      desactiverAppareil,
-      exact: true,
-      allowWhileIdle: true,
-    );
   }
 
   @override

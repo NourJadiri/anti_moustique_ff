@@ -1,4 +1,5 @@
 import 'package:anti_moustique/app_state.dart';
+import 'package:anti_moustique/custom_code/actions/device_utilities.dart';
 
 import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_checkbox_group.dart';
@@ -644,14 +645,18 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                               );
                               return;
                             }
-                          
-                            FFAppState().updateCurrentDeviceStruct((device) {
-                              device.functioningScheduleList.add(FunctioningScheduleStruct(
+
+                            var functoningSchedule = FunctioningScheduleStruct(
                                 startDay: startDay,
                                 startTime: startDateTime,
                                 endTime: endDateTime,
                                 isReccurent: _model.switchValue ?? false,
-                              ));
+                              );
+
+                            if(!await addFunctionSchedule(context, FFAppState().currentDevice, functoningSchedule )) return;
+                          
+                            FFAppState().updateCurrentDeviceStruct((device) {
+                              device.functioningScheduleList.add(functoningSchedule);
                             });
                             
                             Navigator.pop(context);
