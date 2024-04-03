@@ -4,12 +4,10 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="428ea98a-0dd3-484c-ac09-aa9a94b23271" name="Changes" comment="A local notification is generated every time a notification is added in app_state.dart : FFAppState().addNotificationList&#10;if the vendor is Pole Habitat, on est redirigé vers le site de pole-habitat lorsqu'on clique sur la notif.">
+    <list default="true" id="428ea98a-0dd3-484c-ac09-aa9a94b23271" name="Changes" comment="A local notification is generated every time a notification is added in app_state.dart : FFAppState().addNotificationList&#10;if the vendor is Pole Habitat, on est redirigé vers le site de pole-habitat lorsqu'on clique sur la notif.&#10;On est redirigé vers une page google map des revendeurs.&#10;Lorsqu'on clique sur une notification locale soit le e-shop de pole habitat s'ouvre soit la map s'affiche.">
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/components/notification_widget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/components/notification_widget.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/notification_page/notification_page_widget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/notification_page/notification_page_widget.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/services/notification_service.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/services/notification_service.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -181,7 +179,15 @@
       <option name="project" value="LOCAL" />
       <updated>1712154677600</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="A local notification is generated every time a notification is added in app_state.dart : FFAppState().addNotificationList&#10;if the vendor is Pole Habitat, on est redirigé vers le site de pole-habitat lorsqu'on clique sur la notif.&#10;On est redirigé vers une page google map des revendeurs.&#10;Lorsqu'on clique sur une notification locale soit le e-shop de pole habitat s'ouvre soit la map s'affiche.">
+      <option name="closed" value="true" />
+      <created>1712164829312</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1712164829312</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -213,7 +219,8 @@
     <MESSAGE value="Version d'ajout des plages horaires. Il faut mtn refresh la page controlePage" />
     <MESSAGE value="Notification Added in notification List when Level Of CO2 is lower than 0.1" />
     <MESSAGE value="A local notification is generated every time a notification is added in app_state.dart : FFAppState().addNotificationList&#10;if the vendor is Pole Habitat, on est redirigé vers le site de pole-habitat lorsqu'on clique sur la notif." />
-    <option name="LAST_COMMIT_MESSAGE" value="A local notification is generated every time a notification is added in app_state.dart : FFAppState().addNotificationList&#10;if the vendor is Pole Habitat, on est redirigé vers le site de pole-habitat lorsqu'on clique sur la notif." />
+    <MESSAGE value="A local notification is generated every time a notification is added in app_state.dart : FFAppState().addNotificationList&#10;if the vendor is Pole Habitat, on est redirigé vers le site de pole-habitat lorsqu'on clique sur la notif.&#10;On est redirigé vers une page google map des revendeurs.&#10;Lorsqu'on clique sur une notification locale soit le e-shop de pole habitat s'ouvre soit la map s'affiche." />
+    <option name="LAST_COMMIT_MESSAGE" value="A local notification is generated every time a notification is added in app_state.dart : FFAppState().addNotificationList&#10;if the vendor is Pole Habitat, on est redirigé vers le site de pole-habitat lorsqu'on clique sur la notif.&#10;On est redirigé vers une page google map des revendeurs.&#10;Lorsqu'on clique sur une notification locale soit le e-shop de pole habitat s'ouvre soit la map s'affiche." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

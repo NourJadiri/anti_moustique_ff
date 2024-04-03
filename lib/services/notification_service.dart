@@ -1,11 +1,9 @@
 
 
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../backend/schema/structs/notification_struct.dart';
-import '../flutter_flow/flutter_flow_util.dart';
-import '../main.dart';
+
 
 class NotificationService {
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
