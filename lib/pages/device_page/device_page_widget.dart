@@ -84,16 +84,17 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
           top: true,
           child: Stack(
             children: [
+
               Column(
                 mainAxisSize: MainAxisSize.max,
                 children: [
+                  Expanded(child:
                   Container(
                     width: 478.0,
                     height: 608.0,
                     decoration: BoxDecoration(
                       color: FlutterFlowTheme.of(context).secondaryBackground,
                     ),
-                    child: SingleChildScrollView(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -127,13 +128,15 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
                               ),
                             ],
                           ),
-                          Builder(
-                            builder: (context) {
-                              final listeAppareils =
-                                  FFAppState().deviceList.toList();
-                              print(FFAppState().deviceList);
-                              return buildDeviceListView(listeAppareils);
-                            },
+                          Expanded(
+                            child: Builder(
+                              builder: (context) {
+                                final listeAppareils = FFAppState().deviceList.toList();
+                                // Debugging print, consider removing for production
+                                print(FFAppState().deviceList);
+                                return buildDeviceListView(listeAppareils);
+                              },
+                            ),
                           ),
                         ],
                       ),
