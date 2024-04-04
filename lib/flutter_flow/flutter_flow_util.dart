@@ -1,3 +1,5 @@
+// ignore_for_file: type_literal_in_constant_pattern
+
 import 'dart:io';
 
 import 'package:flutter/foundation.dart' show kIsWeb;

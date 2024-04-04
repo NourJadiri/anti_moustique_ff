@@ -43,11 +43,13 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
 
     // Check if the device list contains a device with the same manufacture ID
     if (FFAppState().deviceList.any((device) => device.manufactureID == qrData['manufactureID'])) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Cet appareil a déjà été ajouté'),
-        ),
-      );
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Cet appareil a déjà été ajouté'),
+          ),
+        );
+      }
       return;
     }
 
@@ -58,7 +60,7 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
     }
 
     // Show a loading dialog while processing the QR code
-    if(context.mounted) {
+    if (context.mounted) {
       showProcessingQrDialog(context);
     }
 
@@ -66,7 +68,7 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
       if (context.mounted) {
         // Get the device from the QR code data
         AntimoustiqueStruct newAntiMoustique = await getDeviceFromQR(context, qrData);
-        await refreshDeviceInformation(newAntiMoustique);    
+        await refreshDeviceInformation(newAntiMoustique);
 
         setState(() {
           _model.antimoustique = newAntiMoustique;
@@ -78,7 +80,7 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
       print("Error: $e");
     } finally {
       // Close the loading dialog
-      if(context.mounted){
+      if (context.mounted) {
         Navigator.of(context).pop();
       }
     }
@@ -86,33 +88,32 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
 
   Future<dynamic> showProcessingQrDialog(BuildContext context) {
     return showDialog(
-    context: context,
-    barrierDismissible:
-        false, // Prevents dismissing the dialog by tapping outside
-    builder: (BuildContext context) {
-      return const AlertDialog(
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CircularProgressIndicator(),
-            SizedBox(height: 20),
-            Text(
-              "Please wait...",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+      context: context,
+      barrierDismissible: false, // Prevents dismissing the dialog by tapping outside
+      builder: (BuildContext context) {
+        return const AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(height: 20),
+              Text(
+                "Please wait...",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            SizedBox(height: 10),
-            Text(
-              "Processing QR code...",
-              style: TextStyle(fontSize: 16),
-            ),
-          ],
-        ),
-      );
-    },
-  );
+              SizedBox(height: 10),
+              Text(
+                "Processing QR code...",
+                style: TextStyle(fontSize: 16),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   void buildQRReadingError(BuildContext context) {
@@ -126,9 +127,7 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => _model.unfocusNode.canRequestFocus
-          ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-          : FocusScope.of(context).unfocus(),
+      onTap: () => _model.unfocusNode.canRequestFocus ? FocusScope.of(context).requestFocus(_model.unfocusNode) : FocusScope.of(context).unfocus(),
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
@@ -145,13 +144,11 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const Padding(
-                  padding:
-                      EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 5.0),
+                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 5.0),
                   child: AjouterAppareilTopBar(),
                 ),
                 Padding(
-                  padding:
-                      const EdgeInsetsDirectional.fromSTEB(0.0, 30.0, 0.0, 0.0),
+                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 30.0, 0.0, 0.0),
                   child: Text(
                     'QR-CODE',
                     textAlign: TextAlign.center,
@@ -172,16 +169,13 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
                     ),
                     child: Icon(
                       Icons.qr_code_2_outlined,
-                      color: _deviceScanned
-                          ? FlutterFlowTheme.of(context).success
-                          : FlutterFlowTheme.of(context).primary,
+                      color: _deviceScanned ? FlutterFlowTheme.of(context).success : FlutterFlowTheme.of(context).primary,
                       size: 200.0,
                     ),
                   ),
                 ),
                 Padding(
-                  padding:
-                      const EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
+                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
                   child: Container(
                     width: MediaQuery.sizeOf(context).width * 0.5,
                     height: MediaQuery.sizeOf(context).height * 0.04,
@@ -193,8 +187,7 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
                   ),
                 ),
                 Padding(
-                  padding:
-                      const EdgeInsetsDirectional.fromSTEB(0.0, 40.0, 0.0, 0.0),
+                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 40.0, 0.0, 0.0),
                   child: Container(
                     width: 270.0,
                     height: 63.0,
@@ -280,14 +273,12 @@ class AjouterAppareilTopBar extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsetsDirectional.fromSTEB(
-              0.0, 3.0, 0.0, 0.0),
+          padding: const EdgeInsetsDirectional.fromSTEB(0.0, 3.0, 0.0, 0.0),
           child: Container(
             width: MediaQuery.sizeOf(context).width * 1.0,
             height: MediaQuery.sizeOf(context).height * 0.05,
             decoration: BoxDecoration(
-              color: FlutterFlowTheme.of(context)
-                  .secondaryBackground,
+              color: FlutterFlowTheme.of(context).secondaryBackground,
             ),
             child: Stack(
               children: [
@@ -300,9 +291,7 @@ class AjouterAppareilTopBar extends StatelessWidget {
                   child: Text(
                     'Ajouter un appareil',
                     textAlign: TextAlign.center,
-                    style: FlutterFlowTheme.of(context)
-                        .titleLarge
-                        .override(
+                    style: FlutterFlowTheme.of(context).titleLarge.override(
                           fontFamily: 'Inter',
                           fontWeight: FontWeight.w600,
                         ),
@@ -340,17 +329,16 @@ class _ConfirmDeviceScanButtonState extends State<ConfirmDeviceScanButton> {
         await BluetoothActions.connectToDevice(widget._model.antimoustique!);
         await BluetoothActions.discoverServices(widget._model.antimoustique!);
         await refreshDeviceInformation(widget._model.antimoustique!);
-        }
-
-        FFAppState().update(
-          () {
-            FFAppState().addToDeviceList(widget._model.antimoustique!);
-          },
-        );
-      
-        Navigator.pop(context);
-
       }
+
+      FFAppState().update(
+        () {
+          FFAppState().addToDeviceList(widget._model.antimoustique!);
+        },
+      );
+
+      Navigator.pop(context);
+    }
   }
 
   @override

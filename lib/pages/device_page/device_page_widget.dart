@@ -1,5 +1,3 @@
-import 'package:anti_moustique/custom_code/actions/device_utilities.dart';
-
 import '/components/device_widget.dart';
 import '/components/navigation_bar_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';

@@ -26,6 +26,7 @@ dynamic deserializeStructParam<T>(
   if (param == null) {
     return null;
   } else if (isList) {
+    // ignore: prefer_typing_uninitialized_variables
     final paramValues;
     try {
       paramValues = param is Iterable ? param : json.decode(param);

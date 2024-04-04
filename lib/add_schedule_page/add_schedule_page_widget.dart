@@ -1,6 +1,4 @@
-import 'package:anti_moustique/app_state.dart';
 import 'package:anti_moustique/custom_code/actions/device_utilities.dart';
-
 import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_checkbox_group.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
