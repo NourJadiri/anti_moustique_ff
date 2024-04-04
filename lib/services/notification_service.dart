@@ -17,6 +17,7 @@ class NotificationService {
   Future<void> init() async {
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     // Configuration pour Android
+    // ignore: prefer_const_constructors
     var initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
 
     // Configuration pour iOS

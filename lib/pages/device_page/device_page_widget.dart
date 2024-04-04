@@ -41,9 +41,7 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
     context.watch<FFAppState>();
 
     return GestureDetector(
-      onTap: () => _model.unfocusNode.canRequestFocus
-          ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-          : FocusScope.of(context).unfocus(),
+      onTap: () => _model.unfocusNode.canRequestFocus ? FocusScope.of(context).requestFocus(_model.unfocusNode) : FocusScope.of(context).unfocus(),
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
@@ -55,19 +53,17 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
             title: Align(
               alignment: const AlignmentDirectional(0.0, 0.0),
               child: Padding(
-                padding:
-                    const EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
+                padding: const EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       'Mes Appareils',
-                      style:
-                          FlutterFlowTheme.of(context).headlineLarge.override(
-                                fontFamily: 'Inter',
-                                fontSize: 20.0,
-                              ),
+                      style: FlutterFlowTheme.of(context).headlineLarge.override(
+                            fontFamily: 'Inter',
+                            fontSize: 20.0,
+                          ),
                     ),
                     const NotificationIconButton(),
                   ],
@@ -106,18 +102,14 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
                               Align(
                                 alignment: const AlignmentDirectional(0.0, 0.0),
                                 child: Padding(
-                                  padding: const EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 10.0, 0.0, 10.0),
+                                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
                                   child: Container(
-                                    width:
-                                        MediaQuery.sizeOf(context).width * 1.0,
+                                    width: MediaQuery.sizeOf(context).width * 1.0,
                                     height: 38.0,
                                     decoration: BoxDecoration(
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryBackground,
+                                      color: FlutterFlowTheme.of(context).secondaryBackground,
                                     ),
-                                    alignment:
-                                        const AlignmentDirectional(0.0, 0.0),
+                                    alignment: const AlignmentDirectional(0.0, 0.0),
                                     child: const Align(
                                       alignment: AlignmentDirectional(0.0, 0.0),
                                       child: AddDeviceButton(),
@@ -129,8 +121,7 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
                           ),
                           Builder(
                             builder: (context) {
-                              final listeAppareils =
-                                  FFAppState().deviceList.toList();
+                              final listeAppareils = FFAppState().deviceList.toList();
                               print(FFAppState().deviceList);
                               return buildDeviceListView(listeAppareils);
                             },
@@ -175,13 +166,11 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
               FFAppState().currentDevice = listeAppareilsItem;
             });
 
-            await refreshDeviceInformation(FFAppState().currentDevice);
             // Ouverture de la page de controle correspondante
             context.pushNamed('ControlePage');
           },
           child: DeviceWidget(
-            key: Key(
-                'Key1f8_${listeAppareilsIndex}_of_${listeAppareils.length}'),
+            key: Key('Key1f8_${listeAppareilsIndex}_of_${listeAppareils.length}'),
             deviceName: listeAppareilsItem.name,
             deviceID: listeAppareilsItem.manufactureID,
             deviceCO2Level: listeAppareilsItem.co2,
@@ -216,7 +205,7 @@ class AddDeviceButton extends StatelessWidget {
         FFAppState().addToDeviceList(AntimoustiqueStruct.fromSerializableMap(jsonDecode(
             '{\"manufactureID\":\"XIC-SFD-LLAS\",\"name\":\"Antimoustique\",\"remoteID\":\"QSDFQSDFQSDCXVQSDF\",\"attractif\":\"0.5\",\"co2\":\"0.1\",\"vendor\":\"Pole-Habitat\"}')));
         FFAppState().addToDeviceList(AntimoustiqueStruct.fromSerializableMap(jsonDecode(
-        '{\"manufactureID\":\"LLSQI-IDNSIQ-LQD\",\"name\":\"Ouai\",\"remoteID\":\"QSDFJQKSDF\",\"attractif\":\"0.2\",\"co2\":\"0.77\",\"vendor\":\"Distributeur\"}')));
+            '{\"manufactureID\":\"LLSQI-IDNSIQ-LQD\",\"name\":\"Ouai\",\"remoteID\":\"QSDFJQKSDF\",\"attractif\":\"0.2\",\"co2\":\"0.77\",\"vendor\":\"Distributeur\"}')));
         context.pushNamed('AddDevicePage');
       },
     );
