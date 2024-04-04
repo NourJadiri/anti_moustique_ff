@@ -206,7 +206,7 @@ class FFAppState extends ChangeNotifier {
         'ff_googleMapData', _googleMapData.map((x) => x.serialize()).toList());
   }
 
-  AntimoustiqueStruct? _currentDevice = AntimoustiqueStruct();
+  AntimoustiqueStruct? _currentDevice = null;
   AntimoustiqueStruct? get currentDevice => _currentDevice;
   set currentDevice(AntimoustiqueStruct? value) {
     _currentDevice = value;

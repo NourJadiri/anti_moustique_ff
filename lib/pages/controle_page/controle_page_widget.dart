@@ -50,6 +50,16 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
 
   @override
   Widget build(BuildContext context) {
+    // Si currentDevice est null, on retourne immédiatement un autre widget.
+    if (FFAppState().currentDevice == null) {
+
+      // Ou simplement retourner un message d'erreur ou une page d'information.
+      return const Scaffold(
+        body: Center(
+          child: Text("Aucun appareil n'est sélectionné. Veuillez sélectionner un appareil."),
+        ),
+      );
+    }
     context.watch<FFAppState>();
 
     return GestureDetector(
