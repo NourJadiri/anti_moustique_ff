@@ -103,13 +103,18 @@ class _NavigationBarWidgetState extends State<NavigationBarWidget> {
               hoverColor: Colors.transparent,
               highlightColor: Colors.transparent,
               onTap: () async {
-                _model.isNull = await actions.checkIfNull(
-                  FFAppState().currentDevice,
-                );
-                if (!_model.isNull!) {
-                  context.pushNamed('ControlePage');
-                }
-
+                  // Check if there is a current device before navigating
+                    if (FFAppState().currentDevice == null){
+                    // Show a message or handle the lack of a current device appropriately
+                    // For example, using a snackbar to inform the user
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Aucun appareil sélectionné.'),
+                      ),
+                    );
+                  } else {
+                      context.pushNamed('ControlePage');
+                    }
                 setState(() {});
               },
               child: Container(

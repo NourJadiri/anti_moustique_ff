@@ -651,7 +651,7 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                                 isReccurent: _model.switchValue ?? false,
                               );
 
-                            if(!await addFunctionSchedule(context, FFAppState().currentDevice, functoningSchedule )) return;
+                            if(!await addFunctionSchedule(context, FFAppState().currentDevice!, functoningSchedule )) return;
                           
                             FFAppState().updateCurrentDeviceStruct((device) {
                               device.functioningScheduleList.add(functoningSchedule);

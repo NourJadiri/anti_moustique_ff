@@ -36,7 +36,7 @@ class NotificationService {
     );
 
     // Create a channel for Android (only affects Android 8.0+)
-    final AndroidNotificationChannel channel = AndroidNotificationChannel(
+    const AndroidNotificationChannel channel = AndroidNotificationChannel(
       _channelId,
       _channelName,
       description: _channelDescription,

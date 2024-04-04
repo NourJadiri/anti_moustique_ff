@@ -118,6 +118,11 @@ class FFAppState extends ChangeNotifier {
   }
 
   void removeFromDeviceList(AntimoustiqueStruct value) {
+    // Update the current device if it's the one being removed
+    if (_currentDevice == value) {
+      _currentDevice = null;
+      // Update your state or UI as necessary to reflect no current device
+    }
     _deviceList.remove(value);
     prefs.setStringList(
         'ff_deviceList', _deviceList.map((x) => x.serialize()).toList());
@@ -185,16 +190,22 @@ class FFAppState extends ChangeNotifier {
         'ff_googleMapData', _googleMapData.map((x) => x.serialize()).toList());
   }
 
-  AntimoustiqueStruct _currentDevice = AntimoustiqueStruct();
-  AntimoustiqueStruct get currentDevice => _currentDevice;
-  set currentDevice(AntimoustiqueStruct value) {
+  AntimoustiqueStruct? _currentDevice = AntimoustiqueStruct();
+  AntimoustiqueStruct? get currentDevice => _currentDevice;
+  set currentDevice(AntimoustiqueStruct? value) {
     _currentDevice = value;
-    prefs.setString('ff_currentDevice', value.serialize());
+    if (value == null) {
+      prefs.remove('ff_currentDevice');
+    } else {
+      prefs.setString('ff_currentDevice', value.serialize());
+    }
+    notifyListeners();
   }
 
+
   void updateCurrentDeviceStruct(Function(AntimoustiqueStruct) updateFn) {
-    updateFn(_currentDevice);
-    prefs.setString('ff_currentDevice', _currentDevice.serialize());
+    updateFn(_currentDevice!);
+    prefs.setString('ff_currentDevice', _currentDevice!.serialize());
   }
 
   List<NotificationStruct> _notificationList = [];

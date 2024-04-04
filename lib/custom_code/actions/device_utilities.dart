@@ -238,15 +238,24 @@ Future<void> generateNotification() async {
 
 Future<void> _checkAndAddCo2LowNotification() async {
   try {
+    // Vérifiez d'abord si currentDevice est non-null.
+    var currentDevice = FFAppState().currentDevice;
+    if (currentDevice == null) {
+      print("Current device is null, cannot check CO2 level.");
+      return;
+    }
+
+    // Vérifiez si la notification CO2 est déjà dans la liste.
     bool isCo2NotificationAlreadyInList = FFAppState().notificationList.any(
           (notification) =>
-      notification.antimoustique == FFAppState().currentDevice &&
+      notification.antimoustique == currentDevice &&
           notification.type == NotificationType.co2Low,
     );
 
-    if (FFAppState().currentDevice.islevelCo2Low() && !isCo2NotificationAlreadyInList) {
+    // Vérifiez maintenant si le niveau de CO2 est bas et s'il n'y a pas déjà une notification.
+    if (currentDevice.islevelCo2Low() && !isCo2NotificationAlreadyInList) {
       NotificationStruct notification = NotificationStruct(
-        antimoustique: FFAppState().currentDevice,
+        antimoustique: currentDevice, // Utilisez la variable locale non-nulle.
         title: "",
         body: "Niveau de CO2 faible, veuillez changer la bouteille.",
         type: NotificationType.co2Low,
@@ -258,15 +267,23 @@ Future<void> _checkAndAddCo2LowNotification() async {
   }
 }
 
+
 Future<void> _checkAndAddAttractifLowNotification() async {
   try {
+
+    // Vérifiez d'abord si currentDevice est non-null.
+    var currentDevice = FFAppState().currentDevice;
+    if (currentDevice == null) {
+      print("Current device is null, cannot check Attractif level.");
+      return;
+    }
     bool isAttractifNotificationAlreadyInList = FFAppState().notificationList.any(
           (notification) =>
       notification.antimoustique == FFAppState().currentDevice &&
           notification.type == NotificationType.attractifLow,
     );
 
-    if (FFAppState().currentDevice.islevelAttractifLow() && !isAttractifNotificationAlreadyInList) {
+    if (currentDevice.islevelAttractifLow() && !isAttractifNotificationAlreadyInList) {
       NotificationStruct notification = NotificationStruct(
         antimoustique: FFAppState().currentDevice,
         title: "Avertissement Attractif",
@@ -279,6 +296,8 @@ Future<void> _checkAndAddAttractifLowNotification() async {
     print("Erreur lors de la vérification/ajout de la notification d'attractif : $e");
   }
 }
+
+
 Future<int> findEmptyCharacteristicIndex(List<BluetoothCharacteristic> characteristics, AntimoustiqueStruct antimoustique) async {
   int emptyCharacteristicIndex = -1;
 

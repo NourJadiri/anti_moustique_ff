@@ -1,4 +1,3 @@
-import 'package:anti_moustique/app_state.dart';
 import 'package:anti_moustique/custom_code/actions/device_utilities.dart';
 import '../../backend/schema/structs/notification_struct.dart';
 import '/components/functionning_schedule_widget.dart';
@@ -29,7 +28,7 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => ControlePageModel());
-    refreshDeviceInformation(FFAppState().currentDevice).catchError((e) {
+    refreshDeviceInformation(FFAppState().currentDevice!).catchError((e) {
       buildConnectionErrorSnackbar(context);
     });
     setState(() {});
@@ -129,7 +128,7 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-            "La connexion avec l'appareil ${FFAppState().currentDevice.name} n'a pas pu être établie.",
+            "La connexion avec l'appareil ${FFAppState().currentDevice!.name} n'a pas pu être établie.",
           style: const TextStyle(
             color: Colors.black, // Changez la couleur du texte si nécessaire
           ),
@@ -175,7 +174,7 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
                           width: 192.0,
                           height: 192.0,
                           decoration: BoxDecoration(
-                            color: FFAppState().currentDevice.isOn ? const Color(0xFF05D03E) : const Color(0xFFD9E9FE),
+                            color: FFAppState().currentDevice!.isOn ? const Color(0xFF05D03E) : const Color(0xFFD9E9FE),
                             boxShadow: const [
                               BoxShadow(
                                 blurRadius: 4.0,
@@ -480,7 +479,7 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
                 ),
                 Builder(
                   builder: (context) {
-                    final listePlagesHoraires = FFAppState().currentDevice.functioningScheduleList.toList();
+                    final listePlagesHoraires = FFAppState().currentDevice!.functioningScheduleList.toList();
                     return ListView.builder(
                       padding: EdgeInsets.zero,
                       shrinkWrap: true,
@@ -516,26 +515,26 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
   FFButtonWidget buildActivateButton(BuildContext context) {
     return FFButtonWidget(
       onPressed: () async {
-        if (FFAppState().currentDevice.isOn) {
+        if (FFAppState().currentDevice!.isOn) {
           await _deactivateDevice(context);
         } else {
           await _activateDevice(context);
         }
       },
-      text: FFAppState().currentDevice.isOn ? 'Désactiver' : 'Activer',
+      text: FFAppState().currentDevice!.isOn ? 'Désactiver' : 'Activer',
       options: FFButtonOptions(
         width: MediaQuery.sizeOf(context).width * 0.6,
         height: 40.0,
         padding: const EdgeInsetsDirectional.fromSTEB(70.0, 0.0, 70.0, 0.0),
         iconPadding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-        color: FFAppState().currentDevice.isOn ? FlutterFlowTheme.of(context).primary : FlutterFlowTheme.of(context).secondaryBackground,
+        color: FFAppState().currentDevice!.isOn ? FlutterFlowTheme.of(context).primary : FlutterFlowTheme.of(context).secondaryBackground,
         textStyle: FlutterFlowTheme.of(context).labelSmall.override(
               fontFamily: 'Readex Pro',
-              color: FFAppState().currentDevice.isOn ? FlutterFlowTheme.of(context).accent4 : FlutterFlowTheme.of(context).primary,
+              color: FFAppState().currentDevice!.isOn ? FlutterFlowTheme.of(context).accent4 : FlutterFlowTheme.of(context).primary,
             ),
         elevation: 3.0,
         borderSide: BorderSide(
-          color: FFAppState().currentDevice.isOn ? const Color(0x00FFFFFF) : FlutterFlowTheme.of(context).primary,
+          color: FFAppState().currentDevice!.isOn ? const Color(0x00FFFFFF) : FlutterFlowTheme.of(context).primary,
           width: 2.0,
         ),
         borderRadius: BorderRadius.circular(24.0),
@@ -544,7 +543,7 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
   }
 
   Future<void> _activateDevice(BuildContext context) async {
-    if (await sendCommandToDevice(context, FFAppState().currentDevice, CommandEnum.activate)) {
+    if (await sendCommandToDevice(context, FFAppState().currentDevice!, CommandEnum.activate)) {
       setState(() {
         FFAppState().updateCurrentDeviceStruct((d) => d..isOn = true);
       });
@@ -552,7 +551,7 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
   }
 
   Future<void> _deactivateDevice(BuildContext context) async {
-    if (await sendCommandToDevice(context, FFAppState().currentDevice, CommandEnum.deactivate)) {
+    if (await sendCommandToDevice(context, FFAppState().currentDevice!, CommandEnum.deactivate)) {
       setState(() {
         FFAppState().updateCurrentDeviceStruct((d) => d..isOn = false);
       });
@@ -572,7 +571,7 @@ class DeviceIdTitleWidget extends StatelessWidget {
         Align(
           alignment: const AlignmentDirectional(0.0, -1.0),
           child: Text(
-            FFAppState().currentDevice.name,
+            FFAppState().currentDevice!.name,
             textAlign: TextAlign.center,
             style: FlutterFlowTheme.of(context).headlineLarge.override(
                   fontFamily: 'Inter',
@@ -583,7 +582,7 @@ class DeviceIdTitleWidget extends StatelessWidget {
         Align(
           alignment: const AlignmentDirectional(0.0, 0.0),
           child: Text(
-            FFAppState().currentDevice.manufactureID,
+            FFAppState().currentDevice!.manufactureID,
             textAlign: TextAlign.center,
             style: const TextStyle(
               color: Color(0xFF2A2D50),
@@ -660,7 +659,7 @@ class FunctionningSchedulePageView extends StatelessWidget {
             ),
             Builder(
               builder: (context) {
-                final listePlagesHoraires = FFAppState().currentDevice.functioningScheduleList.toList();
+                final listePlagesHoraires = FFAppState().currentDevice!.functioningScheduleList.toList();
                 return ListView.builder(
                   padding: EdgeInsets.zero,
                   shrinkWrap: true,
@@ -732,7 +731,7 @@ class AttractifLevelContainer extends StatelessWidget {
             Align(
               alignment: const AlignmentDirectional(0.0, -1.0),
               child: CircularPercentIndicator(
-                percent: FFAppState().currentDevice.attractif,
+                percent: FFAppState().currentDevice!.attractif,
                 radius: 60.0,
                 lineWidth: 12.0,
                 animation: true,
@@ -742,7 +741,7 @@ class AttractifLevelContainer extends StatelessWidget {
                 center: Text(
                   valueOrDefault<String>(
                     formatNumber(
-                      FFAppState().currentDevice.attractif,
+                      FFAppState().currentDevice!.attractif,
                       formatType: FormatType.custom,
                       format: '#%',
                       locale: '',
@@ -787,7 +786,7 @@ class Co2LevelContainer extends StatelessWidget {
             Align(
               alignment: const AlignmentDirectional(0.0, -1.0),
               child: CircularPercentIndicator(
-                percent: FFAppState().currentDevice.co2,
+                percent: FFAppState().currentDevice!.co2,
                 radius: 60.0,
                 lineWidth: 12.0,
                 animation: true,
@@ -797,7 +796,7 @@ class Co2LevelContainer extends StatelessWidget {
                 center: Text(
                   valueOrDefault<String>(
                     formatNumber(
-                      FFAppState().currentDevice.co2,
+                      FFAppState().currentDevice!.co2,
                       formatType: FormatType.custom,
                       format: '#%',
                       locale: '',
