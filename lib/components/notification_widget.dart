@@ -3,18 +3,23 @@ import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'notification_model.dart';
 export 'notification_model.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 
 class NotificationWidget extends StatefulWidget {
+
   const NotificationWidget({
     super.key,
     required this.deviceName,
     required this.content,
     required this.index,
+    required this.deviceVendor
   });
 
   final String? deviceName;
   final String? content;
   final int? index;
+  final String? deviceVendor;
 
   @override
   State<NotificationWidget> createState() => _NotificationWidgetState();
@@ -66,13 +71,24 @@ class _NotificationWidgetState extends State<NotificationWidget> {
           child: Row(
             mainAxisSize: MainAxisSize.max,
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(4.0),
-                child: Image.asset(
-                  'assets/images/boitier.png',
-                  width: 44.0,
-                  height: 200.0,
-                  fit: BoxFit.contain,
+              GestureDetector(
+                onTap: () {
+                  if(widget.deviceVendor == "Pole-Habitat" || widget.deviceVendor == 'unknown') {
+                    // Ouvre une URL dans le navigateur
+                    launchUrl(Uri.parse('https://www.pole-habitat-ra.com'));
+                  }
+                  else {
+                    context.pushNamed('MapPage');
+                  }
+                },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(4.0),
+                  child: Image.asset(
+                    'assets/images/boitier.png',
+                    width: 44.0,
+                    height: 200.0,
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
               Expanded(

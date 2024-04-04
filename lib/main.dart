@@ -3,11 +3,16 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
+import 'backend/schema/structs/antimoustique_struct.dart';
 import 'flutter_flow/flutter_flow_util.dart';
+import 'services/notification_service.dart'; // Ajustez le chemin en fonction de votre structure de dossier
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   usePathUrlStrategy();
+
+  // Initialiser NotificationService
+  await NotificationService().init(); // Assurez-vous que cette ligne utilise `await` si `init` est asynchrone
 
   final appState = FFAppState(); // Initialize FFAppState
   await appState.initializePersistedState();
@@ -17,6 +22,7 @@ void main() async {
     child: const MyApp(),
   ));
 }
+
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -34,6 +40,8 @@ class _MyAppState extends State<MyApp> {
 
   late AppStateNotifier _appStateNotifier;
   late GoRouter _router;
+  late NotificationService notificationService; // Ajouter ceci
+
 
   @override
   void initState() {
@@ -41,6 +49,8 @@ class _MyAppState extends State<MyApp> {
 
     _appStateNotifier = AppStateNotifier.instance;
     _router = createRouter(_appStateNotifier);
+    notificationService = NotificationService(); // Initialiser NotificationService ici
+    // Assurez-vous d'initialiser NotificationService après FlutterBinding et avant d'utiliser runApp.
   }
 
   void setThemeMode(ThemeMode mode) => setState(() {
@@ -63,6 +73,7 @@ class _MyAppState extends State<MyApp> {
       ),
       themeMode: _themeMode,
       routerConfig: _router,
+
     );
   }
 }

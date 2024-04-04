@@ -141,6 +141,7 @@ class _NotificationPageWidgetState extends State<NotificationPageWidget> {
                                       'Key6t8_${noticationsIndex}_of_${notications.length}'),
                                   deviceName:
                                       noticationsItem.antimoustique.name,
+                                  deviceVendor: noticationsItem.antimoustique.vendor,
                                   content: noticationsItem.body,
                                   index: noticationsIndex,
                                 ),

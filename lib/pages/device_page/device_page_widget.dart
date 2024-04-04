@@ -131,6 +131,7 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
                             builder: (context) {
                               final listeAppareils =
                                   FFAppState().deviceList.toList();
+                              print(FFAppState().deviceList);
                               return buildDeviceListView(listeAppareils);
                             },
                           ),
@@ -212,6 +213,10 @@ class AddDeviceButton extends StatelessWidget {
         size: 24.0,
       ),
       onPressed: () async {
+        FFAppState().addToDeviceList(AntimoustiqueStruct.fromSerializableMap(jsonDecode(
+            '{\"manufactureID\":\"XIC-SFD-LLAS\",\"name\":\"Antimoustique\",\"remoteID\":\"QSDFQSDFQSDCXVQSDF\",\"attractif\":\"0.5\",\"co2\":\"0.1\",\"vendor\":\"Pole-Habitat\"}')));
+        FFAppState().addToDeviceList(AntimoustiqueStruct.fromSerializableMap(jsonDecode(
+        '{\"manufactureID\":\"LLSQI-IDNSIQ-LQD\",\"name\":\"Ouai\",\"remoteID\":\"QSDFJQKSDF\",\"attractif\":\"0.2\",\"co2\":\"0.77\",\"vendor\":\"Distributeur\"}')));
         context.pushNamed('AddDevicePage');
       },
     );
