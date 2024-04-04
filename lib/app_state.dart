@@ -118,9 +118,9 @@ class FFAppState extends ChangeNotifier {
   }
 
   void removeFromDeviceList(AntimoustiqueStruct value) {
-    // Update the current device if it's the one being removed
-    print("Le current device est ");
-    print(currentDevice);
+    // Supprimez d'abord les notifications pour l'appareil
+    removeNotificationsForDevice(value);
+
     if (_currentDevice == value) {
       _currentDevice = null;
       // Update your state or UI as necessary to reflect no current device
@@ -133,7 +133,8 @@ class FFAppState extends ChangeNotifier {
   void removeAtIndexFromDeviceList(int index) {
     // First, get the device at the given index.
     var deviceToRemove = _deviceList.elementAt(index);
-
+    // Supprimez d'abord les notifications pour l'appareil
+    removeNotificationsForDevice(deviceToRemove);
     // Check if the device to remove is the current device.
     if (_currentDevice != null && _currentDevice == deviceToRemove) {
       // If it is the current device, set the current device to null.
@@ -250,6 +251,12 @@ class FFAppState extends ChangeNotifier {
     _notificationList.removeAt(index);
     prefs.setStringList('ff_notificationList',
         _notificationList.map((x) => x.serialize()).toList());
+  }
+
+  void removeNotificationsForDevice(AntimoustiqueStruct device) {
+    _notificationList.removeWhere((notification) => notification.antimoustique == device);
+    // Sauvegarder la liste mise à jour dans les préférences
+    prefs.setStringList('ff_notificationList', _notificationList.map((x) => x.serialize()).toList());
   }
 
   void updateNotificationListAtIndex(
