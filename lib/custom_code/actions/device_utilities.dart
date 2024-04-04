@@ -9,6 +9,7 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:anti_moustique/custom_code/actions/bluetooth_actions.dart';
 import 'package:anti_moustique/backend/schema/structs/antimoustique_struct.dart';
 import 'package:anti_moustique/backend/schema/structs/functioning_schedule_struct.dart';
+import 'package:anti_moustique/backend/schema/structs/notification_struct.dart';
 
 final String deviceInfoServiceUUID = '180d';
 final String deviceCommandServiceUUID = '1900';
@@ -225,4 +226,59 @@ Future<void> refreshDeviceInformation(AntimoustiqueStruct antimoustique) async {
   }
 }
 
+
+Future<void> generateNotification() async {
+  try {
+    // Vérifie séparément pour chaque type de notification
+    await _checkAndAddCo2LowNotification();
+    await _checkAndAddAttractifLowNotification();
+  } catch (e) {
+    // Gérer l'erreur ou la loguer
+    print("Erreur lors de la génération des notifications : $e");
+  }
+}
+
+Future<void> _checkAndAddCo2LowNotification() async {
+  try {
+    bool isCo2NotificationAlreadyInList = FFAppState().notificationList.any(
+          (notification) =>
+      notification.antimoustique == FFAppState().currentDevice &&
+          notification.type == NotificationType.co2Low,
+    );
+
+    if (FFAppState().currentDevice.islevelCo2Low() && !isCo2NotificationAlreadyInList) {
+      NotificationStruct notification = NotificationStruct(
+        antimoustique: FFAppState().currentDevice,
+        title: "",
+        body: "Niveau de CO2 faible, veuillez changer la bouteille.",
+        type: NotificationType.co2Low,
+      );
+      FFAppState().addToNotificationList(notification);
+    }
+  } catch (e) {
+    print("Erreur lors de la vérification/ajout de la notification de CO2 : $e");
+  }
+}
+
+Future<void> _checkAndAddAttractifLowNotification() async {
+  try {
+    bool isAttractifNotificationAlreadyInList = FFAppState().notificationList.any(
+          (notification) =>
+      notification.antimoustique == FFAppState().currentDevice &&
+          notification.type == NotificationType.attractifLow,
+    );
+
+    if (FFAppState().currentDevice.islevelAttractifLow() && !isAttractifNotificationAlreadyInList) {
+      NotificationStruct notification = NotificationStruct(
+        antimoustique: FFAppState().currentDevice,
+        title: "Avertissement Attractif",
+        body: "Niveau d'attractif faible, veuillez le recharger.",
+        type: NotificationType.attractifLow,
+      );
+      FFAppState().addToNotificationList(notification);
+    }
+  } catch (e) {
+    print("Erreur lors de la vérification/ajout de la notification d'attractif : $e");
+  }
+}
 

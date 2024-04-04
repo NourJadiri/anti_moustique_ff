@@ -176,6 +176,7 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
             });
 
             await refreshDeviceInformation(FFAppState().currentDevice);
+            await generateNotification();
             // Ouverture de la page de controle correspondante
             context.pushNamed('ControlePage');
           },
