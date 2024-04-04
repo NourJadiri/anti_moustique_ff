@@ -18,7 +18,7 @@ final String attractifLevelCharacteristicUUID = 'cf862a6b-8f91-4d53-a396-70d91a2
 
 typedef jsonObject = Map<String, dynamic>;
 
-enum CommandEnum{
+enum CommandEnum {
   deactivate,
   activate,
 }
@@ -36,9 +36,7 @@ Future<jsonObject> scanQR(BuildContext context) async {
     Map<String, dynamic> qrData = jsonDecode(qrResult);
 
     // Check if all required fields (manufactureID, remoteID, vendor) are present
-    if (qrData.containsKey('manufactureID') &&
-        qrData.containsKey('remoteID') &&
-        qrData.containsKey('vendor')) {
+    if (qrData.containsKey('manufactureID') && qrData.containsKey('remoteID') && qrData.containsKey('vendor')) {
       // Extract manufactureID, remoteID, and vendor from the decoded JSON
       String manufactureID = qrData['manufactureID'];
       String remoteID = qrData['remoteID'];
@@ -49,7 +47,6 @@ Future<jsonObject> scanQR(BuildContext context) async {
         'remoteID': remoteID,
         'vendor': vendor,
       };
-
     } else {
       // Show error message if any of the required fields are missing
       print('Error: Missing required fields in QR code data');
@@ -95,60 +92,45 @@ Future<AntimoustiqueStruct> getDeviceFromQR(BuildContext context, Map<String, dy
   }
 }
 
-Future<bool> sendCommandToDevice(BuildContext context, AntimoustiqueStruct antimoustique, CommandEnum command) async{
+Future<bool> sendCommandToDevice(BuildContext context, AntimoustiqueStruct antimoustique, CommandEnum command) async {
+  try {
+    if (antimoustique.device.isDisconnected || antimoustique.device.remoteId == null) {
+      await restoreDeviceConnection(antimoustique);
+    }
+
+    var commandService = await antimoustique.device.servicesList.firstWhere((service) => service.uuid.toString() == '1900');
+
+    await BluetoothActions.discoverCharacteristics(antimoustique, commandService);
+
+    var activateCommandCharacteristic =
+        await commandService.characteristics.firstWhere((characteristic) => characteristic.uuid.toString() == 'fa45d9c7-4068-453d-a18c-e255e2e037bd');
+
     try {
-      if (antimoustique.device.isDisconnected || antimoustique.device.remoteId == null) {
-        await restoreDeviceConnection(antimoustique);
-      }
-
-      var commandService = await antimoustique.device.servicesList.firstWhere((service) => service.uuid.toString() == '1900');
-
-      await BluetoothActions.discoverCharacteristics(
-          antimoustique, commandService);
-
-      var activateCommandCharacteristic = await commandService.characteristics
-          .firstWhere((characteristic) =>
-              characteristic.uuid.toString() ==
-              'fa45d9c7-4068-453d-a18c-e255e2e037bd');
-
-      try{
-        await BluetoothActions.writeToCharacteristic(antimoustique: antimoustique, characteristic:  activateCommandCharacteristic, value: [command == CommandEnum.activate ? 1 : 0]);
-        return true;
-      }
-      catch(e){
-        print('Error writing to characteristic: $e');
-        return false;
-      }
-      
-    } on FlutterBluePlusException catch (e) {
-      if (context.mounted) {
-        // Add a snackbar to show the error
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-                'Erreur dans la communication avec l\'appareil. Assurez vous que l\'appareil est allumé et à proximité.'),
-          ),
-        );
-      }
-      return false;
+      await BluetoothActions.writeToCharacteristic(
+          antimoustique: antimoustique, characteristic: activateCommandCharacteristic, value: [command == CommandEnum.activate ? 1 : 0]);
+      return true;
     } catch (e) {
-      print(e);
+      print('Error writing to characteristic: $e');
       return false;
     }
-}
-
-Future<bool> addFunctionSchedule(BuildContext context, AntimoustiqueStruct antimoustique, FunctioningScheduleStruct schedule) async{
-  int writeCharacteristicIndex = antimoustique.functioningScheduleList.length;
-
-  if(writeCharacteristicIndex >= 3){
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text(
-            'Vous avez atteint le nombre maximum de plages horaires'),
-      ),
-    );
+  } on FlutterBluePlusException catch (e) {
+    if (context.mounted) {
+      // Add a snackbar to show the error
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Erreur dans la communication avec l\'appareil. Assurez vous que l\'appareil est allumé et à proximité.'),
+        ),
+      );
+    }
+    return false;
+  } catch (e) {
+    print(e);
     return false;
   }
+}
+
+Future<bool> addFunctionSchedule(BuildContext context, AntimoustiqueStruct antimoustique, FunctioningScheduleStruct schedule) async {
+  var writeCharacteristicIndex = -1;
 
   try {
     if (antimoustique.device.isDisconnected || antimoustique.device.remoteId == null) {
@@ -159,57 +141,73 @@ Future<bool> addFunctionSchedule(BuildContext context, AntimoustiqueStruct antim
 
     var fsCharacteristics = await BluetoothActions.discoverCharacteristics(antimoustique, scheduleService);
 
+    writeCharacteristicIndex = await findEmptyCharacteristicIndex(fsCharacteristics, antimoustique);
+
     var writeCharacteristic = fsCharacteristics[writeCharacteristicIndex];
 
     String scheduleString = jsonEncode(schedule.toSerializableMap());
 
     List<int> scheduleBytes = utf8.encode(scheduleString);
 
-    try{
-      await BluetoothActions.writeToCharacteristic(antimoustique: antimoustique, characteristic:  writeCharacteristic, value: scheduleBytes, allowLongWrite: true);
+    try {
+      await BluetoothActions.writeToCharacteristic(
+          antimoustique: antimoustique, characteristic: writeCharacteristic, value: scheduleBytes, allowLongWrite: true);
       return true;
-    }
-    catch(e){
+    } catch (e) {
       return false;
     }
-
-  }
-  catch(e){
+  } catch (e) {
     print('Error writing to characteristic: $e');
     return false;
   }
 }
 
-Future<void> restoreDeviceConnection(AntimoustiqueStruct antimoustique) async{
-  await BluetoothActions.scanForDevice(manufactureID: antimoustique.manufactureID);
-  BluetoothDevice currentDeviceBtDevice = FlutterBluePlus.lastScanResults.firstWhere((scanResult) => scanResult.device.advName.toString() == antimoustique.manufactureID).device;
-  antimoustique.device = currentDeviceBtDevice;
-  antimoustique.updateDeviceInfo();
-  await BluetoothActions.connectToDevice(antimoustique);
-  await BluetoothActions.discoverServices(antimoustique);
+Future<void> restoreDeviceConnection(AntimoustiqueStruct antimoustique) async {
+  try {
+    await BluetoothActions.scanForDevice(manufactureID: antimoustique.manufactureID);
+    if (FlutterBluePlus.lastScanResults.isEmpty) {
+      throw Exception('Aucun appareil trouvé lors de la numérisation.');
+    }
+    BluetoothDevice currentDeviceBtDevice;
+    try {
+      currentDeviceBtDevice = FlutterBluePlus.lastScanResults
+          .firstWhere(
+            (scanResult) => scanResult.device.advName.toString() == antimoustique.manufactureID,
+          )
+          .device;
+    } catch (e) {
+      throw Exception('Appareil avec manufactureID ${antimoustique.manufactureID} non trouvé.');
+    }
+
+    antimoustique.device = currentDeviceBtDevice;
+    antimoustique.updateDeviceInfo();
+
+    await BluetoothActions.connectToDevice(antimoustique);
+    await BluetoothActions.discoverServices(antimoustique);
+  } catch (e) {
+    throw Exception('La restauration de la connexion a échoué: $e');
+  }
 }
 
 Future<void> refreshDeviceInformation(AntimoustiqueStruct antimoustique) async {
   if (!antimoustique.device.isConnected) {
-    try{
-      await BluetoothActions.connectToDevice(antimoustique);
-      await BluetoothActions.discoverServices(antimoustique);
-    }
-    catch(e){
+    try {
+      await restoreDeviceConnection(antimoustique);
+    } catch (e) {
       print('Error connecting to device: $e');
       rethrow;
     }
   }
 
   try {
-
     var deviceInfoCharacteristicList = await BluetoothActions.discoverCharacteristicsForServiceUUID(antimoustique, deviceInfoServiceUUID);
     var deviceCommandCharacteristicList = await BluetoothActions.discoverCharacteristicsForServiceUUID(antimoustique, deviceCommandServiceUUID);
 
     var co2Characteristic = deviceInfoCharacteristicList.firstWhere((characteristic) => characteristic.uuid.toString() == co2LevelCharacteristicUUID);
-    var attractifCharacteristic = deviceInfoCharacteristicList.firstWhere((characteristic) => characteristic.uuid.toString() == attractifLevelCharacteristicUUID);
-    var deviceCommandCharacteristic = deviceCommandCharacteristicList.firstWhere((characteristic) => characteristic.uuid.toString() == 'fa45d9c7-4068-453d-a18c-e255e2e037bd');
-
+    var attractifCharacteristic =
+        deviceInfoCharacteristicList.firstWhere((characteristic) => characteristic.uuid.toString() == attractifLevelCharacteristicUUID);
+    var deviceCommandCharacteristic =
+        deviceCommandCharacteristicList.firstWhere((characteristic) => characteristic.uuid.toString() == 'fa45d9c7-4068-453d-a18c-e255e2e037bd');
 
     // Reading characteristics
     var co2Level = await BluetoothActions.readFromCharacteristic(antimoustique, co2Characteristic);
@@ -220,9 +218,21 @@ Future<void> refreshDeviceInformation(AntimoustiqueStruct antimoustique) async {
     antimoustique.attractif = attractifLevel.first / 100;
   } catch (e) {
     print('Error discovering services and characteristics: $e');
-    
+
     rethrow; // Rethrows the caught exception
   }
 }
 
+Future<int> findEmptyCharacteristicIndex(List<BluetoothCharacteristic> characteristics, AntimoustiqueStruct antimoustique) async {
+  int emptyCharacteristicIndex = -1;
 
+  for (var characteristic in characteristics) {
+    var value = await BluetoothActions.readFromCharacteristic(antimoustique, characteristic);
+    if (value.isEmpty || String.fromCharCodes(value).trim().isEmpty) {
+      emptyCharacteristicIndex = characteristics.indexOf(characteristic);
+      break;
+    }
+  }
+
+  return emptyCharacteristicIndex;
+}

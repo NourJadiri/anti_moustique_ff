@@ -22,7 +22,7 @@ class BluetoothActions {
   static Future<void> scanForDevice(
       {String manufactureID = '',
       String remoteID = '',
-      Duration timeout = const Duration(seconds: 4)}) async {
+      Duration timeout = const Duration(seconds: 1)}) async {
     FlutterBluePlus.cancelWhenScanComplete(_scanSubscription!);
 
     await FlutterBluePlus.adapterState
@@ -57,12 +57,7 @@ class BluetoothActions {
 
   static Future<List<BluetoothCharacteristic>> discoverCharacteristics(
       AntimoustiqueStruct antimoustique, BluetoothService service) async {
-    var characteristics = await service.characteristics;
-
-    characteristics.forEach((characteristic) {
-      print(
-          'Discovered characteristic ${characteristic.uuid} on device ${antimoustique.device.remoteId}');
-    });
+    var characteristics = service.characteristics;
 
     return characteristics;
   }

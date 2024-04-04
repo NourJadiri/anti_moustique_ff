@@ -1,7 +1,6 @@
 // ignore_for_file: unnecessary_getters_setters
 
 import 'dart:async';
-import '/backend/schema/util/schema_util.dart';
 import 'index.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import '/flutter_flow/flutter_flow_util.dart';
