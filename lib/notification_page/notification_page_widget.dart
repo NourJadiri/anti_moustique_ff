@@ -1,3 +1,10 @@
+/*
+Cette page affiche une liste des notifications pour l'utilisateur.
+Elle utilise un modèle de données (NotificationPageModel) pour gérer son état interne
+et interagit avec l'état global de l'application (FFAppState) pour obtenir les notifications à afficher.
+Un FlutterFlowIconButton est utilisé pour permettre à l'utilisateur de retourner à la page précédente.
+ */
+
 import '/components/notification_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -112,6 +119,8 @@ class _NotificationPageWidgetState extends State<NotificationPageWidget> {
                       ],
                     ),
                   ),
+
+                  // Liste des notifications.
                   Builder(
                     builder: (context) {
                       final notications =
@@ -144,6 +153,7 @@ class _NotificationPageWidgetState extends State<NotificationPageWidget> {
                                   deviceVendor: noticationsItem.antimoustique.vendor,
                                   content: noticationsItem.body,
                                   index: noticationsIndex,
+                                  // Paramètres de la notification à afficher.
                                 ),
                               ),
                             ),
