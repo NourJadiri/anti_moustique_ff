@@ -84,38 +84,6 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
                         size: 24.0,
                       ),
                       onPressed: () async {
-                        //Methode qui parcours la list de notifications et qui check si le level de co2 a déjà été notifié comme bas, puis qui ajoute cette notification dans la liste si ce n'est pas le cas
-                        //à ajouter ailleurs
-                        bool isCo2NotificationAlreadyInList = false;
-                        bool isAttractifNotificationAlreadyInList = false;
-
-                        for (var notification in FFAppState().notificationList) {
-                          if (notification.antimoustique == FFAppState().currentDevice) {
-                            if (notification.type == NotificationType.co2Low) {
-                              isCo2NotificationAlreadyInList = true;
-                            } else if (notification.type == NotificationType.attractifLow) {
-                              isAttractifNotificationAlreadyInList = true;
-                            }
-                          }
-                        }
-                        if (FFAppState().currentDevice.islevelCo2Low() && isCo2NotificationAlreadyInList == false) {
-                          NotificationStruct notification = NotificationStruct(
-                            antimoustique: FFAppState().currentDevice,
-                            title: "",
-                            body: "Niveau de CO2 faible, veuillez changer la bouteille.",
-                            type: NotificationType.co2Low,
-                          );
-                          FFAppState().addToNotificationList(notification);
-                        }
-                        if (FFAppState().currentDevice.islevelAttractifLow() && !isAttractifNotificationAlreadyInList) {
-                          NotificationStruct notification = NotificationStruct(
-                            antimoustique: FFAppState().currentDevice,
-                            title: "Avertissement Attractif",
-                            body: "Niveau d'attractif faible, veuillez le recharger.",
-                            type: NotificationType.attractifLow,
-                          );
-                          FFAppState().addToNotificationList(notification);
-                        }
 
                         context.pushNamed('NotificationPage');
                       },

@@ -1,81 +1,92 @@
-
-
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../backend/schema/structs/notification_struct.dart';
 
-
 class NotificationService {
-  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  FlutterLocalNotificationsPlugin();
+  static const String _channelId = 'custom_notification_channel_id'; // Define a channel ID
+  static const String _channelName = 'Custom Notifications'; // Define a channel name
+  static const String _channelDescription = 'Notifications for this app'; // Define a channel description
 
   static final NotificationService _instance = NotificationService._internal();
-
   factory NotificationService() => _instance;
-
   NotificationService._internal();
 
   Future<void> init() async {
-    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    // Configuration pour Android
-    // ignore: prefer_const_constructors
-    var initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const AndroidInitializationSettings initializationSettingsAndroid =
+    AndroidInitializationSettings('@mipmap/ic_launcher');
+    final DarwinInitializationSettings initializationSettingsDarwin =
+    DarwinInitializationSettings(
+        requestSoundPermission: false,
+        requestBadgePermission: false,
+        requestAlertPermission: false,
+        onDidReceiveLocalNotification: (int id, String? title, String? body, String? payload) async {
+          // Handle foreground notification reception in iOS
+        });
 
-    // Configuration pour iOS
-    var initializationSettingsIOS = IOSInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
-      onDidReceiveLocalNotification: (int id, String? title, String? body, String? payload) async {
-        // Ici, vous pouvez personnaliser ce que vous voulez faire lorsque la notification est reçue en premier plan
-      },
-    );
-
-    var initializationSettings = InitializationSettings(
+    final InitializationSettings initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
-      iOS: initializationSettingsIOS,
+      iOS: initializationSettingsDarwin,
     );
 
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
-      onSelectNotification: onSelectNotification,
+      onDidReceiveNotificationResponse: onDidReceiveNotificationResponse,
     );
+
+    // Create a channel for Android (only affects Android 8.0+)
+    final AndroidNotificationChannel channel = AndroidNotificationChannel(
+      _channelId,
+      _channelName,
+      description: _channelDescription,
+      importance: Importance.max,
+    );
+
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
   }
 
   Future<void> sendLocalNotification(NotificationStruct value) async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      'votre_channel_id', // Assurez-vous que ce channel ID a été créé
-      'votre_channel_nom',
-      'votre_channel_description',
-      importance: Importance.max,
-      priority: Priority.high,
-      showWhen: false,
-    );
-    const NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+    AndroidNotificationDetails(
+        _channelId, // Make sure to use the defined channel ID
+        _channelName,
+        channelDescription: _channelDescription,
+        importance: Importance.max,
+        priority: Priority.high,
+        showWhen: false);
+
+    const NotificationDetails platformChannelSpecifics =
+    NotificationDetails(android: androidPlatformChannelSpecifics);
 
     await flutterLocalNotificationsPlugin.show(
-      0, // ID de la notification
-      value.antimoustique.name, // titre
-      value.body, // corps de la notification
+      DateTime.now().millisecondsSinceEpoch.remainder(100000), // Dynamic ID for the notification
+      value.antimoustique.name,
+      value.body,
       platformChannelSpecifics,
       payload: value.antimoustique.vendor,
     );
   }
 
-  Future onSelectNotification(String? payload) async {
+  void onDidReceiveNotificationResponse(NotificationResponse response) async {
+    String? payload = response.payload;
     print(payload);
-    if (payload == "Distributeur" || payload == "unknown") {
-      // Naviguez vers la page Map
-      final url = Uri.parse('https://www.google.com/maps/d/viewer?mid=1G4QNa9Ob5ErrTV54evRI3o_Gbm0&hl=en_US&ll=46.14750807696509%2C-71.90924343517304&z=8');
-      if (!await launchUrl(url)) {
-        throw 'Could not launch $url';
-      }
-    } else if (payload == "Pole-Habitat") {
-      // Naviguez vers le e-shop de Pole Habitat
-      // Utilisation de launchUrl pour ouvrir le navigateur
-      final url = Uri.parse('https://www.pole-habitat-ra.com');
-      if (!await launchUrl(url)) {
-        throw 'Could not launch $url';
+    if (payload != null) {
+      if (payload == "Distributeur" || payload == "unknown") {
+        final url = Uri.parse(
+            'https://www.google.com/maps/d/viewer?mid=1G4QNa9Ob5ErrTV54evRI3o_Gbm0&hl=en_US&ll=46.14750807696509%2C-71.90924343517304&z=8');
+        if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+          throw 'Could not launch $url';
+        }
+      } else if (payload == "Pole-Habitat") {
+        final url = Uri.parse('https://www.pole-habitat-ra.com');
+        if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+          throw 'Could not launch $url';
+        }
       }
     }
   }
 }
+

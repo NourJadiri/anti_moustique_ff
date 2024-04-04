@@ -151,7 +151,7 @@ class AntimoustiqueStruct extends BaseStruct {
 
   bool islevelCo2Low(){
     bool isLow = false;
-    if(co2/100 < 0.1) {
+    if(co2 <= 0.1) {
       isLow = true;
     }
     return isLow;
@@ -159,7 +159,7 @@ class AntimoustiqueStruct extends BaseStruct {
 
   bool islevelAttractifLow(){
     bool isLow = false;
-    if(attractif/100 < 0.1) {
+    if(attractif <= 0.1) {
       isLow = true;
     }
     return isLow;
