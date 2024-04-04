@@ -175,7 +175,7 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
               FFAppState().currentDevice = listeAppareilsItem;
             });
 
-            await refreshDeviceInformation(FFAppState().currentDevice);
+            //await refreshDeviceInformation(FFAppState().currentDevice);
             await generateNotification();
             // Ouverture de la page de controle correspondante
             context.pushNamed('ControlePage');
@@ -218,6 +218,15 @@ class AddDeviceButton extends StatelessWidget {
             '{\"manufactureID\":\"XIC-SFD-LLAS\",\"name\":\"Antimoustique\",\"remoteID\":\"QSDFQSDFQSDCXVQSDF\",\"attractif\":\"0.5\",\"co2\":\"0.1\",\"vendor\":\"Pole-Habitat\"}')));
         FFAppState().addToDeviceList(AntimoustiqueStruct.fromSerializableMap(jsonDecode(
         '{\"manufactureID\":\"LLSQI-IDNSIQ-LQD\",\"name\":\"Ouai\",\"remoteID\":\"QSDFJQKSDF\",\"attractif\":\"0.2\",\"co2\":\"0.77\",\"vendor\":\"Distributeur\"}')));
+        FFAppState().addToDeviceList(AntimoustiqueStruct.fromSerializableMap(jsonDecode(
+            '{\"manufactureID\":\"XWC-SFD-LLAS\",\"name\":\"Isazou\",\"remoteID\":\"QSDFQSDFQSDCXVQSDF\",\"attractif\":\"0.5\",\"co2\":\"0.12\",\"vendor\":\"Pole-Habitat\"}')));
+        FFAppState().addToDeviceList(AntimoustiqueStruct.fromSerializableMap(jsonDecode(
+            '{\"manufactureID\":\"LLSQI-IDDSIQ-LQD\",\"name\":\"FOur\",\"remoteID\":\"QSDFJQKSDF\",\"attractif\":\"0.2\",\"co2\":\"0.77\",\"vendor\":\"Distributeur\"}')));
+        FFAppState().addToDeviceList(AntimoustiqueStruct.fromSerializableMap(jsonDecode(
+            '{\"manufactureID\":\"XIC-SND-LLAS\",\"name\":\"Villa\",\"remoteID\":\"QSDFQSDFQSDCXVQSDF\",\"attractif\":\"0.5\",\"co2\":\"0.1\",\"vendor\":\"Pole-Habitat\"}')));
+        FFAppState().addToDeviceList(AntimoustiqueStruct.fromSerializableMap(jsonDecode(
+            '{\"manufactureID\":\"LLSQI-IDNQIQ-LQD\",\"name\":\"Chambre\",\"remoteID\":\"QSDFJQKSDF\",\"attractif\":\"0.01\",\"co2\":\"0.77\",\"vendor\":\"Distributeur\"}')));
+
         context.pushNamed('AddDevicePage');
       },
     );
