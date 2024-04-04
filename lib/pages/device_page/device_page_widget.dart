@@ -123,8 +123,6 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
                             child: Builder(
                               builder: (context) {
                                 final listeAppareils = FFAppState().deviceList.toList();
-                                // Debugging print, consider removing for production
-                                print(FFAppState().deviceList);
                                 return buildDeviceListView(listeAppareils);
                               },
                             ),

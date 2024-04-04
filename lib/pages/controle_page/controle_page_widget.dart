@@ -28,9 +28,16 @@ class _ControlePageWidgetState extends State<ControlePageWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => ControlePageModel());
-    refreshDeviceInformation(FFAppState().currentDevice!).catchError((e) {
-      buildConnectionErrorSnackbar(context);
-    });
+    if( FFAppState().currentDevice == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).pushReplacementNamed('DevicePage');
+      });
+    }
+    else {
+      refreshDeviceInformation(FFAppState().currentDevice!).catchError((e) {
+        buildConnectionErrorSnackbar(context);
+      });
+    }
     setState(() {});
   }
 

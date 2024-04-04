@@ -119,6 +119,8 @@ class FFAppState extends ChangeNotifier {
 
   void removeFromDeviceList(AntimoustiqueStruct value) {
     // Update the current device if it's the one being removed
+    print("Le current device est ");
+    print(currentDevice);
     if (_currentDevice == value) {
       _currentDevice = null;
       // Update your state or UI as necessary to reflect no current device
@@ -129,10 +131,24 @@ class FFAppState extends ChangeNotifier {
   }
 
   void removeAtIndexFromDeviceList(int index) {
+    // First, get the device at the given index.
+    var deviceToRemove = _deviceList.elementAt(index);
+
+    // Check if the device to remove is the current device.
+    if (_currentDevice != null && _currentDevice == deviceToRemove) {
+      // If it is the current device, set the current device to null.
+      currentDevice = null; // This will also update SharedPreferences accordingly.
+    }
+
+    // Now it is safe to remove the device from the device list.
     _deviceList.removeAt(index);
     prefs.setStringList(
         'ff_deviceList', _deviceList.map((x) => x.serialize()).toList());
+
+    // Notify all listeners of the change.
+    notifyListeners();
   }
+
 
   void updateDeviceListAtIndex(
     int index,
