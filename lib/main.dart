@@ -3,16 +3,15 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
-import 'backend/schema/structs/antimoustique_struct.dart';
 import 'flutter_flow/flutter_flow_util.dart';
-import 'services/notification_service.dart'; // Ajustez le chemin en fonction de votre structure de dossier
+import 'services/notification_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   usePathUrlStrategy();
 
   // Initialiser NotificationService
-  await NotificationService().init(); // Assurez-vous que cette ligne utilise `await` si `init` est asynchrone
+  await NotificationService().init();
 
   final appState = FFAppState(); // Initialize FFAppState
   await appState.initializePersistedState();
@@ -60,7 +59,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Anti-Moustique',
+      title: 'Moustibox',
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,

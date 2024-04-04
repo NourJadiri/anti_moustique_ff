@@ -287,6 +287,7 @@ void _safeInit(Function() initializeField) {
   } catch (_) {}
 }
 
+// ignore: unused_element
 Future _safeInitAsync(Function() initializeField) async {
   try {
     await initializeField();
