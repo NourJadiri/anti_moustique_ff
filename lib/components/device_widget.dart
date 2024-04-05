@@ -60,7 +60,11 @@ class _DeviceWidgetState extends State<DeviceWidget> {
           motion: const ScrollMotion(),
           children: [
             SlidableAction(
-              onPressed: (BuildContext context) => _confirmDeletion(),
+              onPressed: (BuildContext context) {
+                FFAppState().update(() {
+                  FFAppState().removeAtIndexFromDeviceList(widget.index!);
+                });
+              },
               backgroundColor: Colors.red,
               foregroundColor: Colors.white,
               icon: Icons.delete,
@@ -142,8 +146,7 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 0.0, 0.0),
+                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 12.0, 0.0),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -180,8 +183,7 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 0.0, 0.0),
+                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 12.0, 0.0),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -225,32 +227,5 @@ class _DeviceWidgetState extends State<DeviceWidget> {
                 ),
               ),
             )));
-  }
-
-  void _confirmDeletion() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Confirmer'),
-          content: const Text('Voulez-vous vraiment supprimer cet appareil ?'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Annuler'),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            TextButton(
-              child: const Text('Supprimer'),
-              onPressed: () {
-                setState(() {
-                  FFAppState().removeAtIndexFromDeviceList(widget.index!);
-                });
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 }
