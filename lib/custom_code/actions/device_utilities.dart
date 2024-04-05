@@ -10,7 +10,7 @@ import 'package:anti_moustique/custom_code/actions/bluetooth_actions.dart';
 import 'package:anti_moustique/backend/schema/structs/antimoustique_struct.dart';
 import 'package:anti_moustique/backend/schema/structs/functioning_schedule_struct.dart';
 import 'package:anti_moustique/backend/schema/structs/notification_struct.dart';
-
+// UUIDs pour différents services et caractéristiques BLE utilisés par l'appareil.
 final String deviceInfoServiceUUID = '180d';
 final String deviceCommandServiceUUID = '1900';
 final String functioningScheduleServiceUUID = '6900';
@@ -19,11 +19,13 @@ final String attractifLevelCharacteristicUUID = 'cf862a6b-8f91-4d53-a396-70d91a2
 
 typedef jsonObject = Map<String, dynamic>;
 
+// Enumération pour les commandes pouvant être envoyées à l'appareil.
 enum CommandEnum {
   deactivate,
   activate,
 }
 
+// Scanne un QR code et retourne les données décodées si elles contiennent les champs requis.
 Future<jsonObject> scanQR(BuildContext context) async {
   try {
     String qrResult = await FlutterBarcodeScanner.scanBarcode(
@@ -60,6 +62,7 @@ Future<jsonObject> scanQR(BuildContext context) async {
   }
 }
 
+// Utilise les données d'un QR code pour obtenir un objet AntimoustiqueStruct représentant l'appareil.
 Future<AntimoustiqueStruct> getDeviceFromQR(BuildContext context, Map<String, dynamic> qrData) async {
   try {
     await BluetoothActions.scanForDevice(manufactureID: qrData['manufactureID']);
@@ -92,7 +95,7 @@ Future<AntimoustiqueStruct> getDeviceFromQR(BuildContext context, Map<String, dy
     throw e;
   }
 }
-
+// Envoie une commande à l'appareil et retourne le succès de l'opération.
 Future<bool> sendCommandToDevice(BuildContext context, AntimoustiqueStruct antimoustique, CommandEnum command) async {
   try {
     if (antimoustique.device.isDisconnected || antimoustique.device.remoteId == null) {
@@ -130,6 +133,7 @@ Future<bool> sendCommandToDevice(BuildContext context, AntimoustiqueStruct antim
   }
 }
 
+// Ajoute un horaire de fonctionnement à l'appareil.
 Future<bool> addFunctionSchedule(BuildContext context, AntimoustiqueStruct antimoustique, FunctioningScheduleStruct schedule) async {
   var writeCharacteristicIndex = -1;
 
@@ -163,6 +167,7 @@ Future<bool> addFunctionSchedule(BuildContext context, AntimoustiqueStruct antim
   }
 }
 
+// Restaure la connexion avec l'appareil si nécessaire.
 Future<void> restoreDeviceConnection(AntimoustiqueStruct antimoustique) async {
   try {
     await BluetoothActions.scanForDevice(manufactureID: antimoustique.manufactureID);
@@ -190,6 +195,7 @@ Future<void> restoreDeviceConnection(AntimoustiqueStruct antimoustique) async {
   }
 }
 
+// Met à jour les informations de l'appareil, comme le niveau de CO2 et d'attractif.
 Future<void> refreshDeviceInformation(AntimoustiqueStruct antimoustique) async {
   if (!antimoustique.device.isConnected) {
     try {
@@ -225,17 +231,18 @@ Future<void> refreshDeviceInformation(AntimoustiqueStruct antimoustique) async {
 }
 
 
+// Génère des notifications basées sur l'état de l'appareil.
 Future<void> generateNotification() async {
   try {
     // Vérifie séparément pour chaque type de notification
     await _checkAndAddCo2LowNotification();
     await _checkAndAddAttractifLowNotification();
   } catch (e) {
-    // Gérer l'erreur ou la loguer
     print("Erreur lors de la génération des notifications : $e");
   }
 }
 
+// Vérifie le niveau de CO2 et ajoute une notification si nécessaire.
 Future<void> _checkAndAddCo2LowNotification() async {
   try {
     // Vérifiez d'abord si currentDevice est non-null.
@@ -255,7 +262,7 @@ Future<void> _checkAndAddCo2LowNotification() async {
     // Vérifiez maintenant si le niveau de CO2 est bas et s'il n'y a pas déjà une notification.
     if (currentDevice.islevelCo2Low() && !isCo2NotificationAlreadyInList) {
       NotificationStruct notification = NotificationStruct(
-        antimoustique: currentDevice, // Utilisez la variable locale non-nulle.
+        antimoustique: currentDevice, // Utilisation de la variable locale non-nulle.
         title: "",
         body: "Niveau de CO2 faible, veuillez changer la bouteille.",
         type: NotificationType.co2Low,
@@ -267,7 +274,7 @@ Future<void> _checkAndAddCo2LowNotification() async {
   }
 }
 
-
+// Vérifie le niveau d'attractif et ajoute une notification si nécessaire.
 Future<void> _checkAndAddAttractifLowNotification() async {
   try {
 
@@ -298,6 +305,7 @@ Future<void> _checkAndAddAttractifLowNotification() async {
 }
 
 
+// Trouve un indice de caractéristique vide pour ajouter un nouvel horaire.
 Future<int> findEmptyCharacteristicIndex(List<BluetoothCharacteristic> characteristics, AntimoustiqueStruct antimoustique) async {
   int emptyCharacteristicIndex = -1;
 
