@@ -142,6 +142,7 @@ class FFAppState extends ChangeNotifier {
     _deviceList.remove(value);
     prefs.setStringList(
         'ff_deviceList', _deviceList.map((x) => x.serialize()).toList());
+    notifyListeners();
   }
 
   void removeAtIndexFromDeviceList(int index) {
