@@ -1,6 +1,5 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/custom_code/actions/index.dart' as actions;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'navigation_bar_model.dart';
@@ -127,10 +126,18 @@ class _NavigationBarWidgetState extends State<NavigationBarWidget> {
                   shape: BoxShape.circle,
                   border: Border.all(
                     color: FFAppState().currentDevice != null && FFAppState().currentDevice!.isOn
-                        ? const Color(0xFFD9E9FE) // Couleur du contour si le device est on
+                        ? const Color(0xFF05D03E) // Couleur du contour si le device est on
                         : FlutterFlowTheme.of(context).primary, // Couleur par défaut du contour
                     width: 3.0,
                   ),
+                  boxShadow: FFAppState().currentDevice != null && FFAppState().currentDevice!.isOn
+                      ? const [
+                    BoxShadow(
+                      blurRadius: 5.0,
+                      color: Color(0x3416202A),
+                      offset: Offset(0.0, 2.0),
+                    )
+                  ] : [],
                 ),
                 child: Align(
                   alignment: const AlignmentDirectional(0.0, 0.0),
