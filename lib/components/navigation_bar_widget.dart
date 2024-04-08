@@ -103,23 +103,32 @@ class _NavigationBarWidgetState extends State<NavigationBarWidget> {
               hoverColor: Colors.transparent,
               highlightColor: Colors.transparent,
               onTap: () async {
-                _model.isNull = await actions.checkIfNull(
-                  FFAppState().currentDevice,
-                );
-                if (!_model.isNull!) {
-                  context.pushNamed('ControlePage');
-                }
-
+                  // Check if there is a current device before navigating
+                    if (FFAppState().currentDevice == null){
+                    // Show a message or handle the lack of a current device appropriately
+                    // For example, using a snackbar to inform the user
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Aucun appareil sélectionné.'),
+                      ),
+                    );
+                  } else {
+                      context.pushNamed('ControlePage');
+                    }
                 setState(() {});
               },
               child: Container(
                 width: 50.0,
                 height: 50.0,
                 decoration: BoxDecoration(
-                  color: FlutterFlowTheme.of(context).secondaryBackground,
+                  color: FFAppState().currentDevice != null && FFAppState().currentDevice!.isOn
+                      ? const Color(0xFF05D03E) // Couleur du fond si le device est on
+                      : FlutterFlowTheme.of(context).secondaryBackground, // Couleur par défaut
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: FlutterFlowTheme.of(context).primary,
+                    color: FFAppState().currentDevice != null && FFAppState().currentDevice!.isOn
+                        ? const Color(0xFFD9E9FE) // Couleur du contour si le device est on
+                        : FlutterFlowTheme.of(context).primary, // Couleur par défaut du contour
                     width: 3.0,
                   ),
                 ),
@@ -127,7 +136,9 @@ class _NavigationBarWidgetState extends State<NavigationBarWidget> {
                   alignment: const AlignmentDirectional(0.0, 0.0),
                   child: Icon(
                     Icons.bolt_sharp,
-                    color: FlutterFlowTheme.of(context).primary,
+                    color: FFAppState().currentDevice != null && FFAppState().currentDevice!.isOn
+                        ? Colors.white // Couleur de l'icône si le device est on
+                        : FlutterFlowTheme.of(context).primary, // Couleur par défaut de l'icône
                     size: 35.0,
                   ),
                 ),

@@ -106,7 +106,7 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
               ),
               SizedBox(height: 10),
               Text(
-                "Processing QR code...",
+                "On cherche votre Moustibox !",
                 style: TextStyle(fontSize: 16),
               ),
             ],

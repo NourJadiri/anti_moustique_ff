@@ -1,3 +1,8 @@
+/*
+Cette classe définit l'interface utilisateur pour la page de gestion des appareils, permettant à l'utilisateur d'afficher une liste de ses appareils connectés,
+ d'en ajouter de nouveaux, et de naviguer vers d'autres pages pour des actions spécifiques.
+ Elle utilise le modèle de données DevicePageModel pour gérer son état et interagit avec l'état global de l'application via FFAppState.
+ */
 import 'package:anti_moustique/custom_code/actions/device_utilities.dart';
 import '/components/device_widget.dart';
 import '/components/navigation_bar_widget.dart';
@@ -10,6 +15,8 @@ import 'package:provider/provider.dart';
 import 'device_page_model.dart';
 export 'device_page_model.dart';
 
+
+// Widget de page principale pour la gestion des appareils.
 class DevicePageWidget extends StatefulWidget {
   const DevicePageWidget({super.key});
 
@@ -39,8 +46,11 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
   Widget build(BuildContext context) {
     context.watch<FFAppState>();
 
+    // Structure de base de la page.
     return GestureDetector(
-      onTap: () => _model.unfocusNode.canRequestFocus ? FocusScope.of(context).requestFocus(_model.unfocusNode) : FocusScope.of(context).unfocus(),
+      onTap: () => _model.unfocusNode.canRequestFocus
+          ? FocusScope.of(context).requestFocus(_model.unfocusNode)
+          : FocusScope.of(context).unfocus(),
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
@@ -52,19 +62,21 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
             title: Align(
               alignment: const AlignmentDirectional(0.0, 0.0),
               child: Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
+                padding:
+                    const EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       'Mes Appareils',
-                      style: FlutterFlowTheme.of(context).headlineLarge.override(
-                            fontFamily: 'Inter',
-                            fontSize: 20.0,
-                          ),
+                      style:
+                          FlutterFlowTheme.of(context).headlineLarge.override(
+                                fontFamily: 'Inter',
+                                fontSize: 20.0,
+                              ),
                     ),
-                    const NotificationIconButton(),
+                    const NotificationIconButton(), // Bouton pour les notifications.
                   ],
                 ),
               ),
@@ -79,17 +91,16 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
           top: true,
           child: Stack(
             children: [
-
               Column(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Expanded(child:
-                  Container(
-                    width: 478.0,
-                    height: 608.0,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
-                    ),
+                  Expanded(
+                    child: Container(
+                      width: 478.0,
+                      height: 608.0,
+                      decoration: BoxDecoration(
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                      ),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -102,17 +113,21 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
                               Align(
                                 alignment: const AlignmentDirectional(0.0, 0.0),
                                 child: Padding(
-                                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
+                                  padding: const EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 10.0, 0.0, 10.0),
                                   child: Container(
-                                    width: MediaQuery.sizeOf(context).width * 1.0,
+                                    width:
+                                        MediaQuery.sizeOf(context).width * 1.0,
                                     height: 38.0,
                                     decoration: BoxDecoration(
-                                      color: FlutterFlowTheme.of(context).secondaryBackground,
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondaryBackground,
                                     ),
-                                    alignment: const AlignmentDirectional(0.0, 0.0),
+                                    alignment:
+                                        const AlignmentDirectional(0.0, 0.0),
                                     child: const Align(
                                       alignment: AlignmentDirectional(0.0, 0.0),
-                                      child: AddDeviceButton(),
+                                      child: AddDeviceButton(), // Bouton pour ajouter un appareil.
                                     ),
                                   ),
                                 ),
@@ -122,10 +137,9 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
                           Expanded(
                             child: Builder(
                               builder: (context) {
-                                final listeAppareils = FFAppState().deviceList.toList();
-                                // Debugging print, consider removing for production
-                                print(FFAppState().deviceList);
-                                return buildDeviceListView(listeAppareils);
+                                final listeAppareils =
+                                    FFAppState().deviceList.toList();
+                                return buildDeviceListView(listeAppareils); // Construction de la liste des appareils.
                               },
                             ),
                           ),
@@ -140,7 +154,7 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
                 child: wrapWithModel(
                   model: _model.navigationBarModel,
                   updateCallback: () => setState(() {}),
-                  child: const NavigationBarWidget(),
+                  child: const NavigationBarWidget(), // Barre de navigation en bas de la page.
                 ),
               ),
             ],
@@ -150,6 +164,7 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
     );
   }
 
+  // Construit et retourne une liste des appareils.
   ListView buildDeviceListView(List<AntimoustiqueStruct> listeAppareils) {
     return ListView.separated(
       padding: EdgeInsets.zero,
@@ -174,8 +189,9 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
             // Ouverture de la page de controle correspondante
             context.pushNamed('ControlePage');
           },
-          child: DeviceWidget(
-            key: Key('Key1f8_${listeAppareilsIndex}_of_${listeAppareils.length}'),
+          child: DeviceWidget( // Widget personnalisé pour afficher chaque appareil.
+            key: Key(
+                'Key1f8_${listeAppareilsIndex}_of_${listeAppareils.length}'),
             deviceName: listeAppareilsItem.name,
             deviceID: listeAppareilsItem.manufactureID,
             deviceCO2Level: listeAppareilsItem.co2,
@@ -188,6 +204,7 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
   }
 }
 
+// Bouton pour ajouter un nouvel appareil.
 class AddDeviceButton extends StatelessWidget {
   const AddDeviceButton({
     super.key,
@@ -195,6 +212,7 @@ class AddDeviceButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Utilise FlutterFlowIconButton pour un style cohérent.
     return FlutterFlowIconButton(
       borderColor: const Color(0xFF2A2D50),
       borderRadius: 20.0,
@@ -207,16 +225,20 @@ class AddDeviceButton extends StatelessWidget {
         size: 24.0,
       ),
       onPressed: () async {
-        FFAppState().addToDeviceList(AntimoustiqueStruct.fromSerializableMap(jsonDecode(
-            '{\"manufactureID\":\"XIC-SFD-LLAS\",\"name\":\"Antimoustique\",\"remoteID\":\"QSDFQSDFQSDCXVQSDF\",\"attractif\":\"0.5\",\"co2\":\"0.1\",\"vendor\":\"Pole-Habitat\"}')));
-        FFAppState().addToDeviceList(AntimoustiqueStruct.fromSerializableMap(jsonDecode(
-        '{\"manufactureID\":\"LLSQI-IDNSIQ-LQD\",\"name\":\"Ouai\",\"remoteID\":\"QSDFJQKSDF\",\"attractif\":\"0.2\",\"co2\":\"0.77\",\"vendor\":\"Distributeur\"}')));
+        // Ajout d'appareils factices pour la démonstration.
+        FFAppState().addToDeviceList(AntimoustiqueStruct.fromSerializableMap(
+            jsonDecode(
+                '{\"manufactureID\":\"XIC-SFD-LLAS\",\"name\":\"Antimoustique\",\"remoteID\":\"QSDFQSDFQSDCXVQSDF\",\"attractif\":\"0.5\",\"co2\":\"0.1\",\"vendor\":\"Pole-Habitat\"}')));
+        FFAppState().addToDeviceList(AntimoustiqueStruct.fromSerializableMap(
+            jsonDecode(
+                '{\"manufactureID\":\"LLSQI-IDNSIQ-LQD\",\"name\":\"Ouai\",\"remoteID\":\"QSDFJQKSDF\",\"attractif\":\"0.2\",\"co2\":\"0.77\",\"vendor\":\"Distributeur\"}')));
         context.pushNamed('AddDevicePage');
       },
     );
   }
 }
 
+// Bouton pour accéder aux notifications.
 class NotificationIconButton extends StatelessWidget {
   const NotificationIconButton({
     super.key,
@@ -236,7 +258,7 @@ class NotificationIconButton extends StatelessWidget {
         size: 24.0,
       ),
       onPressed: () async {
-        context.pushNamed('NotificationPage');
+        context.pushNamed('NotificationPage'); // Navigation vers la page des notifications.
       },
     );
   }

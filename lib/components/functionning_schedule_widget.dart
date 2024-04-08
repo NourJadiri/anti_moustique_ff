@@ -144,7 +144,7 @@ class _FunctionningScheduleWidgetState
               onTap: () async {
                 FFAppState().update(() {
                 setState(() {
-                  FFAppState().currentDevice.removeAtIndexFromFunctioningScheduleList(widget.index!);
+                  FFAppState().currentDevice!.removeAtIndexFromFunctioningScheduleList(widget.index!);
                 });
                 });
               },

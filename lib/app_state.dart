@@ -4,21 +4,29 @@ import '/backend/schema/structs/index.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'flutter_flow/flutter_flow_util.dart';
 
-class FFAppState extends ChangeNotifier {
-  static FFAppState _instance = FFAppState._internal();
 
+// Classe FFAppState utilisée pour gérer l'état global de l'application. Elle utilise le pattern singleton pour s'assurer qu'une seule instance est créée.
+
+class FFAppState extends ChangeNotifier {
+  static FFAppState _instance = FFAppState._internal();   // Instance unique de FFAppState.
+
+  // Factory constructor pour accéder à l'instance singleton.
   factory FFAppState() {
     return _instance;
   }
 
+  // Constructeur privé utilisé pour créer l'instance singleton.
   FFAppState._internal();
 
+  // Réinitialise l'instance à son état initial. Utilisé pour les tests ou la réinitialisation de l'application.
   static void reset() {
     _instance = FFAppState._internal();
   }
 
+  // Initialise l'état persistant de l'application à partir des SharedPreferences.
   Future initializePersistedState() async {
     prefs = await SharedPreferences.getInstance();
+    // Charge la liste des appareils enregistrés.
     _safeInit(() {
       _deviceList = prefs
               .getStringList('ff_deviceList')
@@ -34,6 +42,7 @@ class FFAppState extends ChangeNotifier {
               .toList() ??
           _deviceList;
     });
+    // Charge les données des cartes Google.
     _safeInit(() {
       _googleMapData = prefs
               .getStringList('ff_googleMapData')
@@ -49,6 +58,7 @@ class FFAppState extends ChangeNotifier {
               .toList() ??
           _googleMapData;
     });
+    // Charge l'appareil actuellement sélectionné.
     _safeInit(() {
       if (prefs.containsKey('ff_currentDevice')) {
         try {
@@ -60,6 +70,7 @@ class FFAppState extends ChangeNotifier {
         }
       }
     });
+    // Charge la liste des notifications.
     _safeInit(() {
       _notificationList = prefs
               .getStringList('ff_notificationList')
@@ -93,14 +104,16 @@ class FFAppState extends ChangeNotifier {
     });
   }
 
-
+  // Met à jour l'état de l'application et notifie les écouteurs de changements.
   void update(VoidCallback callback) {
     callback();
     notifyListeners();
   }
 
+  // SharedPreferences utilisées pour la persistance des données.
   late SharedPreferences prefs;
 
+  // Gestion de la liste des appareils (AntimoustiqueStruct).
   List<AntimoustiqueStruct> _deviceList = [];
 
   List<AntimoustiqueStruct> get deviceList => _deviceList;
@@ -110,6 +123,7 @@ class FFAppState extends ChangeNotifier {
         'ff_deviceList', value.map((x) => x.serialize()).toList());
   }
 
+  // Plusieurs méthodes pour ajouter, retirer ou mettre à jour des appareils dans la liste.
   void addToDeviceList(AntimoustiqueStruct value) {
     _deviceList.add(value);
     prefs.setStringList(
@@ -118,16 +132,39 @@ class FFAppState extends ChangeNotifier {
   }
 
   void removeFromDeviceList(AntimoustiqueStruct value) {
+    // Supprimez d'abord les notifications pour l'appareil
+    removeNotificationsForDevice(value);
+
+    if (_currentDevice == value) {
+      _currentDevice = null;
+      // Update your state or UI as necessary to reflect no current device
+    }
     _deviceList.remove(value);
     prefs.setStringList(
         'ff_deviceList', _deviceList.map((x) => x.serialize()).toList());
+    notifyListeners();
   }
 
   void removeAtIndexFromDeviceList(int index) {
+    // First, get the device at the given index.
+    var deviceToRemove = _deviceList.elementAt(index);
+    // Supprimez d'abord les notifications pour l'appareil
+    removeNotificationsForDevice(deviceToRemove);
+    // Check if the device to remove is the current device.
+    if (_currentDevice != null && _currentDevice == deviceToRemove) {
+      // If it is the current device, set the current device to null.
+      currentDevice = null; // This will also update SharedPreferences accordingly.
+    }
+
+    // Now it is safe to remove the device from the device list.
     _deviceList.removeAt(index);
     prefs.setStringList(
         'ff_deviceList', _deviceList.map((x) => x.serialize()).toList());
+
+    // Notify all listeners of the change.
+    notifyListeners();
   }
+
 
   void updateDeviceListAtIndex(
     int index,
@@ -144,6 +181,8 @@ class FFAppState extends ChangeNotifier {
         'ff_deviceList', _deviceList.map((x) => x.serialize()).toList());
   }
 
+  // Gestion de la liste des données de carte Google.
+
   List<GoogleMapDataStruct> _googleMapData = [];
   List<GoogleMapDataStruct> get googleMapData => _googleMapData;
   set googleMapData(List<GoogleMapDataStruct> value) {
@@ -152,6 +191,7 @@ class FFAppState extends ChangeNotifier {
         'ff_googleMapData', value.map((x) => x.serialize()).toList());
   }
 
+  // Plusieurs méthodes pour ajouter, retirer ou mettre à jour des données de carte Google.
   void addToGoogleMapData(GoogleMapDataStruct value) {
     _googleMapData.add(value);
     prefs.setStringList(
@@ -185,18 +225,28 @@ class FFAppState extends ChangeNotifier {
         'ff_googleMapData', _googleMapData.map((x) => x.serialize()).toList());
   }
 
-  AntimoustiqueStruct _currentDevice = AntimoustiqueStruct();
-  AntimoustiqueStruct get currentDevice => _currentDevice;
-  set currentDevice(AntimoustiqueStruct value) {
+  // Gestion de l'appareil actuellement sélectionné (AntimoustiqueStruct).
+  AntimoustiqueStruct? _currentDevice = null;
+
+  // Méthodes pour gérer l'appareil actuel.
+  AntimoustiqueStruct? get currentDevice => _currentDevice;
+  set currentDevice(AntimoustiqueStruct? value) {
     _currentDevice = value;
-    prefs.setString('ff_currentDevice', value.serialize());
+    if (value == null) {
+      prefs.remove('ff_currentDevice');
+    } else {
+      prefs.setString('ff_currentDevice', value.serialize());
+    }
+    notifyListeners();
   }
+
 
   void updateCurrentDeviceStruct(Function(AntimoustiqueStruct) updateFn) {
-    updateFn(_currentDevice);
-    prefs.setString('ff_currentDevice', _currentDevice.serialize());
+    updateFn(_currentDevice!);
+    prefs.setString('ff_currentDevice', _currentDevice!.serialize());
   }
 
+  // Gestion de la liste des notifications.
   List<NotificationStruct> _notificationList = [];
   List<NotificationStruct> get notificationList => _notificationList;
   set notificationList(List<NotificationStruct> value) {
@@ -205,6 +255,7 @@ class FFAppState extends ChangeNotifier {
         'ff_notificationList', value.map((x) => x.serialize()).toList());
   }
 
+  // Plusieurs méthodes pour ajouter, retirer ou mettre à jour des notifications.
   void addToNotificationList(NotificationStruct value) {
     _notificationList.add(value);
     prefs.setStringList('ff_notificationList',
@@ -223,6 +274,12 @@ class FFAppState extends ChangeNotifier {
     _notificationList.removeAt(index);
     prefs.setStringList('ff_notificationList',
         _notificationList.map((x) => x.serialize()).toList());
+  }
+
+  void removeNotificationsForDevice(AntimoustiqueStruct device) {
+    _notificationList.removeWhere((notification) => notification.antimoustique == device);
+    // Sauvegarder la liste mise à jour dans les préférences
+    prefs.setStringList('ff_notificationList', _notificationList.map((x) => x.serialize()).toList());
   }
 
   void updateNotificationListAtIndex(
@@ -281,6 +338,7 @@ class FFAppState extends ChangeNotifier {
   }
 }
 
+// Fonction d'assistance pour exécuter en toute sécurité les initialisations.
 void _safeInit(Function() initializeField) {
   try {
     initializeField();
