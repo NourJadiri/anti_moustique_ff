@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:anti_moustique/custom_code/actions/device_utilities.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -40,6 +43,7 @@ class _MyAppState extends State<MyApp> {
   late AppStateNotifier _appStateNotifier;
   late GoRouter _router;
   late NotificationService notificationService; // Ajouter ceci
+  Timer? _refreshTimer;
 
 
   @override
@@ -49,12 +53,27 @@ class _MyAppState extends State<MyApp> {
     _appStateNotifier = AppStateNotifier.instance;
     _router = createRouter(_appStateNotifier);
     notificationService = NotificationService(); // Initialiser NotificationService ici
-    // Assurez-vous d'initialiser NotificationService après FlutterBinding et avant d'utiliser runApp.
+    
+    // Initialiser le timer de rafraichissement
+    _refreshTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      print('Refreshing devices...');
+      FFAppState().update(() {
+        refreshAllDevices(FFAppState().deviceList);
+      });
+    });
+
+    setState(() {});
   }
 
   void setThemeMode(ThemeMode mode) => setState(() {
         _themeMode = mode;
       });
+
+  @override
+  void dispose(){
+    _refreshTimer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -167,6 +167,7 @@ Future<bool> addFunctionSchedule(BuildContext context, AntimoustiqueStruct antim
   }
 }
 
+
 // Restaure la connexion avec l'appareil si nécessaire.
 Future<void> restoreDeviceConnection(AntimoustiqueStruct antimoustique) async {
   try {
@@ -215,6 +216,20 @@ Future<void> refreshDeviceInformation(AntimoustiqueStruct antimoustique) async {
         deviceInfoCharacteristicList.firstWhere((characteristic) => characteristic.uuid.toString() == attractifLevelCharacteristicUUID);
     var deviceCommandCharacteristic =
         deviceCommandCharacteristicList.firstWhere((characteristic) => characteristic.uuid.toString() == 'fa45d9c7-4068-453d-a18c-e255e2e037bd');
+      
+    var functioningScheduleService = await antimoustique.device.servicesList.firstWhere((service) => service.uuid.toString() == functioningScheduleServiceUUID);
+    var functioningScheduleCharacteristics = await BluetoothActions.discoverCharacteristics(antimoustique, functioningScheduleService);
+
+    List<FunctioningScheduleStruct> schedules = [];
+
+    for (var characteristic in functioningScheduleCharacteristics) {
+      var scheduleBytes = await BluetoothActions.readFromCharacteristic(antimoustique, characteristic);
+      if (scheduleBytes.isNotEmpty) {
+        var scheduleString = utf8.decode(scheduleBytes);
+        var scheduleMap = jsonDecode(scheduleString);
+        schedules.add(FunctioningScheduleStruct.fromSerializableMap(scheduleMap));
+      }
+    }
 
     // Reading characteristics
     var co2Level = await BluetoothActions.readFromCharacteristic(antimoustique, co2Characteristic);
@@ -230,6 +245,19 @@ Future<void> refreshDeviceInformation(AntimoustiqueStruct antimoustique) async {
   }
 }
 
+Future<void> refreshAllDevices(List<AntimoustiqueStruct> devices) async {
+  if(devices.isEmpty) {
+    print('No devices to refresh.');
+    return;
+  }
+  for (var device in devices) {
+    try {
+      refreshDeviceInformation(device);
+    } catch (e) {
+      print('Error refreshing device information: $e');
+    }
+  }
+}
 
 // Génère des notifications basées sur l'état de l'appareil.
 Future<void> generateNotification() async {
