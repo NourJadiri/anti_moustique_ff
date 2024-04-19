@@ -55,7 +55,7 @@ class _MyAppState extends State<MyApp> {
     notificationService = NotificationService(); // Initialiser NotificationService ici
     
     // Initialiser le timer de rafraichissement
-    _refreshTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
+    _refreshTimer = Timer.periodic(const Duration(minutes: 10), (timer) {
       print('Refreshing devices...');
       FFAppState().update(() {
         refreshAllDevices(FFAppState().deviceList);

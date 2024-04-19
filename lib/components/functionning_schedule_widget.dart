@@ -1,3 +1,5 @@
+import 'package:anti_moustique/custom_code/actions/device_utilities.dart';
+
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
@@ -20,14 +22,11 @@ class FunctionningScheduleWidget extends StatefulWidget {
   final int? index;
   final bool? isPeriodic;
 
-
   @override
-  State<FunctionningScheduleWidget> createState() =>
-      _FunctionningScheduleWidgetState();
+  State<FunctionningScheduleWidget> createState() => _FunctionningScheduleWidgetState();
 }
 
-class _FunctionningScheduleWidgetState
-    extends State<FunctionningScheduleWidget> {
+class _FunctionningScheduleWidgetState extends State<FunctionningScheduleWidget> {
   late FunctionningScheduleModel _model;
 
   @override
@@ -41,7 +40,6 @@ class _FunctionningScheduleWidgetState
     super.setState(callback);
     _model.onUpdate();
   }
-
 
   @override
   void dispose() {
@@ -87,18 +85,18 @@ class _FunctionningScheduleWidgetState
                           '15:00',
                         ),
                         style: FlutterFlowTheme.of(context).bodyLarge.override(
-                          fontFamily: 'Readex Pro',
-                          color: FlutterFlowTheme.of(context).primary,
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.w300,
-                        ),
+                              fontFamily: 'Readex Pro',
+                              color: FlutterFlowTheme.of(context).primary,
+                              fontSize: 30.0,
+                              fontWeight: FontWeight.w300,
+                            ),
                       ),
                       Text(
                         'à ',
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
-                          fontFamily: 'Readex Pro',
-                          color: FlutterFlowTheme.of(context).primary,
-                        ),
+                              fontFamily: 'Readex Pro',
+                              color: FlutterFlowTheme.of(context).primary,
+                            ),
                       ),
                       Text(
                         valueOrDefault<String>(
@@ -106,11 +104,11 @@ class _FunctionningScheduleWidgetState
                           '21:00',
                         ),
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
-                          fontFamily: 'Readex Pro',
-                          color: FlutterFlowTheme.of(context).primary,
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.w300,
-                        ),
+                              fontFamily: 'Readex Pro',
+                              color: FlutterFlowTheme.of(context).primary,
+                              fontSize: 30.0,
+                              fontWeight: FontWeight.w300,
+                            ),
                       ),
                     ],
                   ),
@@ -120,15 +118,12 @@ class _FunctionningScheduleWidgetState
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Text(
-                          valueOrDefault<String>(
-                              widget.isPeriodic! ? 'Periodic' : DateFormat('dd/MM/yyyy').format(widget.date!), 'undefined'
-                          ),
-                          style:
-                          FlutterFlowTheme.of(context).labelSmall.override(
-                            fontFamily: 'Readex Pro',
-                            color: FlutterFlowTheme.of(context).primary,
-                            fontWeight: FontWeight.w200,
-                          ),
+                          valueOrDefault<String>(widget.isPeriodic! ? 'Periodic' : DateFormat('dd/MM/yyyy').format(widget.date!), 'undefined'),
+                          style: FlutterFlowTheme.of(context).labelSmall.override(
+                                fontFamily: 'Readex Pro',
+                                color: FlutterFlowTheme.of(context).primary,
+                                fontWeight: FontWeight.w200,
+                              ),
                         ),
                       ],
                     ),
@@ -142,11 +137,22 @@ class _FunctionningScheduleWidgetState
               hoverColor: Colors.transparent,
               highlightColor: Colors.transparent,
               onTap: () async {
-                FFAppState().update(() {
-                setState(() {
-                  FFAppState().currentDevice!.removeAtIndexFromFunctioningScheduleList(widget.index!);
-                });
-                });
+                try {
+                  FFAppState().update(() {
+                    setState(() {
+                      // Attempt to delete the schedule
+                      deleteFunctioningSchedule(FFAppState().currentDevice!, widget.index!);
+                      // If successful, remove it from the list
+                      FFAppState().currentDevice!.removeAtIndexFromFunctioningScheduleList(widget.index!);
+                    });
+                  });
+                } catch (e) {
+                  // Catch any errors thrown by deleteFunctioningSchedule or other operations
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text('Error: $e'), // Display the error message
+                    duration: const Duration(seconds: 2),
+                  ));
+                }
               },
               child: Icon(
                 Icons.delete_outlined,

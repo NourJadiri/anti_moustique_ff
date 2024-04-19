@@ -16,6 +16,7 @@ final String deviceCommandServiceUUID = '1900';
 final String functioningScheduleServiceUUID = '6900';
 final String co2LevelCharacteristicUUID = '289f1cd7-546b-4c3d-b760-a353592e196c';
 final String attractifLevelCharacteristicUUID = 'cf862a6b-8f91-4d53-a396-70d91a25ce9b';
+final String activateCommandCharacteristicUUID = '1901';
 
 typedef jsonObject = Map<String, dynamic>;
 
@@ -107,7 +108,7 @@ Future<bool> sendCommandToDevice(BuildContext context, AntimoustiqueStruct antim
     await BluetoothActions.discoverCharacteristics(antimoustique, commandService);
 
     var activateCommandCharacteristic =
-        await commandService.characteristics.firstWhere((characteristic) => characteristic.uuid.toString() == 'fa45d9c7-4068-453d-a18c-e255e2e037bd');
+        await commandService.characteristics.firstWhere((characteristic) => characteristic.uuid.toString() == activateCommandCharacteristicUUID);
 
     try {
       await BluetoothActions.writeToCharacteristic(
@@ -167,6 +168,28 @@ Future<bool> addFunctionSchedule(BuildContext context, AntimoustiqueStruct antim
   }
 }
 
+Future<void> deleteFunctioningSchedule(AntimoustiqueStruct antimoustique, int index) async {
+  try {
+    var scheduleService = await antimoustique.device.servicesList.firstWhere((service) => service.uuid.toString() == functioningScheduleServiceUUID);
+
+    var fsCharacteristics = await BluetoothActions.discoverCharacteristics(antimoustique, scheduleService);
+
+    var deleteCharacteristic = fsCharacteristics[index];
+
+    List<int> emptyBytes = [];
+
+    try {
+      await BluetoothActions.writeToCharacteristic(
+          antimoustique: antimoustique, characteristic: deleteCharacteristic, value: emptyBytes);
+    } catch (e) {
+      print('Error writing to characteristic: $e');
+    }
+  } catch (e) {
+    print('Error discovering services and characteristics: $e');
+  }
+
+}
+
 
 // Restaure la connexion avec l'appareil si nécessaire.
 Future<void> restoreDeviceConnection(AntimoustiqueStruct antimoustique) async {
@@ -214,8 +237,8 @@ Future<void> refreshDeviceInformation(AntimoustiqueStruct antimoustique) async {
     var co2Characteristic = deviceInfoCharacteristicList.firstWhere((characteristic) => characteristic.uuid.toString() == co2LevelCharacteristicUUID);
     var attractifCharacteristic =
         deviceInfoCharacteristicList.firstWhere((characteristic) => characteristic.uuid.toString() == attractifLevelCharacteristicUUID);
-    var deviceCommandCharacteristic =
-        deviceCommandCharacteristicList.firstWhere((characteristic) => characteristic.uuid.toString() == 'fa45d9c7-4068-453d-a18c-e255e2e037bd');
+    var activateCommandCharacteristic =
+        deviceCommandCharacteristicList.firstWhere((characteristic) => characteristic.uuid.toString() == activateCommandCharacteristicUUID);
       
     var functioningScheduleService = await antimoustique.device.servicesList.firstWhere((service) => service.uuid.toString() == functioningScheduleServiceUUID);
     var functioningScheduleCharacteristics = await BluetoothActions.discoverCharacteristics(antimoustique, functioningScheduleService);
@@ -230,6 +253,8 @@ Future<void> refreshDeviceInformation(AntimoustiqueStruct antimoustique) async {
         schedules.add(FunctioningScheduleStruct.fromSerializableMap(scheduleMap));
       }
     }
+
+    antimoustique.functioningScheduleList = schedules;
 
     // Reading characteristics
     var co2Level = await BluetoothActions.readFromCharacteristic(antimoustique, co2Characteristic);
