@@ -619,23 +619,17 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                               return;
                             }
 
-                            final DateTime startDateTime = DateTime(
-                              startDay.year,
-                              startDay.month,
-                              startDay.day,
-                              startTime.hour,
-                              startTime.minute,
+                            final startDateTime = TimeOfDay(
+                              hour: startTime.hour,
+                              minute: startTime.minute,
                             );
 
-                            final DateTime endDateTime = DateTime(
-                              startDay.year,
-                              startDay.month,
-                              startDay.day,
-                              endTime.hour,
-                              endTime.minute,
+                            final endDateTime = TimeOfDay(
+                              hour: endTime.hour,
+                              minute: endTime.minute,
                             );
 
-                            if (endDateTime.isBefore(startDateTime)) {
+                            if ((startDateTime.hour * 60 + startDateTime.minute) >= (endDateTime.hour * 60 + endDateTime.minute)) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text("L'heure de fin doit être après l'heure de début."),

@@ -3,13 +3,13 @@ Cette classe définit l'interface utilisateur pour la page de gestion des appare
  d'en ajouter de nouveaux, et de naviguer vers d'autres pages pour des actions spécifiques.
  Elle utilise le modèle de données DevicePageModel pour gérer son état et interagit avec l'état global de l'application via FFAppState.
  */
+import 'package:anti_moustique/backend/schema/structs/index.dart';
 import 'package:anti_moustique/custom_code/actions/device_utilities.dart';
 import '/components/device_widget.dart';
 import '/components/navigation_bar_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import 'package:anti_moustique/backend/schema/structs/antimoustique_struct.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'device_page_model.dart';
@@ -226,12 +226,16 @@ class AddDeviceButton extends StatelessWidget {
       ),
       onPressed: () async {
         // Ajout d'appareils factices pour la démonstration.
-        FFAppState().addToDeviceList(AntimoustiqueStruct.fromSerializableMap(
-            jsonDecode(
-                '{\"manufactureID\":\"XIC-SFD-LLAS\",\"name\":\"Antimoustique\",\"remoteID\":\"QSDFQSDFQSDCXVQSDF\",\"attractif\":\"0.5\",\"co2\":\"0.1\",\"vendor\":\"Pole-Habitat\"}')));
-        FFAppState().addToDeviceList(AntimoustiqueStruct.fromSerializableMap(
-            jsonDecode(
-                '{\"manufactureID\":\"LLSQI-IDNSIQ-LQD\",\"name\":\"Ouai\",\"remoteID\":\"QSDFJQKSDF\",\"attractif\":\"0.2\",\"co2\":\"0.77\",\"vendor\":\"Distributeur\"}')));
+        FunctioningScheduleStruct schedule = FunctioningScheduleStruct(
+          startDay: DateTime.now(),
+          startTime: TimeOfDay.now(),
+          endTime: const TimeOfDay(hour: 23, minute: 59), // TimeOfDay.fromDateTime(DateTime.now()
+          isReccurent: false,
+          days: [DayOfWeek.monday, DayOfWeek.wednesday],
+        );
+
+        print(schedule.toSerializableMap());
+        print(FunctioningScheduleStruct.fromSerializableMap(schedule.toSerializableMap()));
         context.pushNamed('AddDevicePage');
       },
     );

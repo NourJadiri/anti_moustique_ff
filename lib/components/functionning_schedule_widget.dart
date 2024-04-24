@@ -16,8 +16,8 @@ class FunctionningScheduleWidget extends StatefulWidget {
     required this.isPeriodic,
   });
 
-  final DateTime? startTime;
-  final DateTime? endTime;
+  final TimeOfDay? startTime;
+  final TimeOfDay? endTime;
   final DateTime? date;
   final int? index;
   final bool? isPeriodic;
@@ -81,7 +81,7 @@ class _FunctionningScheduleWidgetState extends State<FunctionningScheduleWidget>
                     children: [
                       Text(
                         valueOrDefault<String>(
-                          DateFormat('HH:mm').format(widget.startTime!),
+                          widget.startTime!.format(context),
                           '15:00',
                         ),
                         style: FlutterFlowTheme.of(context).bodyLarge.override(
@@ -100,7 +100,7 @@ class _FunctionningScheduleWidgetState extends State<FunctionningScheduleWidget>
                       ),
                       Text(
                         valueOrDefault<String>(
-                          DateFormat('HH:mm').format(widget.endTime!),
+                          widget.endTime!.format(context),
                           '21:00',
                         ),
                         style: FlutterFlowTheme.of(context).bodyMedium.override(

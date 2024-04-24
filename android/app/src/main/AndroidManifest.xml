@@ -25,7 +25,7 @@
 
 
     <application
-        android:label="Anti-Moustique"
+        android:label="Moustibox"
         tools:replace="android:label"
         android:icon="@mipmap/ic_launcher"
         android:requestLegacyExternalStorage="true"
