@@ -226,16 +226,6 @@ class AddDeviceButton extends StatelessWidget {
       ),
       onPressed: () async {
         // Ajout d'appareils factices pour la démonstration.
-        FunctioningScheduleStruct schedule = FunctioningScheduleStruct(
-          startDay: DateTime.now(),
-          startTime: TimeOfDay.now(),
-          endTime: const TimeOfDay(hour: 23, minute: 59), // TimeOfDay.fromDateTime(DateTime.now()
-          isReccurent: false,
-          days: [DayOfWeek.monday, DayOfWeek.wednesday],
-        );
-
-        print(schedule.toSerializableMap());
-        print(FunctioningScheduleStruct.fromSerializableMap(schedule.toSerializableMap()));
         context.pushNamed('AddDevicePage');
       },
     );
