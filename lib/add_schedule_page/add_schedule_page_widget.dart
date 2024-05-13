@@ -563,8 +563,10 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                           'Chaque samedi',
                           'Chaque dimanche'
                         ],
-                        onChanged: (val) =>
-                            setState(() => _model.checkboxGroupValues = val),
+                        onChanged: (val) {
+                          print(val);
+                          setState(() => _model.checkboxGroupValues = val.map((e) => e.split(' ').last).toList());
+                        },
                         controller: _model.checkboxGroupValueController ??=
                             FormFieldController<List<String>>(
                           [],
@@ -643,6 +645,7 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                                 startTime: startDateTime,
                                 endTime: endDateTime,
                                 isReccurent: _model.switchValue ?? false,
+                                days: _model.checkboxGroupValues?.map((e) => DayOfWeek.values.byName(e)).toList()
                               );
 
                             if(!await addFunctionSchedule(context, FFAppState().currentDevice!, functoningSchedule )) return;

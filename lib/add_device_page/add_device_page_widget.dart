@@ -328,6 +328,7 @@ class _ConfirmDeviceScanButtonState extends State<ConfirmDeviceScanButton> {
 
         await BluetoothActions.connectToDevice(widget._model.antimoustique!);
         await BluetoothActions.discoverServices(widget._model.antimoustique!);
+        print("Services discovered");
         await refreshDeviceInformation(widget._model.antimoustique!);
       }
 
