@@ -14,8 +14,8 @@ import 'package:anti_moustique/backend/schema/structs/notification_struct.dart';
 final String deviceInfoServiceUUID = '180d';
 final String deviceCommandServiceUUID = '1900';
 final String functioningScheduleServiceUUID = '6900';
-final String co2LevelCharacteristicUUID = '289f1cd7-546b-4c3d-b760-a353592e196c';
-final String attractifLevelCharacteristicUUID = 'cf862a6b-8f91-4d53-a396-70d91a25ce9b';
+final String co2LevelCharacteristicUUID = '180e';
+final String attractifLevelCharacteristicUUID = '180f';
 final String activateCommandCharacteristicUUID = '1901';
 
 typedef jsonObject = Map<String, dynamic>;

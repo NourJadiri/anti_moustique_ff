@@ -7,7 +7,7 @@ import '/backend/schema/util/schema_util.dart';
 import 'index.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 
-enum DayOfWeek { monday, tuesday, wednesday, thursday, friday, saturday, sunday }
+enum DayOfWeek { lundi, mardi, mercredi, jeudi, vendredi, samedi, dimanche }
 
 class FunctioningScheduleStruct extends BaseStruct {
   FunctioningScheduleStruct({
