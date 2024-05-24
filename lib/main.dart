@@ -1,6 +1,5 @@
 import 'dart:async';
-
-import 'package:anti_moustique/custom_code/actions/device_utilities.dart';
+import 'package:anti_moustique/custom_code/actions/device_connection.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 

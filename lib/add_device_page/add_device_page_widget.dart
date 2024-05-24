@@ -1,5 +1,6 @@
 import 'package:anti_moustique/backend/schema/structs/index.dart';
 import 'package:anti_moustique/custom_code/actions/bluetooth_actions.dart';
+import 'package:anti_moustique/custom_code/actions/device_connection.dart';
 import 'package:anti_moustique/custom_code/actions/device_utilities.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -405,7 +406,7 @@ class DeviceNameTextFormField extends StatelessWidget {
     return TextFormField(
       controller: _model.textController,
       focusNode: _model.textFieldFocusNode,
-      autofocus: true,
+      autofocus: false,
       obscureText: false,
       decoration: InputDecoration(
         labelText: 'Nom Borne',

@@ -1,4 +1,4 @@
-import 'package:anti_moustique/custom_code/actions/device_utilities.dart';
+import 'package:anti_moustique/custom_code/actions/func_schedule_services.dart';
 
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';

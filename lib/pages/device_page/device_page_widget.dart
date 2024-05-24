@@ -4,7 +4,7 @@ Cette classe définit l'interface utilisateur pour la page de gestion des appare
  Elle utilise le modèle de données DevicePageModel pour gérer son état et interagit avec l'état global de l'application via FFAppState.
  */
 import 'package:anti_moustique/backend/schema/structs/index.dart';
-import 'package:anti_moustique/custom_code/actions/device_utilities.dart';
+import 'package:anti_moustique/custom_code/actions/notification_utilities.dart';
 import '/components/device_widget.dart';
 import '/components/navigation_bar_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -14,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'device_page_model.dart';
 export 'device_page_model.dart';
-
 
 // Widget de page principale pour la gestion des appareils.
 class DevicePageWidget extends StatefulWidget {
@@ -48,9 +47,7 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
 
     // Structure de base de la page.
     return GestureDetector(
-      onTap: () => _model.unfocusNode.canRequestFocus
-          ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-          : FocusScope.of(context).unfocus(),
+      onTap: () => _model.unfocusNode.canRequestFocus ? FocusScope.of(context).requestFocus(_model.unfocusNode) : FocusScope.of(context).unfocus(),
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
@@ -62,19 +59,17 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
             title: Align(
               alignment: const AlignmentDirectional(0.0, 0.0),
               child: Padding(
-                padding:
-                    const EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
+                padding: const EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       'Mes Appareils',
-                      style:
-                          FlutterFlowTheme.of(context).headlineLarge.override(
-                                fontFamily: 'Inter',
-                                fontSize: 20.0,
-                              ),
+                      style: FlutterFlowTheme.of(context).headlineLarge.override(
+                            fontFamily: 'Inter',
+                            fontSize: 20.0,
+                          ),
                     ),
                     const NotificationIconButton(), // Bouton pour les notifications.
                   ],
@@ -113,18 +108,14 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
                               Align(
                                 alignment: const AlignmentDirectional(0.0, 0.0),
                                 child: Padding(
-                                  padding: const EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 10.0, 0.0, 10.0),
+                                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
                                   child: Container(
-                                    width:
-                                        MediaQuery.sizeOf(context).width * 1.0,
+                                    width: MediaQuery.sizeOf(context).width * 1.0,
                                     height: 38.0,
                                     decoration: BoxDecoration(
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryBackground,
+                                      color: FlutterFlowTheme.of(context).secondaryBackground,
                                     ),
-                                    alignment:
-                                        const AlignmentDirectional(0.0, 0.0),
+                                    alignment: const AlignmentDirectional(0.0, 0.0),
                                     child: const Align(
                                       alignment: AlignmentDirectional(0.0, 0.0),
                                       child: AddDeviceButton(), // Bouton pour ajouter un appareil.
@@ -137,8 +128,7 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
                           Expanded(
                             child: Builder(
                               builder: (context) {
-                                final listeAppareils =
-                                    FFAppState().deviceList.toList();
+                                final listeAppareils = FFAppState().deviceList.toList();
                                 return buildDeviceListView(listeAppareils); // Construction de la liste des appareils.
                               },
                             ),
@@ -189,9 +179,9 @@ class _DevicePageWidgetState extends State<DevicePageWidget> {
             // Ouverture de la page de controle correspondante
             context.pushNamed('ControlePage');
           },
-          child: DeviceWidget( // Widget personnalisé pour afficher chaque appareil.
-            key: Key(
-                'Key1f8_${listeAppareilsIndex}_of_${listeAppareils.length}'),
+          child: DeviceWidget(
+            // Widget personnalisé pour afficher chaque appareil.
+            key: Key('Key1f8_${listeAppareilsIndex}_of_${listeAppareils.length}'),
             deviceName: listeAppareilsItem.name,
             deviceID: listeAppareilsItem.manufactureID,
             deviceCO2Level: listeAppareilsItem.co2,
