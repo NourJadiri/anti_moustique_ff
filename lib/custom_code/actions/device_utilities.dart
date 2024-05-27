@@ -43,11 +43,13 @@ Future<jsonObject> scanQR(BuildContext context) async {
       String manufactureID = qrData['manufactureID'];
       String remoteID = qrData['remoteID'];
       String vendor = qrData['vendor'];
+      Map<String,dynamic> services = qrData['services'];
 
       return {
         'manufactureID': manufactureID,
         'remoteID': remoteID,
         'vendor': vendor,
+        'services': services,
       };
     } else {
       // Show error message if any of the required fields are missing
@@ -83,6 +85,7 @@ Future<AntimoustiqueStruct> getDeviceFromQR(BuildContext context, Map<String, dy
       vendor: qrData['vendor'],
       device: device,
       isOn: false,
+      serviceMap: qrData['services'],
     );
   } catch (e) {
     // Vous pouvez gérer ou relancer l'exception selon votre cas d'utilisation.

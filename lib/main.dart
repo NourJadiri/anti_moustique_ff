@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:anti_moustique/custom_code/actions/device_connection.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'flutter_flow/flutter_flow_util.dart';
 import 'services/notification_service.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,6 +54,10 @@ class _MyAppState extends State<MyApp> {
     _appStateNotifier = AppStateNotifier.instance;
     _router = createRouter(_appStateNotifier);
     notificationService = NotificationService(); // Initialiser NotificationService ici
+
+    if(Platform.isAndroid){
+      FlutterBluePlus.turnOn();
+    }
     
     // Initialiser le timer de rafraichissement
     _refreshTimer = Timer.periodic(const Duration(minutes: 10), (timer) {

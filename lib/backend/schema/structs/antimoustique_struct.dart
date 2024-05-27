@@ -15,6 +15,7 @@ class AntimoustiqueStruct extends BaseStruct {
     double? co2 = 0,
     bool? isOn = false,
     BluetoothDevice? device,
+    Map<String, dynamic>? serviceMap,
     List<FunctioningScheduleStruct>? functioningScheduleList, // Ajout du paramètre
   }) {
     _manufactureID = manufactureID;
@@ -25,7 +26,7 @@ class AntimoustiqueStruct extends BaseStruct {
     _co2 = co2;
     _isOn = isOn;
     _device = device;
-    device = device;
+    _serviceMap = serviceMap;
     _functioningScheduleList = functioningScheduleList ?? []; // Initialisation avec une liste vide par défaut
     _connectionSubscription = _device?.connectionState.listen((BluetoothConnectionState state) async {
       if (state == BluetoothConnectionState.disconnected) {
@@ -42,16 +43,10 @@ class AntimoustiqueStruct extends BaseStruct {
      _device?.cancelWhenDisconnected(_onServiceResetSubscription!, delayed: true, next: true);
   }
 
-  BluetoothService? _deviceInformationService;
-  BluetoothService? get deviceInformationService => _deviceInformationService;
-  set deviceInformationService(BluetoothService? val) => _deviceInformationService = val;
-  bool hasDeviceInformationService() => _deviceInformationService != null;
-
-  BluetoothService? _deviceCommandService;
-  BluetoothService? get deviceCommandService => _deviceCommandService;
-  set deviceCommandService(BluetoothService? val) => _deviceCommandService = val;
-  bool hasDeviceCommandService() => _deviceCommandService != null;
-
+  // "serviceMap" field.
+  Map<String, dynamic>? _serviceMap;
+  Map<String, dynamic>? get serviceMap => _serviceMap;
+  set serviceMap(Map<String, dynamic>? val) => _serviceMap = val;
 
   StreamSubscription<void>? _onServiceResetSubscription;
   get onServiceResetSubscription => _onServiceResetSubscription;
@@ -165,6 +160,7 @@ class AntimoustiqueStruct extends BaseStruct {
     return isLow;
   }
 
+
   static AntimoustiqueStruct fromMap(Map<String, dynamic> data) =>
       AntimoustiqueStruct(
         manufactureID: data['manufactureID'] as String?,
@@ -196,6 +192,7 @@ class AntimoustiqueStruct extends BaseStruct {
       'remoteId': _device?.remoteId.toString(),
       'name': _device?.advName,
     },
+    'serviceMap': _serviceMap,
     'functioningScheduleList' : _functioningScheduleList,
   }.withoutNulls;
 
@@ -239,6 +236,10 @@ class AntimoustiqueStruct extends BaseStruct {
         ParamType.String,
       ),
     },
+    'serviceMap' : serializeParam(
+      _serviceMap,
+      ParamType.JSON
+      ),
   }.withoutNulls;
 
   static AntimoustiqueStruct fromSerializableMap(Map<String, dynamic> data) =>
@@ -281,6 +282,11 @@ class AntimoustiqueStruct extends BaseStruct {
         functioningScheduleList: (data['functioningScheduleList'] as List<dynamic>?)
             ?.map((scheduleData) => FunctioningScheduleStruct.fromMap(scheduleData.cast<String, dynamic>()))
             .toList(),
+        serviceMap: deserializeParam(
+          data['serviceMap'],
+          ParamType.JSON,
+          false,
+        ),
       );
 
   @override
@@ -311,6 +317,7 @@ AntimoustiqueStruct createAntimoustiqueStruct({
   double? attractif,
   double? co2,
   bool? isOn,
+  Map<String, String>? serviceMap,
   BluetoothDevice? device,
 }) =>
     AntimoustiqueStruct(
@@ -320,5 +327,6 @@ AntimoustiqueStruct createAntimoustiqueStruct({
       remoteID: remoteID,
       attractif: attractif,
       co2: co2,
+      serviceMap: serviceMap,
       isOn: isOn,
     );

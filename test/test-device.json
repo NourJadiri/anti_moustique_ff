@@ -1,5 +1,31 @@
 {
-    "manufactureID"  : "TEST-MOUSTIBOX" ,
-    "remoteID" : "07:00:00:00:00:00:00:00" ,
-    "vendor" : "MOUSTIBOX"
+    "manufactureID": "TEST-MOUSTIBOX",
+    "remoteID": "07:00:00:00:00:00:00:00",
+    "vendor": "MOUSTIBOX",
+    "services": {
+        "deviceInfoService": {
+            "UUID": "180d",
+            "characteristics": {
+                "co2LevelCharacteristicUUID": "180e",
+                "attractifLevelCharacteristicUUID": "180f"
+            }
+        },
+        "deviceCommandService": {
+            "UUID": "1900",
+            "characteristics": {
+                "activateCommandCharacteristicUUID": "1901"
+            }
+        },
+        "functioningScheduleService": {
+            "UUID": "6900",
+            "characteristics": {
+                "FS1UUID": "6901",
+                "FS2UUID": "6902",
+                "FS3UUID": "6903",
+                "FS4UUID": "6904",
+                "FS5UUID": "6905",
+                "FS6UUID": "6906"
+            }
+        }
+    }
 }

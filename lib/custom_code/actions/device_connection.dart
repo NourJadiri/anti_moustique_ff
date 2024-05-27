@@ -52,17 +52,20 @@ Future<void> refreshDeviceInformation(AntimoustiqueStruct antimoustique) async {
   }
 
   try {
-    var deviceInfoCharacteristicList = await BluetoothActions.discoverCharacteristicsForServiceUUID(antimoustique, deviceInfoServiceUUID);
-    var deviceCommandCharacteristicList = await BluetoothActions.discoverCharacteristicsForServiceUUID(antimoustique, deviceCommandServiceUUID);
+    var deviceInfoCharacteristicList =
+        await BluetoothActions.discoverCharacteristicsForServiceUUID(antimoustique, antimoustique.serviceMap!['deviceInfoService']['UUID']);
+    var deviceCommandCharacteristicList =
+        await BluetoothActions.discoverCharacteristicsForServiceUUID(antimoustique, antimoustique.serviceMap!['deviceCommandService']['UUID']);
 
-    var co2Characteristic = deviceInfoCharacteristicList.firstWhere((characteristic) => characteristic.uuid.toString() == co2LevelCharacteristicUUID);
-    var attractifCharacteristic =
-        deviceInfoCharacteristicList.firstWhere((characteristic) => characteristic.uuid.toString() == attractifLevelCharacteristicUUID);
-    var activateCommandCharacteristic =
-        deviceCommandCharacteristicList.firstWhere((characteristic) => characteristic.uuid.toString() == activateCommandCharacteristicUUID);
+    var co2Characteristic = deviceInfoCharacteristicList.firstWhere(
+        (characteristic) => characteristic.uuid.toString() == antimoustique.serviceMap!['deviceInfoService']['characteristics']['co2LevelCharacteristicUUID']);
+    var attractifCharacteristic = deviceInfoCharacteristicList.firstWhere(
+        (characteristic) => characteristic.uuid.toString() == antimoustique.serviceMap!['deviceInfoService']['characteristics']['attractifLevelCharacteristicUUID']);
+    var activateCommandCharacteristic = deviceCommandCharacteristicList.firstWhere(
+        (characteristic) => characteristic.uuid.toString() == antimoustique.serviceMap!['deviceCommandService']['characteristics']['activateCommandCharacteristicUUID']);
 
-    var functioningScheduleService =
-        await antimoustique.device.servicesList.firstWhere((service) => service.uuid.toString() == functioningScheduleServiceUUID);
+    var functioningScheduleService = await antimoustique.device.servicesList
+        .firstWhere((service) => service.uuid.toString() == antimoustique.serviceMap!['functioningScheduleService']['UUID']);
     var functioningScheduleCharacteristics = await BluetoothActions.discoverCharacteristics(antimoustique, functioningScheduleService);
 
     List<FunctioningScheduleStruct> schedules = [];
