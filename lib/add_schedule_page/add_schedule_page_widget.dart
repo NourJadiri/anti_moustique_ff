@@ -31,7 +31,6 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
   @override
   void dispose() {
     _model.dispose();
-
     super.dispose();
   }
 
@@ -78,7 +77,7 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                                 children: [
                                   Align(
                                     alignment:
-                                        const AlignmentDirectional(-1.0, 0.0),
+                                    const AlignmentDirectional(-1.0, 0.0),
                                     child: FlutterFlowIconButton(
                                       borderColor: FlutterFlowTheme.of(context)
                                           .secondaryBackground,
@@ -98,23 +97,23 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                                   ),
                                   Align(
                                     alignment:
-                                        const AlignmentDirectional(0.0, 0.0),
+                                    const AlignmentDirectional(0.0, 0.0),
                                     child: Text(
                                       'Nouvelle plage horaire',
                                       textAlign: TextAlign.center,
                                       style: FlutterFlowTheme.of(context)
                                           .titleLarge
                                           .override(
-                                            fontFamily: 'Inter',
-                                            color: FlutterFlowTheme.of(context)
-                                                .primary,
-                                            fontWeight: FontWeight.w600,
-                                          ),
+                                        fontFamily: 'Inter',
+                                        color: FlutterFlowTheme.of(context)
+                                            .primary,
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                     ),
                                   ),
                                   Align(
                                     alignment:
-                                        const AlignmentDirectional(1.0, 0.0),
+                                    const AlignmentDirectional(1.0, 0.0),
                                     child: FlutterFlowIconButton(
                                       borderColor: FlutterFlowTheme.of(context)
                                           .secondaryBackground,
@@ -142,131 +141,130 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                   ],
                 ),
               ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Container(
-                    width: MediaQuery.sizeOf(context).width * 1.0,
-                    height: MediaQuery.sizeOf(context).height * 0.09,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).secondaryBackground,
-                    ),
-                    child: Stack(
-                      children: [
-                        Align(
-                          alignment: const AlignmentDirectional(-1.0, 0.0),
-                          child: Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                30.0, 0.0, 0.0, 0.0),
-                            child: Text(
-                              'Date',
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    fontFamily: 'Inter',
-                                    color: FlutterFlowTheme.of(context).primary,
-                                    fontSize: 20.0,
-                                  ),
-                            ),
-                          ),
-                        ),
-                        Align(
-                          alignment: const AlignmentDirectional(0.68, 0.0),
-                          child: InkWell(
-                            splashColor: Colors.transparent,
-                            focusColor: Colors.transparent,
-                            hoverColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            onTap: () async {
-                              final datePicked1Date = await showDatePicker(
-                                context: context,
-                                initialDate: getCurrentTimestamp,
-                                initialEntryMode: DatePickerEntryMode.calendar,
-                                firstDate: getCurrentTimestamp,
-                                lastDate: DateTime(2050),
-                                builder: (context, child) {
-                                  return Theme(
-                                    data: Theme.of(context).copyWith(
-                                      colorScheme: ColorScheme.light(
-                                        primary: FlutterFlowTheme.of(context)
-                                            .primary, // Header background color
-                                        onPrimary:
-                                            Colors.white, // Header text color
-                                        onSurface: FlutterFlowTheme.of(context)
-                                            .primaryText, // Body text color
-                                      ),
-                                      dialogBackgroundColor:
-                                          FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
-
-                                      datePickerTheme: DatePickerThemeData(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(16.0),
-                                        ),
-                                        headerBackgroundColor:
-                                            FlutterFlowTheme.of(context)
-                                                .primary,
-                                        headerForegroundColor: Colors.white,
-                                        backgroundColor:
-                                            FlutterFlowTheme.of(context)
-                                                .secondaryBackground,
-                                        yearForegroundColor:
-                                            MaterialStateProperty.all(
-                                                FlutterFlowTheme.of(context)
-                                                    .primaryText),
-                                        rangeSelectionBackgroundColor:
-                                            FlutterFlowTheme.of(context)
-                                                .primary
-                                                .withOpacity(0),
-                                      ),
-                                    ),
-                                    child: child!,
-                                  );
-                                },
-                              );
-
-                              if (datePicked1Date != null) {
-                                safeSetState(() {
-                                  _model.datePicked1 = DateTime(
-                                    datePicked1Date.year,
-                                    datePicked1Date.month,
-                                    datePicked1Date.day,
-                                  );
-                                });
-                              }
-                            },
-                            child: Container(
-                              width: 204.0,
-                              height: 40.0,
-                              decoration: BoxDecoration(
-                                color: FlutterFlowTheme.of(context).alternate,
-                                borderRadius: BorderRadius.circular(14.0),
-                              ),
-                              child: Align(
-                                alignment: const AlignmentDirectional(0.0, 0.0),
-                                child: Text(
-                                  valueOrDefault<String>(
-                                    dateTimeFormat('d/M/y', _model.datePicked1),
-                                    'Sélectionner une date',
-                                  ),
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                        fontFamily: 'Inter',
-                                        color: FlutterFlowTheme.of(context)
-                                            .primary,
-                                      ),
+              if (!(_model.switchValue ?? false))
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Container(
+                      width: MediaQuery.sizeOf(context).width * 1.0,
+                      height: MediaQuery.sizeOf(context).height * 0.09,
+                      decoration: BoxDecoration(
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                      ),
+                      child: Stack(
+                        children: [
+                          Align(
+                            alignment: const AlignmentDirectional(-1.0, 0.0),
+                            child: Padding(
+                              padding: const EdgeInsetsDirectional.fromSTEB(
+                                  30.0, 0.0, 0.0, 0.0),
+                              child: Text(
+                                'Date',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                  fontFamily: 'Inter',
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  fontSize: 20.0,
                                 ),
                               ),
                             ),
                           ),
-                        )
-                      ],
+                          Align(
+                            alignment: const AlignmentDirectional(0.68, 0.0),
+                            child: InkWell(
+                              splashColor: Colors.transparent,
+                              focusColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onTap: () async {
+                                final datePicked1Date = await showDatePicker(
+                                  context: context,
+                                  initialDate: getCurrentTimestamp,
+                                  initialEntryMode: DatePickerEntryMode.calendar,
+                                  firstDate: getCurrentTimestamp,
+                                  lastDate: DateTime(2050),
+                                  builder: (context, child) {
+                                    return Theme(
+                                      data: Theme.of(context).copyWith(
+                                        colorScheme: ColorScheme.light(
+                                          primary: FlutterFlowTheme.of(context)
+                                              .primary, // Header background color
+                                          onPrimary: Colors.white, // Header text color
+                                          onSurface: FlutterFlowTheme.of(context)
+                                              .primaryText, // Body text color
+                                        ),
+                                        dialogBackgroundColor:
+                                        FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
+                                        datePickerTheme: DatePickerThemeData(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                            BorderRadius.circular(16.0),
+                                          ),
+                                          headerBackgroundColor:
+                                          FlutterFlowTheme.of(context)
+                                              .primary,
+                                          headerForegroundColor: Colors.white,
+                                          backgroundColor:
+                                          FlutterFlowTheme.of(context)
+                                              .secondaryBackground,
+                                          yearForegroundColor:
+                                          MaterialStateProperty.all(
+                                              FlutterFlowTheme.of(context)
+                                                  .primaryText),
+                                          rangeSelectionBackgroundColor:
+                                          FlutterFlowTheme.of(context)
+                                              .primary
+                                              .withOpacity(0),
+                                        ),
+                                      ),
+                                      child: child!,
+                                    );
+                                  },
+                                );
+
+                                if (datePicked1Date != null) {
+                                  safeSetState(() {
+                                    _model.datePicked1 = DateTime(
+                                      datePicked1Date.year,
+                                      datePicked1Date.month,
+                                      datePicked1Date.day,
+                                    );
+                                  });
+                                }
+                              },
+                              child: Container(
+                                width: 204.0,
+                                height: 40.0,
+                                decoration: BoxDecoration(
+                                  color: FlutterFlowTheme.of(context).alternate,
+                                  borderRadius: BorderRadius.circular(14.0),
+                                ),
+                                child: Align(
+                                  alignment: const AlignmentDirectional(0.0, 0.0),
+                                  child: Text(
+                                    valueOrDefault<String>(
+                                      dateTimeFormat('d/M/y', _model.datePicked1),
+                                      'Sélectionner une date',
+                                    ),
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .override(
+                                      fontFamily: 'Inter',
+                                      color: FlutterFlowTheme.of(context)
+                                          .primary,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
               Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
@@ -288,10 +286,10 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
-                                    fontFamily: 'Inter',
-                                    color: FlutterFlowTheme.of(context).primary,
-                                    fontSize: 20.0,
-                                  ),
+                                fontFamily: 'Inter',
+                                color: FlutterFlowTheme.of(context).primary,
+                                fontSize: 20.0,
+                              ),
                             ),
                           ),
                         ),
@@ -309,36 +307,36 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                                 context: context,
                                 initialEntryMode: TimePickerEntryMode.inputOnly,
                                 initialTime:
-                                    TimeOfDay.fromDateTime(getCurrentTimestamp),
+                                TimeOfDay.fromDateTime(getCurrentTimestamp),
                                 builder: (context, child) {
                                   return wrapInMaterialTimePickerTheme(
                                     context,
                                     child!,
                                     headerBackgroundColor:
-                                        FlutterFlowTheme.of(context).primary,
+                                    FlutterFlowTheme.of(context).primary,
                                     headerForegroundColor:
-                                        FlutterFlowTheme.of(context).info,
+                                    FlutterFlowTheme.of(context).info,
                                     headerTextStyle:
-                                        FlutterFlowTheme.of(context)
-                                            .headlineLarge
-                                            .override(
-                                              fontFamily: 'Inter',
-                                              fontSize: 32.0,
-                                              fontWeight: FontWeight.w600,
-                                            ),
+                                    FlutterFlowTheme.of(context)
+                                        .headlineLarge
+                                        .override(
+                                      fontFamily: 'Inter',
+                                      fontSize: 32.0,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                     pickerBackgroundColor:
-                                        FlutterFlowTheme.of(context)
-                                            .secondaryBackground,
+                                    FlutterFlowTheme.of(context)
+                                        .secondaryBackground,
                                     pickerForegroundColor:
-                                        FlutterFlowTheme.of(context)
-                                            .primaryText,
+                                    FlutterFlowTheme.of(context)
+                                        .primaryText,
                                     selectedDateTimeBackgroundColor:
-                                        FlutterFlowTheme.of(context).primary,
+                                    FlutterFlowTheme.of(context).primary,
                                     selectedDateTimeForegroundColor:
-                                        FlutterFlowTheme.of(context).info,
+                                    FlutterFlowTheme.of(context).info,
                                     actionButtonForegroundColor:
-                                        FlutterFlowTheme.of(context)
-                                            .primaryText,
+                                    FlutterFlowTheme.of(context)
+                                        .primaryText,
                                     iconSize: 24.0,
                                   );
                                 },
@@ -372,11 +370,11 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
-                                        fontFamily: 'Inter',
-                                        color: FlutterFlowTheme.of(context)
-                                            .primary,
-                                        fontSize: 20.0,
-                                      ),
+                                    fontFamily: 'Inter',
+                                    color: FlutterFlowTheme.of(context)
+                                        .primary,
+                                    fontSize: 20.0,
+                                  ),
                                 ),
                               ),
                             ),
@@ -408,10 +406,10 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
-                                    fontFamily: 'Inter',
-                                    color: FlutterFlowTheme.of(context).primary,
-                                    fontSize: 20.0,
-                                  ),
+                                fontFamily: 'Inter',
+                                color: FlutterFlowTheme.of(context).primary,
+                                fontSize: 20.0,
+                              ),
                             ),
                           ),
                         ),
@@ -429,36 +427,36 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                                 context: context,
                                 initialEntryMode: TimePickerEntryMode.inputOnly,
                                 initialTime:
-                                    TimeOfDay.fromDateTime(getCurrentTimestamp),
+                                TimeOfDay.fromDateTime(getCurrentTimestamp),
                                 builder: (context, child) {
                                   return wrapInMaterialTimePickerTheme(
                                     context,
                                     child!,
                                     headerBackgroundColor:
-                                        FlutterFlowTheme.of(context).primary,
+                                    FlutterFlowTheme.of(context).primary,
                                     headerForegroundColor:
-                                        FlutterFlowTheme.of(context).info,
+                                    FlutterFlowTheme.of(context).info,
                                     headerTextStyle:
-                                        FlutterFlowTheme.of(context)
-                                            .headlineLarge
-                                            .override(
-                                              fontFamily: 'Inter',
-                                              fontSize: 32.0,
-                                              fontWeight: FontWeight.w600,
-                                            ),
+                                    FlutterFlowTheme.of(context)
+                                        .headlineLarge
+                                        .override(
+                                      fontFamily: 'Inter',
+                                      fontSize: 32.0,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                     pickerBackgroundColor:
-                                        FlutterFlowTheme.of(context)
-                                            .secondaryBackground,
+                                    FlutterFlowTheme.of(context)
+                                        .secondaryBackground,
                                     pickerForegroundColor:
-                                        FlutterFlowTheme.of(context)
-                                            .primaryText,
+                                    FlutterFlowTheme.of(context)
+                                        .primaryText,
                                     selectedDateTimeBackgroundColor:
-                                        FlutterFlowTheme.of(context).primary,
+                                    FlutterFlowTheme.of(context).primary,
                                     selectedDateTimeForegroundColor:
-                                        FlutterFlowTheme.of(context).info,
+                                    FlutterFlowTheme.of(context).info,
                                     actionButtonForegroundColor:
-                                        FlutterFlowTheme.of(context)
-                                            .primaryText,
+                                    FlutterFlowTheme.of(context)
+                                        .primaryText,
                                     iconSize: 24.0,
                                   );
                                 },
@@ -492,11 +490,11 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
-                                        fontFamily: 'Inter',
-                                        color: FlutterFlowTheme.of(context)
-                                            .primary,
-                                        fontSize: 20.0,
-                                      ),
+                                    fontFamily: 'Inter',
+                                    color: FlutterFlowTheme.of(context)
+                                        .primary,
+                                    fontSize: 20.0,
+                                  ),
                                 ),
                               ),
                             ),
@@ -528,10 +526,10 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
-                                    fontFamily: 'Inter',
-                                    color: FlutterFlowTheme.of(context).primary,
-                                    fontSize: 20.0,
-                                  ),
+                                fontFamily: 'Inter',
+                                color: FlutterFlowTheme.of(context).primary,
+                                fontSize: 20.0,
+                              ),
                             ),
                           ),
                         ),
@@ -545,7 +543,7 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                             activeColor: FlutterFlowTheme.of(context).primary,
                             activeTrackColor: const Color(0xFF05D03E),
                             inactiveTrackColor:
-                                FlutterFlowTheme.of(context).alternate,
+                            FlutterFlowTheme.of(context).alternate,
                             inactiveThumbColor: FlutterFlowTheme.of(context)
                                 .secondaryBackground,
                           ),
@@ -581,15 +579,15 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                         },
                         controller: _model.checkboxGroupValueController ??=
                             FormFieldController<List<String>>(
-                          [],
-                        ),
+                              [],
+                            ),
                         activeColor: FlutterFlowTheme.of(context).primary,
                         checkColor: FlutterFlowTheme.of(context).info,
                         checkboxBorderColor:
-                            FlutterFlowTheme.of(context).secondaryText,
+                        FlutterFlowTheme.of(context).secondaryText,
                         textStyle: FlutterFlowTheme.of(context).bodyMedium,
                         unselectedTextStyle:
-                            FlutterFlowTheme.of(context).bodyMedium,
+                        FlutterFlowTheme.of(context).bodyMedium,
                         checkboxBorderRadius: BorderRadius.circular(4.0),
                         initialized: _model.checkboxGroupValues != null,
                       ),
@@ -599,7 +597,7 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
               ),
               Padding(
                 padding:
-                    const EdgeInsetsDirectional.fromSTEB(0.0, 30.0, 0.0, 0.0),
+                const EdgeInsetsDirectional.fromSTEB(0.0, 30.0, 0.0, 0.0),
                 child: Row(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -610,27 +608,30 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                         height: MediaQuery.sizeOf(context).height * 0.04,
                         decoration: BoxDecoration(
                           color:
-                              FlutterFlowTheme.of(context).secondaryBackground,
+                          FlutterFlowTheme.of(context).secondaryBackground,
                           borderRadius: BorderRadius.circular(14.0),
                         ),
                         child: FFButtonWidget(
                           onPressed: () async {
-                            final DateTime? startDay = _model.datePicked1;
+                            final DateTime? startDay =
+                            _model.switchValue ?? false
+                                ? null
+                                : _model.datePicked1;
                             final TimeOfDay? startTime =
-                                _model.datePicked2 != null
-                                    ? TimeOfDay(
-                                        hour: _model.datePicked2!.hour,
-                                        minute: _model.datePicked2!.minute)
-                                    : null;
+                            _model.datePicked2 != null
+                                ? TimeOfDay(
+                                hour: _model.datePicked2!.hour,
+                                minute: _model.datePicked2!.minute)
+                                : null;
 
                             final TimeOfDay? endTime =
-                                _model.datePicked3 != null
-                                    ? TimeOfDay(
-                                        hour: _model.datePicked3!.hour,
-                                        minute: _model.datePicked3!.minute)
-                                    : null;
+                            _model.datePicked3 != null
+                                ? TimeOfDay(
+                                hour: _model.datePicked3!.hour,
+                                minute: _model.datePicked3!.minute)
+                                : null;
 
-                            if (startDay == null ||
+                            if ((!_model.switchValue! && startDay == null) ||
                                 startTime == null ||
                                 endTime == null) {
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -653,7 +654,7 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                             );
 
                             if ((startDateTime.hour * 60 +
-                                    startDateTime.minute) >=
+                                startDateTime.minute) >=
                                 (endDateTime.hour * 60 + endDateTime.minute)) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
@@ -664,7 +665,7 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                               return;
                             }
 
-                            var functoningSchedule = FunctioningScheduleStruct(
+                            var functioningSchedule = FunctioningScheduleStruct(
                                 startDay: startDay,
                                 startTime: startDateTime,
                                 endTime: endDateTime,
@@ -676,11 +677,11 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                             if (!await addFunctionSchedule(
                                 context,
                                 FFAppState().currentDevice!,
-                                functoningSchedule)) return;
+                                functioningSchedule)) return;
 
                             FFAppState().updateCurrentDeviceStruct((device) {
                               device.functioningScheduleList
-                                  .add(functoningSchedule);
+                                  .add(functioningSchedule);
                             });
 
                             Navigator.pop(context);
@@ -697,10 +698,10 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                             textStyle: FlutterFlowTheme.of(context)
                                 .titleSmall
                                 .override(
-                                  fontFamily: 'Inter',
-                                  color: Colors.white,
-                                  fontSize: 14.0,
-                                ),
+                              fontFamily: 'Inter',
+                              color: Colors.white,
+                              fontSize: 14.0,
+                            ),
                             elevation: 0.0,
                             borderRadius: BorderRadius.circular(24.0),
                           ),
