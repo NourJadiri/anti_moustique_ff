@@ -138,9 +138,10 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
         backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
         body: SafeArea(
           top: true,
+    child: SingleChildScrollView(
           child: Container(
             width: MediaQuery.sizeOf(context).width * 1.0,
-            height: MediaQuery.sizeOf(context).height * 1.0,
+           // height: MediaQuery.sizeOf(context).height * 1.0,
             decoration: BoxDecoration(
               color: FlutterFlowTheme.of(context).secondaryBackground,
             ),
@@ -235,7 +236,7 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   FFButtonWidget buildScanQRButton(BuildContext context) {
