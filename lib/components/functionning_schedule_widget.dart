@@ -1,5 +1,4 @@
 import 'package:anti_moustique/custom_code/actions/func_schedule_services.dart';
-
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +31,7 @@ class _FunctionningScheduleWidgetState extends State<FunctionningScheduleWidget>
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => FunctionningScheduleModel(FFAppState())); // Passer FFAppState ici
+    _model = createModel(context, () => FunctionningScheduleModel(FFAppState()));
   }
 
   @override
@@ -85,18 +84,18 @@ class _FunctionningScheduleWidgetState extends State<FunctionningScheduleWidget>
                           '15:00',
                         ),
                         style: FlutterFlowTheme.of(context).bodyLarge.override(
-                              fontFamily: 'Readex Pro',
-                              color: FlutterFlowTheme.of(context).primary,
-                              fontSize: 30.0,
-                              fontWeight: FontWeight.w300,
-                            ),
+                          fontFamily: 'Readex Pro',
+                          color: FlutterFlowTheme.of(context).primary,
+                          fontSize: 30.0,
+                          fontWeight: FontWeight.w300,
+                        ),
                       ),
                       Text(
                         'à ',
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
-                              fontFamily: 'Readex Pro',
-                              color: FlutterFlowTheme.of(context).primary,
-                            ),
+                          fontFamily: 'Readex Pro',
+                          color: FlutterFlowTheme.of(context).primary,
+                        ),
                       ),
                       Text(
                         valueOrDefault<String>(
@@ -104,11 +103,11 @@ class _FunctionningScheduleWidgetState extends State<FunctionningScheduleWidget>
                           '21:00',
                         ),
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
-                              fontFamily: 'Readex Pro',
-                              color: FlutterFlowTheme.of(context).primary,
-                              fontSize: 30.0,
-                              fontWeight: FontWeight.w300,
-                            ),
+                          fontFamily: 'Readex Pro',
+                          color: FlutterFlowTheme.of(context).primary,
+                          fontSize: 30.0,
+                          fontWeight: FontWeight.w300,
+                        ),
                       ),
                     ],
                   ),
@@ -118,12 +117,12 @@ class _FunctionningScheduleWidgetState extends State<FunctionningScheduleWidget>
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Text(
-                          valueOrDefault<String>(widget.isPeriodic! ? 'Periodic' : DateFormat('dd/MM/yyyy').format(widget.date!), 'undefined'),
+                          valueOrDefault<String>(widget.isPeriodic! ? 'Périodique' : DateFormat('dd/MM/yyyy').format(widget.date!), 'undefined'),
                           style: FlutterFlowTheme.of(context).labelSmall.override(
-                                fontFamily: 'Readex Pro',
-                                color: FlutterFlowTheme.of(context).primary,
-                                fontWeight: FontWeight.w200,
-                              ),
+                            fontFamily: 'Readex Pro',
+                            color: FlutterFlowTheme.of(context).primary,
+                            fontWeight: FontWeight.w200,
+                          ),
                         ),
                       ],
                     ),
@@ -131,34 +130,60 @@ class _FunctionningScheduleWidgetState extends State<FunctionningScheduleWidget>
                 ],
               ),
             ),
-            InkWell(
-              splashColor: Colors.transparent,
-              focusColor: Colors.transparent,
-              hoverColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              onTap: () async {
-                try {
-                  FFAppState().update(() {
-                    setState(() {
-                      // Attempt to delete the schedule
-                      deleteFunctioningSchedule(FFAppState().currentDevice!, widget.index!);
-                      // If successful, remove it from the list
-                      FFAppState().currentDevice!.removeAtIndexFromFunctioningScheduleList(widget.index!);
-                    });
-                  });
-                } catch (e) {
-                  // Catch any errors thrown by deleteFunctioningSchedule or other operations
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text('Error: $e'), // Display the error message
-                    duration: const Duration(seconds: 2),
-                  ));
-                }
-              },
-              child: Icon(
-                Icons.delete_outlined,
-                color: FlutterFlowTheme.of(context).secondaryText,
-                size: 24.0,
-              ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                InkWell(
+                  splashColor: Colors.transparent,
+                  focusColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  onTap: () async {
+                    try {
+                      FFAppState().update(() {
+                        setState(() {
+                          deleteFunctioningSchedule(FFAppState().currentDevice!, widget.index!);
+                          FFAppState().currentDevice!.removeAtIndexFromFunctioningScheduleList(widget.index!);
+                        });
+                      });
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text('Error: $e'),
+                        duration: const Duration(seconds: 2),
+                      ));
+                    }
+                  },
+                  child: Icon(
+                    Icons.delete_outlined,
+                    color: FlutterFlowTheme.of(context).secondaryText,
+                    size: 24.0,
+                  ),
+                ),
+                const SizedBox(width: 10.0),
+                InkWell(
+                  splashColor: Colors.transparent,
+                  focusColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  onTap: () async {
+                    context.pushNamed(
+                      'AddSchedulePage',
+                      queryParameters: {
+                        'index': widget.index.toString(),
+                        'startTime': widget.startTime!.format(context),
+                        'endTime': widget.endTime!.format(context),
+                        'date': widget.date!.toIso8601String(),
+                        'isPeriodic': widget.isPeriodic.toString(),
+                      },
+                    );
+                  },
+                  child: Icon(
+                    Icons.edit,
+                    color: FlutterFlowTheme.of(context).secondaryText,
+                    size: 24.0,
+                  ),
+                ),
+              ],
             ),
           ],
         ),

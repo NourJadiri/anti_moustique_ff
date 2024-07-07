@@ -11,7 +11,20 @@ import 'add_schedule_page_model.dart';
 export 'add_schedule_page_model.dart';
 
 class AddSchedulePageWidget extends StatefulWidget {
-  const AddSchedulePageWidget({super.key});
+  const AddSchedulePageWidget({
+    super.key,
+    this.index,
+    this.startTime,
+    this.endTime,
+    this.date,
+    this.isPeriodic,
+  });
+
+  final int? index;
+  final TimeOfDay? startTime;
+  final TimeOfDay? endTime;
+  final DateTime? date;
+  final bool? isPeriodic;
 
   @override
   State<AddSchedulePageWidget> createState() => _AddSchedulePageWidgetState();
@@ -19,13 +32,39 @@ class AddSchedulePageWidget extends StatefulWidget {
 
 class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
   late AddSchedulePageModel _model;
-
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
     _model = createModel(context, () => AddSchedulePageModel());
+
+    _model.datePicked1 = widget.date;
+    _model.datePicked2 = DateTime(
+      widget.date?.year ?? DateTime.now().year,
+      widget.date?.month ?? DateTime.now().month,
+      widget.date?.day ?? DateTime.now().day,
+      widget.startTime?.hour ?? TimeOfDay.now().hour,
+      widget.startTime?.minute ?? TimeOfDay.now().minute,
+    );
+    _model.datePicked3 = DateTime(
+      widget.date?.year ?? DateTime.now().year,
+      widget.date?.month ?? DateTime.now().month,
+      widget.date?.day ?? DateTime.now().day,
+      widget.endTime?.hour ?? TimeOfDay.now().hour,
+      widget.endTime?.minute ?? TimeOfDay.now().minute,
+    );
+    _model.switchValue = widget.isPeriodic ?? false;
+    _model.checkboxGroupValues = _model.switchValue == true
+        ? DayOfWeek.values
+        .where((day) => FFAppState()
+        .currentDevice!
+        .functioningScheduleList[widget.index!]
+        .days
+        .contains(day))
+        .map((day) => day.name)
+        .toList()
+        : null;
   }
 
   @override
@@ -99,7 +138,9 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                                     alignment:
                                     const AlignmentDirectional(0.0, 0.0),
                                     child: Text(
-                                      'Nouvelle plage horaire',
+                                      widget.index != null
+                                          ? 'Editer la plage horaire'
+                                          : 'Nouvelle plage horaire',
                                       textAlign: TextAlign.center,
                                       style: FlutterFlowTheme.of(context)
                                           .titleLarge
@@ -164,7 +205,8 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                                     .bodyMedium
                                     .override(
                                   fontFamily: 'Inter',
-                                  color: FlutterFlowTheme.of(context).primary,
+                                  color: FlutterFlowTheme.of(context)
+                                      .primary,
                                   fontSize: 20.0,
                                 ),
                               ),
@@ -242,10 +284,12 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                                   borderRadius: BorderRadius.circular(14.0),
                                 ),
                                 child: Align(
-                                  alignment: const AlignmentDirectional(0.0, 0.0),
+                                  alignment:
+                                  const AlignmentDirectional(0.0, 0.0),
                                   child: Text(
                                     valueOrDefault<String>(
-                                      dateTimeFormat('d/M/y', _model.datePicked1),
+                                      dateTimeFormat(
+                                          'd/M/y', _model.datePicked1),
                                       'Sélectionner une date',
                                     ),
                                     style: FlutterFlowTheme.of(context)
@@ -306,8 +350,8 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                               final datePicked2Time = await showTimePicker(
                                 context: context,
                                 initialEntryMode: TimePickerEntryMode.inputOnly,
-                                initialTime:
-                                TimeOfDay.fromDateTime(getCurrentTimestamp),
+                                initialTime: TimeOfDay.fromDateTime(
+                                    getCurrentTimestamp),
                                 builder: (context, child) {
                                   return wrapInMaterialTimePickerTheme(
                                     context,
@@ -328,15 +372,13 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                                     FlutterFlowTheme.of(context)
                                         .secondaryBackground,
                                     pickerForegroundColor:
-                                    FlutterFlowTheme.of(context)
-                                        .primaryText,
+                                    FlutterFlowTheme.of(context).primaryText,
                                     selectedDateTimeBackgroundColor:
                                     FlutterFlowTheme.of(context).primary,
                                     selectedDateTimeForegroundColor:
                                     FlutterFlowTheme.of(context).info,
                                     actionButtonForegroundColor:
-                                    FlutterFlowTheme.of(context)
-                                        .primaryText,
+                                    FlutterFlowTheme.of(context).primaryText,
                                     iconSize: 24.0,
                                   );
                                 },
@@ -361,7 +403,8 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                                 borderRadius: BorderRadius.circular(14.0),
                               ),
                               child: Align(
-                                alignment: const AlignmentDirectional(0.0, 0.0),
+                                alignment:
+                                const AlignmentDirectional(0.0, 0.0),
                                 child: Text(
                                   valueOrDefault<String>(
                                     dateTimeFormat('Hm', _model.datePicked2),
@@ -426,8 +469,8 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                               final datePicked3Time = await showTimePicker(
                                 context: context,
                                 initialEntryMode: TimePickerEntryMode.inputOnly,
-                                initialTime:
-                                TimeOfDay.fromDateTime(getCurrentTimestamp),
+                                initialTime: TimeOfDay.fromDateTime(
+                                    getCurrentTimestamp),
                                 builder: (context, child) {
                                   return wrapInMaterialTimePickerTheme(
                                     context,
@@ -448,15 +491,13 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                                     FlutterFlowTheme.of(context)
                                         .secondaryBackground,
                                     pickerForegroundColor:
-                                    FlutterFlowTheme.of(context)
-                                        .primaryText,
+                                    FlutterFlowTheme.of(context).primaryText,
                                     selectedDateTimeBackgroundColor:
                                     FlutterFlowTheme.of(context).primary,
                                     selectedDateTimeForegroundColor:
                                     FlutterFlowTheme.of(context).info,
                                     actionButtonForegroundColor:
-                                    FlutterFlowTheme.of(context)
-                                        .primaryText,
+                                    FlutterFlowTheme.of(context).primaryText,
                                     iconSize: 24.0,
                                   );
                                 },
@@ -481,7 +522,8 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                                 borderRadius: BorderRadius.circular(14.0),
                               ),
                               child: Align(
-                                alignment: const AlignmentDirectional(0.0, 0.0),
+                                alignment:
+                                const AlignmentDirectional(0.0, 0.0),
                                 child: Text(
                                   valueOrDefault<String>(
                                     dateTimeFormat('Hm', _model.datePicked3),
@@ -637,7 +679,7 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text(
-                                      "Veuillez sélectionner une date et une heure."),
+                                      "Veuillez remplir tous les champs."),
                                 ),
                               );
                               return;
@@ -655,7 +697,8 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
 
                             if ((startDateTime.hour * 60 +
                                 startDateTime.minute) >=
-                                (endDateTime.hour * 60 + endDateTime.minute)) {
+                                (endDateTime.hour * 60 +
+                                    endDateTime.minute)) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text(
@@ -674,6 +717,14 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
                                     ?.map((e) => DayOfWeek.values.byName(e))
                                     .toList());
 
+                            if (widget.index != null) {
+                              // Supprimer l'ancienne plage de fonctionnement
+                              FFAppState().currentDevice!
+                                  .functioningScheduleList
+                                  .removeAt(widget.index!);
+                            }
+
+                            // Ajouter la nouvelle plage de fonctionnement
                             if (!await addFunctionSchedule(
                                 context,
                                 FFAppState().currentDevice!,
@@ -686,7 +737,9 @@ class _AddSchedulePageWidgetState extends State<AddSchedulePageWidget> {
 
                             Navigator.pop(context);
                           },
-                          text: 'Confirmer',
+                          text: widget.index != null
+                              ? 'Mettre à jour'
+                              : 'Confirmer',
                           options: FFButtonOptions(
                             width: MediaQuery.sizeOf(context).width * 0.2,
                             height: MediaQuery.sizeOf(context).height * 0.2,
