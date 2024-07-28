@@ -13,8 +13,6 @@ import 'package:anti_moustique/backend/schema/structs/notification_struct.dart';
 import 'device_connection.dart';
 import 'constants.dart';
 
-// UUIDs pour différents services et caractéristiques BLE utilisés par l'appareil.
-
 
 typedef jsonObject = Map<String, dynamic>;
 
@@ -29,7 +27,7 @@ Future<jsonObject> scanQR(BuildContext context) async {
   try {
     String qrResult = await FlutterBarcodeScanner.scanBarcode(
       '#C62828', // scanning line color
-      'Cancel', // cancel button text
+      'Annuler', // cancel button text
       true, // whether to show the flash icon
       ScanMode.QR,
     );
