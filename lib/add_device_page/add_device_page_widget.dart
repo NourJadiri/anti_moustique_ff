@@ -1,5 +1,6 @@
 import 'package:anti_moustique/backend/schema/structs/index.dart';
 import 'package:anti_moustique/custom_code/actions/bluetooth_actions.dart';
+import 'package:anti_moustique/custom_code/actions/device_connection.dart';
 import 'package:anti_moustique/custom_code/actions/device_utilities.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -68,11 +69,15 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
       if (context.mounted) {
         // Get the device from the QR code data
         AntimoustiqueStruct newAntiMoustique = await getDeviceFromQR(context, qrData);
+        
+        print(newAntiMoustique);
+        
         await refreshDeviceInformation(newAntiMoustique);
 
+
         setState(() {
-          _model.antimoustique = newAntiMoustique;
-          _deviceScanned = (newAntiMoustique != AntimoustiqueStruct());
+           _model.antimoustique = newAntiMoustique;
+           _deviceScanned = (newAntiMoustique != AntimoustiqueStruct());
         });
       }
     } catch (e) {
@@ -133,9 +138,10 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
         backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
         body: SafeArea(
           top: true,
+    child: SingleChildScrollView(
           child: Container(
             width: MediaQuery.sizeOf(context).width * 1.0,
-            height: MediaQuery.sizeOf(context).height * 1.0,
+           // height: MediaQuery.sizeOf(context).height * 1.0,
             decoration: BoxDecoration(
               color: FlutterFlowTheme.of(context).secondaryBackground,
             ),
@@ -230,7 +236,7 @@ class _AddDevicePageWidgetState extends State<AddDevicePageWidget> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   FFButtonWidget buildScanQRButton(BuildContext context) {
@@ -405,7 +411,7 @@ class DeviceNameTextFormField extends StatelessWidget {
     return TextFormField(
       controller: _model.textController,
       focusNode: _model.textFieldFocusNode,
-      autofocus: true,
+      autofocus: false,
       obscureText: false,
       decoration: InputDecoration(
         labelText: 'Nom Borne',

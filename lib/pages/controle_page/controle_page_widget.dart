@@ -1,5 +1,5 @@
+import 'package:anti_moustique/custom_code/actions/device_connection.dart';
 import 'package:anti_moustique/custom_code/actions/device_utilities.dart';
-import '../../backend/schema/structs/notification_struct.dart';
 import '/components/functionning_schedule_widget.dart';
 import '/components/navigation_bar_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';

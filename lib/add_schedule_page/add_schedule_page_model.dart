@@ -7,9 +7,9 @@ class AddSchedulePageModel extends FlutterFlowModel<AddSchedulePageWidget> {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
-  DateTime? datePicked1;
-  DateTime? datePicked2;
-  DateTime? datePicked3;
+  DateTime? selectedDate;
+  DateTime? startTime;
+  DateTime? endTime;
   // State field(s) for Switch widget.
   bool? switchValue;
   // State field(s) for CheckboxGroup widget.
